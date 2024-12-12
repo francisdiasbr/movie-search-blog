@@ -1,4 +1,4 @@
-export interface MovieBlogPost {
+export interface BlogPostType {
   data: {
     tconst: string;
     primaryTitle: string;
