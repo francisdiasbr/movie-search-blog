@@ -4,6 +4,7 @@ import { store } from './store/store';
 import { GlobalStyles } from './styles/GlobalStyles';
 import Home from './pages/Home';
 import BlogPost from './pages/BlogPost';
+import './index.css';
 
 function App() {
   return (
