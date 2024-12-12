@@ -11,7 +11,7 @@ export function Topbar() {
           className="flex items-center gap-2 cursor-pointer"
           onClick={() => navigate('/')}
         >
-          <span className="text-xl font-bold">Movie Blog</span>
+          <span className="text-xl font-bold">The Movie Blog</span>
         </div>
 
         <div className="flex items-center gap-4">
