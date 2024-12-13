@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import BaseService from '../../api/service';
 import { BlogPostEntry } from './blogPostSlice';
+import { formatDate } from '@/utils/dateUtils';
 
 interface SearchBlogPostState {
   data: {
@@ -58,7 +59,10 @@ const searchBlogPostSlice = createSlice({
       .addCase(searchBlogPosts.fulfilled, (state, action) => {
         state.loading = false;
         state.data = {
-          entries: action.payload.entries,
+          entries: action.payload.entries.map((entry) => ({
+            ...entry,
+            created_at: formatDate(entry.created_at)
+          })),
           total_documents: action.payload.total_documents
         };
       })

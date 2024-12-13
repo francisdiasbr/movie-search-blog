@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import BaseService from '../../api/service';
+import { formatDate } from '@/utils/dateUtils';
 
 export interface BlogPostEntry {
   tconst: string;
@@ -13,6 +14,7 @@ export interface BlogPostEntry {
   original_movie_soundtrack: string;
   conclusion: string;
   poster_url: string;
+  created_at: string;
 }
 
 interface BlogPostState {
@@ -52,7 +54,10 @@ const blogPostSlice = createSlice({
       })
       .addCase(fetchBlogPost.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        state.data = {
+          ...action.payload,
+          created_at: formatDate(action.payload.created_at)
+        }
         console.log('action.payload', action.payload)
       })
       .addCase(fetchBlogPost.rejected, (state) => {

@@ -9,6 +9,7 @@ class BaseService {
 
   constructor() {
     this.baseURL = 'https://the-movie-search-app-638de9ab055f.herokuapp.com/api';
+    // this.baseURL = 'http://192.168.15.11:5000/api';
   }
 
   async delete<T>(endpoint: string, headers: Record<string, string> = {}): Promise<T> {
@@ -48,21 +49,36 @@ class BaseService {
 
     try {
       const response = await fetch(url, options);
+      
+      console.log('API Response:', {
+        status: response.status,
+        url,
+        method,
+        response
+      });
+
       if (!response.ok) {
-        const error = new Error(`HTTP error! status: ${response.status}`) as Error & { response: Response };
+        const errorData = await response.json().catch(() => null);
+        const error = new Error(`HTTP error! status: ${response.status}`) as Error & { 
+          response: Response;
+          data?: unknown;
+        };
         error.response = response;
+        error.data = errorData;
         throw error;
       }
 
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.includes('application/json')) {
-        return response.json();
+        const data = await response.json();
+        console.log('Response data:', data);
+        return data;
       }
       return response.statusText as T;
     } catch (error) {
       console.error(
-        `API call error with ${method} request from url ${url}`,
-        (error as Error).message
+        `API call error with ${method} request from url ${url}:`,
+        error
       );
       throw error;
     }

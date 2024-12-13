@@ -15,10 +15,18 @@ export default function Home() {
   const { data, loading, error } = useAppSelector((state: RootState) => state.searchBlogPost);
 
   useEffect(() => {
-    const params = {
-      filters: {},
+    const fetchData = async () => {
+      try {
+        const params = {
+          filters: {},
+        };
+        await dispatch(searchBlogPosts(params));
+      } catch (err) {
+        console.error('Erro ao buscar posts:', err);
+      }
     };
-    dispatch(searchBlogPosts(params));
+
+    fetchData();
   }, [dispatch]);
 
   const handleCardClick = (movieId: string) => {
@@ -27,13 +35,25 @@ export default function Home() {
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
-  if (!data?.entries?.length) return null;
+  
+  const entries = data?.entries || [];
+  const hasEntries = entries.length > 0;
+
+  if (!hasEntries) {
+    return (
+      <Layout>
+        <div className="container mx-auto p-4">
+          <p className="text-center text-gray-500">Nenhum post encontrado.</p>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
       <div className="container mx-auto p-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {data.entries.map((post) => (
+          {entries.map((post) => (
             <Card 
               key={`${post.tconst}-${post.title}`}
               onClick={() => handleCardClick(post.tconst)}
@@ -47,8 +67,8 @@ export default function Home() {
                   </Avatar>
                   <CardTitle className="text-xl font-semibold">{post.title}</CardTitle>
                 </div>
-                <p className="text-slate-500 dark:text-slate-400">
-                  {post.primaryTitle}
+                <p className="text-slate-500 dark:text-slate-400 text-right">
+                  {post.created_at}
                 </p>
               </CardContent>
             </Card>

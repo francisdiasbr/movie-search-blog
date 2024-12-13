@@ -6,15 +6,17 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { RootState } from '../../store/types';
 import { Layout } from '../../components/Layout';
+import { AvatarCard } from '../../components/AvatarCard';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 
 function BlogPost() {
   const { movieId } = useParams();
   const dispatch = useAppDispatch();
   const { data, loading, error } = useAppSelector((state: RootState) => state.blogPost);
+
+  console.log(data);
 
   useEffect(() => {
     if (movieId) {
@@ -32,13 +34,9 @@ function BlogPost() {
         <Card className="mb-8">
           <CardHeader>
             <div className="flex items-center gap-4 mb-4">
-              <Avatar>
-                <AvatarImage src="https://github.com/francisdiasbr.png" alt="Francis Dias" />
-                <AvatarFallback>FD</AvatarFallback>
-              </Avatar>
               <div>
                 <CardTitle className="text-2xl font-bold">{data.title}</CardTitle>
-                <p className="text-slate-500">ID do Filme: {data.tconst}</p>
+                <p className="text-slate-500">{data.created_at}</p>
               </div>
             </div>
             {data.poster_url && (
@@ -53,6 +51,11 @@ function BlogPost() {
           </CardHeader>
 
           <CardContent className="space-y-8">
+            <AvatarCard 
+              name="Francis Dias" 
+              imageUrl="https://github.com/francisdiasbr.png" 
+              fallback="FD" 
+            />
             <Section title="Introdução" content={data.introduction} />
             <Section title="Elenco e Personagens" content={data.stars_and_characters} />
             <Section title="Contexto Histórico" content={data.historical_context} />

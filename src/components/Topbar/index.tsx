@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 export function Topbar() {
   const navigate = useNavigate();
@@ -11,14 +12,22 @@ export function Topbar() {
           className="flex items-center gap-2 cursor-pointer"
           onClick={() => navigate('/')}
         >
-          <span className="text-xl font-bold">The Movie Blog</span>
+          <span className="text-3xl font-bold">The Movie Blog</span>
         </div>
 
         <div className="flex items-center gap-4">
-          <Avatar>
-            <AvatarImage src="https://github.com/francisdiasbr.png" alt="Francis Dias" />
-            <AvatarFallback>FD</AvatarFallback>
-          </Avatar>
+          <span 
+            className="cursor-pointer text-lg font-medium"
+            onClick={() => navigate('/aboutus')}
+          >
+            QUEM SOMOS
+          </span>
+          <a href="https://github.com/francisdiasbr" target="_blank" rel="noopener noreferrer">
+            <FontAwesomeIcon icon={faGithub} size="lg" />
+          </a>
+          <a href="https://linkedin.com/in/francisdiasbr" target="_blank" rel="noopener noreferrer">
+            <FontAwesomeIcon icon={faLinkedin} size="lg" />
+          </a>
         </div>
       </div>
     </div>
