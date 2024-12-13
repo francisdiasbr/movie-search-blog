@@ -28,8 +28,8 @@ export default function AboutUs() {
                 francisdiasbr@gmail.com
               </a>
             </div>
-            <p className="text-lg">Obrigado pela visita!</p>
-            <p className="text-lg">Francis Dias - dezembro de 2024</p>
+            <p className="text-lg">Obrigada pela visita!</p>
+            <p className="text-lg">Francis Dias - Dezembro de 2024</p>
           </div>
         </div>
       </div>
