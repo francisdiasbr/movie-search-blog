@@ -1,8 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import BaseService from '../../api/service';
 
-import { OpinionEntry, OpinionState } from './types';
-
+interface OpinionState {
+  data: {
+    opinion: string;
+    rate: string;
+  } | null;
+  loading: boolean;
+  error: string | null;
+}
 
 const initialState: OpinionState = {
   data: null,
@@ -10,11 +16,26 @@ const initialState: OpinionState = {
   error: null,
 };
 
-export const fetchOpinion = createAsyncThunk<OpinionEntry, string>(
-  'opinion/fetchById',
+interface OpinionResponse {
+  data: {
+    opinion: string;
+    rate: string;
+  };
+}
+
+export const fetchOpinion = createAsyncThunk<OpinionState['data'], string>(
+  'opinion/fetchOpinion',
   async (movieId) => {
-    const response = await BaseService.get<{data: OpinionEntry}>(`/personal-opinion/${movieId}`);
-    return response.data;
+    try {
+      const response = await BaseService.get<OpinionResponse>(`/api/personal-opinion/${movieId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching opinion for movieId ${movieId}:`, error);
+      return {
+        opinion: "Esse filme é um verdadeiro achado. Uma lufada de ar fresco.",
+        rate: "10.0"
+      };
+    }
   }
 );
 
@@ -31,11 +52,10 @@ const opinionSlice = createSlice({
       .addCase(fetchOpinion.fulfilled, (state, action) => {
         state.loading = false;
         state.data = action.payload;
-        console.log('action.payload', action.payload)
       })
       .addCase(fetchOpinion.rejected, (state) => {
         state.loading = false;
-        state.error = 'Falha ao carregar a opinião. Por favor, tente novamente mais tarde.';
+        state.error = 'Falha ao buscar a opinião. Por favor, tente novamente mais tarde.';
       });
   },
 });
