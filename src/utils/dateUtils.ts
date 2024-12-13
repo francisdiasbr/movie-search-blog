@@ -9,6 +9,6 @@ export const formatDate = (data: string): string => {
     console.error('Data inválida:', data);
     return 'Data inválida';
   }
-  const formattedDate = format(date, "dd/MM/yyyy 'às' HH'h'mm", { locale: ptBR });
+  const formattedDate = format(date, "dd/MM/yyyy", { locale: ptBR });
   return formattedDate;
 }; 

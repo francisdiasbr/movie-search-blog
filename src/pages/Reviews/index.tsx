@@ -8,6 +8,8 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Layout } from '../../components/Layout';
+import { Button } from '@/components/ui/button';
+import { Input } from "@/components/ui/input"
 
 export default function Home() {
   const navigate = useNavigate();
@@ -37,6 +39,11 @@ export default function Home() {
     handleSearch();
   }, [handleSearch]);
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('Mudança no input:', e.target.value);
+    setQuery(e.target.value);
+  };
+
   const handleCardClick = (movieId: string) => {
     navigate(`/movie/${movieId}`);
   };
@@ -50,6 +57,20 @@ export default function Home() {
   return (
     <Layout>
       <div className="container mx-auto p-4">
+        <div className="flex items-center border-b border-gray-300 py-2">
+          <Input
+            type="text"
+            value={query}
+            onChange={handleInputChange}
+            placeholder="Pesquisar por título do post ou nome do filme"
+          />
+          <Button 
+            onClick={handleSearch}
+            className="ml-2 px-4 py-1 bg-slate-800 text-white rounded-r hover:bg-slate-700"
+          >
+            Buscar
+          </Button>
+        </div>
         {!hasEntries && (
           <p className="text-center text-gray-500 mt-4">Nenhum post encontrado.</p>
         )}

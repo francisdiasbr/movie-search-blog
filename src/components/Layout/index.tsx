@@ -3,6 +3,7 @@ import { GoBack } from '../GoBack';
 import { useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import Footer from '../Footer/Footer';
+import { SubTopbar } from '../SubTopbar';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -16,6 +17,7 @@ export function Layout({ children }: LayoutProps) {
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-slate-950">
       <Topbar />
+      <SubTopbar />
       {isInternalPage && (
         <div className={`relative ${isMobile ? 'ml-4 mt-4' : 'ml-4 mt-4'} z-10`}>
           <GoBack />
