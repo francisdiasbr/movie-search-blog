@@ -20,7 +20,7 @@ export function Topbar() {
             className="cursor-pointer text-lg font-medium"
             onClick={() => navigate('/aboutus')}
           >
-            QUEM SOMOS
+            ABOUT
           </span>
           <a href="https://github.com/francisdiasbr" target="_blank" rel="noopener noreferrer">
             <FontAwesomeIcon icon={faGithub} size="lg" />

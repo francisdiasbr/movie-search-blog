@@ -16,8 +16,6 @@ function BlogPost() {
   const dispatch = useAppDispatch();
   const { data, loading, error } = useAppSelector((state: RootState) => state.blogPost);
 
-  console.log(data);
-
   useEffect(() => {
     if (movieId) {
       dispatch(fetchBlogPost(movieId));

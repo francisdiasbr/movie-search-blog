@@ -10,11 +10,6 @@ export const Content = styled.div`
   padding: 3rem 1rem;
 `;
 
-export const Header = styled.header`
-  margin-bottom: 3rem;
-  text-align: center;
-`;
-
 export const Title = styled.h1`
   font-size: 2.25rem;
   font-weight: bold;
@@ -39,11 +34,6 @@ export const Main = styled.main`
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   padding: 2rem;
-`;
-
-export const Footer = styled.footer`
-  margin-top: 2rem;
-  text-align: center;
 `;
 
 export const MovieId = styled.p`
