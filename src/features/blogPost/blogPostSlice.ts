@@ -3,6 +3,7 @@ import BaseService from '../../api/service';
 import { formatDate } from '@/utils/dateUtils';
 
 export interface BlogPostEntry {
+  imageUrls?: string[];
   tconst: string;
   primaryTitle: string;
   title: string;
@@ -33,8 +34,9 @@ export const fetchBlogPost = createAsyncThunk<BlogPostEntry, string>(
   'blogPost/fetchById',
   async (movieId) => {
     try {
-      const response = await BaseService.get<{data: BlogPostEntry}>(`/generate-blogpost/${movieId}`);
-      return response.data;
+      const response = await BaseService.get<BlogPostEntry>(`/generate-blogpost/${movieId}`);
+      console.log('API Response:', response);
+      return response;
     } catch (error) {
       console.error('Error fetching blog post:', error);
       throw error;
@@ -54,11 +56,15 @@ const blogPostSlice = createSlice({
       })
       .addCase(fetchBlogPost.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = {
-          ...action.payload,
-          created_at: formatDate(action.payload.created_at)
+        if (action.payload) {
+          state.data = {
+            ...action.payload,
+            created_at: formatDate(action.payload.created_at)
+          };
+          console.log('action.payload', action.payload);
+        } else {
+          console.error('Payload is undefined');
         }
-        console.log('action.payload', action.payload)
       })
       .addCase(fetchBlogPost.rejected, (state) => {
         state.loading = false;

@@ -8,8 +8,11 @@ class BaseService {
   private baseURL: string;
 
   constructor() {
-    this.baseURL = 'https://the-movie-search-app-638de9ab055f.herokuapp.com/api';
-    // this.baseURL = 'http://192.168.15.11:5000/api';
+    const baseURL = import.meta.env.VITE_MOVIE_SEARCH_BLOG_API_URL;
+    if (!baseURL) {
+      throw new Error("VITE_MOVIE_SEARCH_BLOG_API_URL não está definido nas variáveis de ambiente.");
+    }
+    this.baseURL = baseURL;
   }
 
   async delete<T>(endpoint: string, headers: Record<string, string> = {}): Promise<T> {

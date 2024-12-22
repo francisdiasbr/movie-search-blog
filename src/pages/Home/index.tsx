@@ -3,10 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/types';
 import { searchBlogPosts } from '../../features/blogPost/searchBlogPostSlice';
-import { Card, CardTitle, CardContent } from '@/components/ui/card';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ErrorMessage } from '../../components/ErrorMessage';
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Layout } from '../../components/Layout';
 
 export default function Home() {
@@ -16,9 +14,6 @@ export default function Home() {
   const [query, setQuery] = useState('');
 
   const handleSearch = useCallback(async () => {
-    console.log('Texto digitado:', query);
-    console.log('Texto após trim:', query.trim());
-    
     const params = {
       filters: query.trim() ? {
         $or: [
@@ -28,8 +23,7 @@ export default function Home() {
         ]
       } : {}
     };
-    console.log('Parâmetros enviados para API:', params);
-    
+
     await dispatch(searchBlogPosts(params));
   }, [query, dispatch]);
 
@@ -43,37 +37,40 @@ export default function Home() {
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
-  
+
   const entries = data?.entries || [];
   const hasEntries = entries.length > 0;
 
   return (
     <Layout>
-      <div className="container mx-auto p-4">
+      <div style={{ padding: '16px', maxWidth: '1200px', margin: '0 auto' }}>
         {!hasEntries && (
-          <p className="text-center text-gray-500 mt-4">Nenhum post encontrado.</p>
+          <p style={{ textAlign: 'center', color: '#666' }}>Nenhum post encontrado.</p>
         )}
         {hasEntries && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-4">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
             {entries.map((post) => (
-              <Card 
+              <div 
                 key={`${post.tconst}-${post.title}`}
                 onClick={() => handleCardClick(post.tconst)}
-                className="cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors w-full"
+                style={{
+                  backgroundColor: '#f9f9f9',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                  cursor: 'pointer',
+                  padding: '16px'
+                }}
               >
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-4 mb-4">
-                    <Avatar>
-                      <AvatarImage src="https://github.com/francisdiasbr.png" alt="Francis Dias" />
-                      <AvatarFallback>FD</AvatarFallback>
-                    </Avatar>
-                    <CardTitle className="text-xl font-semibold">{post.title}</CardTitle>
-                  </div>
-                  <p className="text-slate-500 dark:text-slate-400 text-right">
-                    {post.created_at}
-                  </p>
-                </CardContent>
-              </Card>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                  <img 
+                    src="https://github.com/francisdiasbr.png" 
+                    alt="Francis Dias" 
+                    style={{ borderRadius: '50%', width: '40px', height: '40px', marginRight: '8px' }} 
+                  />
+                  <h3 style={{ fontSize: '1.25rem', margin: 0 }}>{post.title}</h3>
+                </div>
+                <p style={{ color: '#999', fontSize: '0.875rem' }}>{post.created_at}</p>
+              </div>
             ))}
           </div>
         )}

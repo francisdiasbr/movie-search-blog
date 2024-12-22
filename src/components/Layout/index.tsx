@@ -15,17 +15,17 @@ export function Layout({ children }: LayoutProps) {
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-slate-950">
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: 'white', color: '#1e293b' }}>
       <Topbar />
-      <div className="flex justify-center flex-grow">
-        <div className="w-full max-w-[1200px] flex flex-col">
+      <div style={{ display: 'flex', justifyContent: 'center', flexGrow: 1 }}>
+        <div style={{ width: '100%', maxWidth: '1600px', display: 'flex', flexDirection: 'column', padding: '16px' }}>
           {isInternalPage && (
-            <div className={`relative ${isMobile ? 'ml-4 mt-4' : 'ml-4 mt-4'} z-10`}>
+            <div style={{ position: 'relative', marginLeft: isMobile ? '16px' : '16px', marginTop: '16px', zIndex: 10 }}>
               <GoBack />
             </div>
           )}
           <SubTopbar />
-          <main className="flex-grow pt-6 mt-4">
+          <main style={{ flexGrow: 1, paddingTop: '24px', marginTop: '16px' }}>
             {children}
           </main>
         </div>
@@ -33,4 +33,4 @@ export function Layout({ children }: LayoutProps) {
       <Footer />
     </div>
   );
-} 
+}
