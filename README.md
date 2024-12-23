@@ -11,8 +11,7 @@ Disponível em: https://themoviesearchblog.netlify.app/
 - TypeScript
 - Redux Toolkit
 - React Router DOM
-- Tailwind CSS
-- Shadcn/UI
+- Styled Components
 
 
 ## Funcionalidades

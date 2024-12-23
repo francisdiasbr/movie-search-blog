@@ -1,12 +1,14 @@
 import { Provider } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import './index.css';
+import About from './pages/About';
+import BlogPost from './pages/BlogPost';
+import Home from './pages/Home';
+import Links from './pages/Links';
+import Reviews from './pages/Reviews';
 import { store } from './store/store';
 import { GlobalStyles } from './styles/GlobalStyles';
-import Home from './pages/Home';
-import BlogPost from './pages/BlogPost';
-import AboutUs from './pages/AboutUs';
-import './index.css';
-import Reviews from './pages/Reviews';
 
 function App() {
   return (
@@ -16,8 +18,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/movie/:movieId" element={<BlogPost />} />
-          <Route path="/aboutus" element={<AboutUs />} />
+          <Route path="/about" element={<About />} />
           <Route path="/reviews" element={<Reviews />} />
+          <Route path="/links" element={<Links />} />
         </Routes>
       </BrowserRouter>
     </Provider>

@@ -1,5 +1,11 @@
 import styled from 'styled-components';
 
+
+export const BlogPostTitleContainer = styled.div`
+  text-align: center;
+  margin-bottom: 16px;
+`;
+
 export const Container = styled.div<{ hasImages: boolean }>`
   max-width: 4xl;
   display: flex;
@@ -32,5 +38,18 @@ export const ImageColumn = styled.div`
 `;
 
 export const ImageWrapper = styled.div`
+  margin-bottom: 16px;
+`;
+
+export const PosterContainer = styled.div`
+  width: 15%;
+  margin: 0 auto;
+  aspect-ratio: 2 / 3;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  overflow: hidden;
+`;
+
+export const SectionContainer = styled.div`
   margin-bottom: 16px;
 `;

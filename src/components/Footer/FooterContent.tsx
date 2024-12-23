@@ -1,15 +1,50 @@
-import Copyright from './Copyright';
+import styled from 'styled-components';
+
 import SocialLinks from './SocialLinks';
 
+const FooterContentContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    justify-content: space-between;
+  }
+`;
+
+const CopyrightContainer = styled.div`
+  width: 100%;
+  padding: 0 16px;
+  margin: 0 auto;
+  text-align: center;
+
+  @media (min-width: 768px) {
+    width: 33.3333%;
+    text-align: left;
+  }
+`;
+
+const SocialLinksContainer = styled.div`
+  width: 100%;
+  padding: 0 16px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    width: 66.6667%;
+  }
+`;
+
 const FooterContent = () => (
-  <div className="flex flex-wrap items-center justify-center md:justify-between w-full">
-    <div className="w-full md:w-4/12 px-4 mx-auto text-center md:text-left">
-      <Copyright />
-    </div>
-    <div className="w-full md:w-8/12 px-4 mx-auto">
+  <FooterContentContainer>
+    <CopyrightContainer>
+      <div style={{ color: '#fff' }}>The Movie Search &copy; {new Date().getFullYear()}</div>
+    </CopyrightContainer>
+    <SocialLinksContainer>
       <SocialLinks />
-    </div>
-  </div>
+    </SocialLinksContainer>
+  </FooterContentContainer>
 );
 
 export default FooterContent;

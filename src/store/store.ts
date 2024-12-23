@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import searchBlogPostReducer from '../features/blogPost/searchBlogPostSlice';
-import blogPostReducer from '../features/blogPost/blogPostSlice';
 import blogPostImagesReducer from '../features/blogPost/blogPostImagesSlice';
+import blogPostReducer from '../features/blogPost/blogPostSlice';
+import searchBlogPostReducer from '../features/blogPost/searchBlogPostSlice';
 import opinionReducer from '../features/opinion/opinionSlice';
 
 export const store = configureStore({
@@ -15,4 +15,4 @@ export const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch; 
+export type AppDispatch = typeof store.dispatch;

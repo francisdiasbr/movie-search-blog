@@ -1,9 +1,12 @@
-import { Topbar } from '../Topbar';
-import { GoBack } from '../GoBack';
-import { useLocation } from 'react-router-dom';
+import React from 'react';
 import { useMediaQuery } from 'react-responsive';
+import { useLocation } from 'react-router-dom';
+
 import Footer from '../Footer/Footer';
+import { GoBack } from '../GoBack';
 import { SubTopbar } from '../SubTopbar';
+import { Topbar } from '../Topbar';
+import * as S from './styles';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -15,22 +18,20 @@ export function Layout({ children }: LayoutProps) {
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: 'white', color: '#1e293b' }}>
+    <S.LayoutContainer>
       <Topbar />
-      <div style={{ display: 'flex', justifyContent: 'center', flexGrow: 1 }}>
-        <div style={{ width: '100%', maxWidth: '1600px', display: 'flex', flexDirection: 'column', padding: '16px' }}>
-          {isInternalPage && (
-            <div style={{ position: 'relative', marginLeft: isMobile ? '16px' : '16px', marginTop: '16px', zIndex: 10 }}>
-              <GoBack />
-            </div>
-          )}
+      <S.ContentWrapper>
+        <S.InnerContainer>
           <SubTopbar />
-          <main style={{ flexGrow: 1, paddingTop: '24px', marginTop: '16px' }}>
-            {children}
-          </main>
-        </div>
-      </div>
+          {isInternalPage && (
+            <S.GoBackWrapper isMobile={isMobile}>
+              <GoBack />
+            </S.GoBackWrapper>
+          )}
+          <S.MainContent>{children}</S.MainContent>
+        </S.InnerContainer>
+      </S.ContentWrapper>
       <Footer />
-    </div>
+    </S.LayoutContainer>
   );
 }

@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
 import BaseService from '../../api/service';
-import { formatDate } from '@/utils/dateUtils';
+import { formatDate } from '../../utils/dateUtils';
 
 export interface BlogPostEntry {
   imageUrls?: string[];
@@ -30,27 +31,24 @@ const initialState: BlogPostState = {
   error: null,
 };
 
-export const fetchBlogPost = createAsyncThunk<BlogPostEntry, string>(
-  'blogPost/fetchById',
-  async (movieId) => {
-    try {
-      const response = await BaseService.get<BlogPostEntry>(`/generate-blogpost/${movieId}`);
-      console.log('API Response:', response);
-      return response;
-    } catch (error) {
-      console.error('Error fetching blog post:', error);
-      throw error;
-    }
+export const fetchBlogPost = createAsyncThunk<BlogPostEntry, string>('blogPost/fetchById', async movieId => {
+  try {
+    const response = await BaseService.get<BlogPostEntry>(`/generate-blogpost/${movieId}`);
+    console.log('API Response:', response);
+    return response;
+  } catch (error) {
+    console.error('Error fetching blog post:', error);
+    throw error;
   }
-);
+});
 
 const blogPostSlice = createSlice({
   name: 'blogPost',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchBlogPost.pending, (state) => {
+      .addCase(fetchBlogPost.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -59,18 +57,18 @@ const blogPostSlice = createSlice({
         if (action.payload) {
           state.data = {
             ...action.payload,
-            created_at: formatDate(action.payload.created_at)
+            created_at: formatDate(action.payload.created_at),
           };
           console.log('action.payload', action.payload);
         } else {
           console.error('Payload is undefined');
         }
       })
-      .addCase(fetchBlogPost.rejected, (state) => {
+      .addCase(fetchBlogPost.rejected, state => {
         state.loading = false;
         state.error = 'Falha ao carregar o post do blog. Por favor, tente novamente mais tarde.';
       });
   },
 });
 
-export default blogPostSlice.reducer; 
+export default blogPostSlice.reducer;
