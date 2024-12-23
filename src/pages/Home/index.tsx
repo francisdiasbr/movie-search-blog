@@ -19,12 +19,12 @@ export default function Home() {
     const params = {
       filters: query.trim()
         ? {
-            $or: [
-              { title: { $regex: query.trim(), $options: 'i' } },
-              { primaryTitle: { $regex: query.trim(), $options: 'i' } },
-              { introduction: { $regex: query.trim(), $options: 'i' } },
-            ],
-          }
+          $or: [
+            { title: { $regex: query.trim(), $options: 'i' } },
+            { primaryTitle: { $regex: query.trim(), $options: 'i' } },
+            { introduction: { $regex: query.trim(), $options: 'i' } },
+          ],
+        }
         : {},
     };
 
@@ -46,16 +46,14 @@ export default function Home() {
 
   return (
     <Layout>
-      <div style={{ padding: '16px', maxWidth: '1200px', margin: '0 auto' }}>
-        {!hasEntries && <p style={{ textAlign: 'center', color: '#666' }}>Nenhum post encontrado.</p>}
-        {hasEntries && (
-          <GridContainer>
-            {entries.map(post => (
-              <Card key={`${post.tconst}-${post.title}`} post={post} onClick={handleCardClick} />
-            ))}
-          </GridContainer>
-        )}
-      </div>
+      {!hasEntries && <p style={{ textAlign: 'center' }}>Nenhum post encontrado.</p>}
+      {hasEntries && (
+        <GridContainer>
+          {entries.map(post => (
+            <Card key={`${post.tconst}-${post.title}`} post={post} onClick={handleCardClick} />
+          ))}
+        </GridContainer>
+      )}
     </Layout>
   );
 }

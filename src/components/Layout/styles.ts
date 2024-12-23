@@ -16,7 +16,6 @@ export const ContentWrapper = styled.div`
 
 export const InnerContainer = styled.div`
   width: 100%;
-  max-width: 1600px;
   display: flex;
   flex-direction: column;
   padding: 16px;
@@ -33,4 +32,8 @@ export const MainContent = styled.main`
   flex-grow: 1;
   padding-top: 24px;
   margin-top: 16px;
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 `;

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { Button } from '../ui/button';
+import Button from '../Button';
 
 export function GoBack() {
   const navigate = useNavigate();

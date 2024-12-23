@@ -1,16 +1,42 @@
+import styled from 'styled-components';
+
+const SocialLinksList = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  justify-content: center;
+
+  @media (min-width: 768px) {
+    justify-content: flex-end;
+  }
+`;
+
+const SocialLinkItem = styled.li`
+  margin: 0 8px;
+`;
+
+const SocialLink = styled.a`
+  color: #FFF;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: block;
+  padding: 0.25rem 0.75rem;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #ffffff;
+  }
+`;
+
 const SocialLinks = () => (
-  <ul className="flex flex-wrap list-none md:justify-end justify-center">
-    <li>
-      <a href="/aboutus" className="text-gray-400 hover:text-white text-sm font-medium block py-1 px-3 transition-colors">
-        About
-      </a>
-    </li>
-    <li>
-      <a href="/" className="text-gray-400 hover:text-white text-sm font-medium block py-1 px-3 transition-colors">
-        Blog
-      </a>
-    </li>
-  </ul>
+  <SocialLinksList>
+    <SocialLinkItem>
+      <SocialLink href="/about">About</SocialLink>
+    </SocialLinkItem>
+    <SocialLinkItem>
+      <SocialLink href="/">Blog</SocialLink>
+    </SocialLinkItem>
+  </SocialLinksList>
 );
 
 export default SocialLinks;

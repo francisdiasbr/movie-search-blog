@@ -20,12 +20,12 @@ export default function Home() {
     const params = {
       filters: query.trim()
         ? {
-            $or: [
-              { title: { $regex: query.trim(), $options: 'i' } },
-              { primaryTitle: { $regex: query.trim(), $options: 'i' } },
-              { introduction: { $regex: query.trim(), $options: 'i' } },
-            ],
-          }
+          $or: [
+            { title: { $regex: query.trim(), $options: 'i' } },
+            { primaryTitle: { $regex: query.trim(), $options: 'i' } },
+            { introduction: { $regex: query.trim(), $options: 'i' } },
+          ],
+        }
         : {},
     };
     await dispatch(searchBlogPosts(params));
@@ -52,15 +52,17 @@ export default function Home() {
 
   return (
     <Layout>
-      <ReviewSearch query={query} onInputChange={handleInputChange} onKeyPress={handleKeyPress} onSearch={handleSearch} />
-      {!hasEntries && <p style={{ textAlign: 'center', color: '#666' }}>Nenhum post encontrado.</p>}
-      {hasEntries && (
-        <S.GridContainer>
-          {entries.map(post => (
-            <Card key={post.tconst} post={post} onClick={handleCardClick} />
-          ))}
-        </S.GridContainer>
-      )}
+      <div style={{ padding: '16px', maxWidth: '1200px', margin: '0 auto' }}>
+        <ReviewSearch query={query} onInputChange={handleInputChange} onKeyPress={handleKeyPress} onSearch={handleSearch} />
+        {!hasEntries && <p style={{ textAlign: 'center', color: '#666' }}>Nenhum post encontrado.</p>}
+        {hasEntries && (
+          <S.GridContainer>
+            {entries.map(post => (
+              <Card key={post.tconst} post={post} onClick={handleCardClick} />
+            ))}
+          </S.GridContainer>
+        )}
+      </div>
     </Layout>
   );
 }

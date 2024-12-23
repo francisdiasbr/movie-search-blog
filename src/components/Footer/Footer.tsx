@@ -1,21 +1,36 @@
+import styled from 'styled-components';
+
 import FooterContent from './FooterContent';
-// import FooterDivider from './FooterDivider';
-// import StoreButtons from './StoreButtons';
+
+const FooterContainer = styled.footer`
+  position: relative;
+  width: 100%;
+  background: linear-gradient(to bottom, #1a1a1a, #000);
+  padding: 24px 0;
+`;
+
+const FooterWrapper = styled.div`
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 16px;
+`;
+
+const FooterContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+`;
 
 const Footer = () => {
   return (
-    <footer className="relative w-full bg-gradient-to-b from-gray-900 to-black py-12">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex flex-col items-center space-y-8">
-          {/* <p className="text-white text-center text-lg">
-            Assine a nossa newsletter ou baixe o aplicativo e receba diariamente sugestões inéditas de filmes.
-          </p> */}
-          {/* <StoreButtons /> */}
-          {/* <FooterDivider /> */}
+    <FooterContainer>
+      <FooterWrapper>
+        <FooterContentContainer>
           <FooterContent />
-        </div>
-      </div>
-    </footer>
+        </FooterContentContainer>
+      </FooterWrapper>
+    </FooterContainer>
   );
 };
 

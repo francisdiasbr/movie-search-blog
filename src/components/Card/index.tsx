@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { CardContainer, CardHeader, CardImage, CardTitle, CardDate } from './styles';
+import * as S from './styles';
 
 interface CardProps {
   post: {
@@ -13,13 +13,13 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ post, onClick }) => {
   return (
-    <CardContainer onClick={() => onClick(post.tconst)}>
-      <CardHeader>
-        <CardImage src="https://github.com/francisdiasbr.png" alt="Francis Dias" />
-        <CardTitle>{post.title}</CardTitle>
-      </CardHeader>
-      <CardDate>{post.created_at}</CardDate>
-    </CardContainer>
+    <S.CardContainer onClick={() => onClick(post.tconst)}>
+      <S.CardHeader>
+        <S.CardImage src="https://github.com/francisdiasbr.png" alt="Francis Dias" />
+        <S.CardTitle>{post.title}</S.CardTitle>
+      </S.CardHeader>
+      <S.CardDate>{post.created_at}</S.CardDate>
+    </S.CardContainer>
   );
 };
 

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
-import { Separator } from '../../components/ui/separator';
+import Separator from '../../components/Separator';
 import { fetchAllImageUrls } from '../../features/blogPost/blogPostImagesSlice';
 import { fetchBlogPost } from '../../features/blogPost/blogPostSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -31,10 +31,10 @@ function BlogPost() {
 
   return (
     <Layout>
-      <div>
-        <div style={{ textAlign: 'center', marginBottom: '16px' }}>
-          <h2 style={{ fontWeight: '600' }}>{data.title}</h2>
-        </div>
+      <>
+        <S.BlogPostTitleContainer>
+          <h2>{data.title}</h2>
+        </S.BlogPostTitleContainer>
         <S.Container hasImages={hasImages}>
           <S.ContentColumn hasImages={hasImages}>
             <Section title="Introdução" content={data.introduction} />
@@ -51,20 +51,11 @@ function BlogPost() {
             </S.ImageColumn>
           )}
         </S.Container>
-      </div>
+      </>
       {data.poster_url && (
-        <div
-          style={{
-            width: '25%',
-            margin: '0 auto',
-            aspectRatio: 2 / 3,
-            backgroundColor: '#f9fafb',
-            borderRadius: '8px',
-            overflow: 'hidden',
-          }}
-        >
-          <img src={data.poster_url} alt={data.primaryTitle} className="w-full h-full object-cover" />
-        </div>
+        <S.PosterContainer>
+          <img src={data.poster_url} alt={data.primaryTitle} />
+        </S.PosterContainer>
       )}
     </Layout>
   );
@@ -74,13 +65,11 @@ function Section({ title, content }: { title: string; content: string }) {
   if (!content) return null;
 
   return (
-    <div style={{ marginBottom: '16px' }}>
-      <div>
+    <S.SectionContainer>
         <h2>{title}</h2>
-        <Separator style={{ marginBottom: '16px' }} />
+        <Separator />
         <p style={{ textIndent: '32px' }}>{content}</p>
-      </div>
-    </div>
+    </S.SectionContainer>
   );
 }
 
@@ -88,13 +77,13 @@ function ImageGallery({ images }: { images: string[] }) {
   if (!images || images.length === 0) return null;
 
   return (
-    <div>
+    <>
       {images.map((url, index) => (
         <S.ImageWrapper key={index}>
-          <img src={url} alt={`Imagem ${index + 1}`} className="w-full h-full object-cover" />
+          <img src={url} alt={`Imagem ${index + 1}`} />
         </S.ImageWrapper>
       ))}
-    </div>
+    </>
   );
 }
 
