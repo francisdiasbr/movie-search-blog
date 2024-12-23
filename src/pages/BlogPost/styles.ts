@@ -25,3 +25,7 @@ export const ImageColumn = styled.div`
   width: 38%;
   padding-left: 1rem;
 `;
+
+export const ImageWrapper = styled.div`
+  margin-bottom: 16px;
+`;

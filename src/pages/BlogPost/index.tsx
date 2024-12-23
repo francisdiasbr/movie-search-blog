@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchBlogPost } from '../../features/blogPost/blogPostSlice';
-// import { fetchAllImageUrls } from '../../features/blogPost/blogPostImagesSlice';
+import { fetchAllImageUrls } from '../../features/blogPost/blogPostImagesSlice';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { RootState } from '../../store/types';
@@ -22,7 +22,7 @@ function BlogPost() {
   console.log('imageUrls', imageUrls);
   useEffect(() => {
     if (movieId) {
-      // dispatch(fetchAllImageUrls({ tconst: movieId }));
+      dispatch(fetchAllImageUrls({ tconst: movieId }));
       dispatch(fetchBlogPost(movieId));
     }
   }, [dispatch, movieId]);
@@ -93,9 +93,9 @@ function ImageGallery({ images }: { images: string[] }) {
   return (
     <div>
       {images.map((url, index) => (
-        <div key={index}>
+        <S.ImageWrapper key={index}>
           <img src={url} alt={`Imagem ${index + 1}`} className="w-full h-full object-cover" />
-        </div>
+        </S.ImageWrapper>
       ))}
     </div>
   );
