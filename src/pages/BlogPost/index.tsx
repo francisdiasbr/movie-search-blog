@@ -8,7 +8,6 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { RootState } from '../../store/types';
 import { Layout } from '../../components/Layout';
-// import { AvatarCard } from '../../components/AvatarCard';
 import { Separator } from "@/components/ui/separator";
 import * as S from './styles';
 
@@ -19,7 +18,6 @@ function BlogPost() {
   const { data, loading, error } = useAppSelector((state: RootState) => state.blogPost);
   const { imageUrls } = useAppSelector((state: RootState) => state.blogPostImages);
 
-  console.log('imageUrls', imageUrls);
   useEffect(() => {
     if (movieId) {
       dispatch(fetchAllImageUrls({ tconst: movieId }));
@@ -31,20 +29,16 @@ function BlogPost() {
   if (error) return <ErrorMessage message={error} />;
   if (!data) return null;
 
+  const hasImages = imageUrls && imageUrls.length > 0;
+
   return (
     <Layout>
       <div>
         <div style={{ textAlign: 'center', marginBottom: '16px' }}>
           <h2 style={{ fontWeight: '600' }}>{data.title}</h2>
-          {/* <p>{data.created_at}</p> */}
         </div>
-        {/* <AvatarCard
-          name="Francis Dias"
-          imageUrl="https://github.com/francisdiasbr.png"
-          fallback="FD"
-        /> */}
-        <S.Container style={{ display: 'flex', flexDirection: 'row' }}>
-          <S.ContentColumn>
+        <S.Container hasImages={hasImages}>
+          <S.ContentColumn hasImages={hasImages}>
             <Section title="Introdução" content={data.introduction} />
             <Section title="Elenco e Personagens" content={data.stars_and_characters} />
             <Section title="Contexto Histórico" content={data.historical_context} />
@@ -53,9 +47,11 @@ function BlogPost() {
             <Section title="Trilha Sonora Original" content={data.original_movie_soundtrack} />
             <Section title="Conclusão" content={data.conclusion} />
           </S.ContentColumn>
-          <S.ImageColumn>
-            <ImageGallery images={imageUrls ?? []} />
-          </S.ImageColumn>
+          {hasImages && (
+            <S.ImageColumn>
+              <ImageGallery images={imageUrls} />
+            </S.ImageColumn>
+          )}
         </S.Container>
       </div>
       {data.poster_url && (
@@ -79,8 +75,8 @@ function Section({ title, content }: { title: string; content: string }) {
     <div style={{ marginBottom: '16px' }}>
       <div>
         <h2>{title}</h2>
-        <Separator className="mb-4" />
-        <p>{content}</p>
+        <Separator style={{ marginBottom: '16px' }} />
+        <p style={{ textIndent: '32px' }}>{content}</p>
       </div>
     </div>
   );

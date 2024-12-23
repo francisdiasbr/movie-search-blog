@@ -67,7 +67,7 @@ export default function Home() {
                     alt="Francis Dias" 
                     style={{ borderRadius: '50%', width: '40px', height: '40px', marginRight: '8px' }} 
                   />
-                  <h3 style={{ fontSize: '1.25rem', margin: 0 }}>{post.title}</h3>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: '600', margin: 0 }}>{post.title}</h3>
                 </div>
                 <p style={{ color: '#999', fontSize: '0.875rem' }}>{post.created_at}</p>
               </div>

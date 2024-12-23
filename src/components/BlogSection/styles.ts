@@ -13,5 +13,4 @@ export const Title = styled.h2`
 
 export const Content = styled.p`
   color: #4b5563;
-  line-height: 1.75;
 `;

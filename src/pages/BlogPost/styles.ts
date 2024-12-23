@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.div<{ hasImages: boolean }>`
   max-width: 4xl;
   display: flex;
   flex-direction: row;
@@ -11,9 +11,9 @@ export const Container = styled.div`
   }
 `;
 
-export const ContentColumn = styled.div`
-  width: 62%;
-  padding-right: 1rem;
+export const ContentColumn = styled.div<{ hasImages: boolean }>`
+  width: ${({ hasImages }) => (hasImages ? '62%' : '100%')};
+  padding-right: ${({ hasImages }) => (hasImages ? '1rem' : '0')};
 
   @media (max-width: 1024px) {
     width: 100%;
@@ -24,6 +24,11 @@ export const ContentColumn = styled.div`
 export const ImageColumn = styled.div`
   width: 38%;
   padding-left: 1rem;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+    padding-left: 0;
+  }
 `;
 
 export const ImageWrapper = styled.div`
