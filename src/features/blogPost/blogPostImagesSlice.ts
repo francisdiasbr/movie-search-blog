@@ -24,30 +24,26 @@ interface ImageResponse {
   images: { url: string; filename: string }[];
 }
 
-export const fetchAllImageUrls = createAsyncThunk<
-  { urls: string[]; names: string[] },
-  { tconst: string }
->('/uploadImages/fetchAllImageUrls', async ({ tconst }, { rejectWithValue }) => {
-  try {
-    const response = await baseService.get(
-      `/personal-opinion/get-all-image-urls/${tconst}`
-    ) as ImageResponse;
+export const fetchAllImageUrls = createAsyncThunk<{ urls: string[]; names: string[] }, { tconst: string }>(
+  '/uploadImages/fetchAllImageUrls',
+  async ({ tconst }, { rejectWithValue }) => {
+    try {
+      const response = (await baseService.get(`/personal-opinion/get-all-image-urls/${tconst}`)) as ImageResponse;
 
-    const urls = response.images.map((image: { url: string }) => image.url);
-    const names = response.images.map(
-      (image: { filename: string }) => image.filename
-    );
+      const urls = response.images.map((image: { url: string }) => image.url);
+      const names = response.images.map((image: { filename: string }) => image.filename);
 
-    return { urls, names };
-  } catch (error) {
-    console.error('Error fetching all image URLs:', error);
-    if (error instanceof Error) {
-      return rejectWithValue(error.message);
-    } else {
-      return rejectWithValue('An unexpected error occurred');
+      return { urls, names };
+    } catch (error) {
+      console.error('Error fetching all image URLs:', error);
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      } else {
+        return rejectWithValue('An unexpected error occurred');
+      }
     }
   }
-});
+);
 
 const uploadImagesSlice = createSlice({
   name: 'uploadImages',
@@ -69,7 +65,7 @@ const uploadImagesSlice = createSlice({
       .addCase(fetchAllImageUrls.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload as string;
-      })
+      });
   },
 });
 

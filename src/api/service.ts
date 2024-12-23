@@ -10,7 +10,7 @@ class BaseService {
   constructor() {
     const baseURL = import.meta.env.VITE_MOVIE_SEARCH_BLOG_API_URL;
     if (!baseURL) {
-      throw new Error("VITE_MOVIE_SEARCH_BLOG_API_URL não está definido nas variáveis de ambiente.");
+      throw new Error('VITE_MOVIE_SEARCH_BLOG_API_URL não está definido nas variáveis de ambiente.');
     }
     this.baseURL = baseURL;
   }
@@ -31,12 +31,7 @@ class BaseService {
     return this.request<T>(endpoint, 'PUT', body, headers);
   }
 
-  private async request<T>(
-    endpoint: string, 
-    method: string, 
-    body: unknown = null, 
-    extra_headers: Record<string, string> = {}
-  ): Promise<T> {
+  private async request<T>(endpoint: string, method: string, body: unknown = null, extra_headers: Record<string, string> = {}): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     const options: RequestOptions = {
       headers: {
@@ -52,17 +47,17 @@ class BaseService {
 
     try {
       const response = await fetch(url, options);
-      
+
       console.log('API Response:', {
         status: response.status,
         url,
         method,
-        response
+        response,
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
-        const error = new Error(`HTTP error! status: ${response.status}`) as Error & { 
+        const error = new Error(`HTTP error! status: ${response.status}`) as Error & {
           response: Response;
           data?: unknown;
         };
@@ -79,13 +74,10 @@ class BaseService {
       }
       return response.statusText as T;
     } catch (error) {
-      console.error(
-        `API call error with ${method} request from url ${url}:`,
-        error
-      );
+      console.error(`API call error with ${method} request from url ${url}:`, error);
       throw error;
     }
   }
 }
 
-export default new BaseService(); 
+export default new BaseService();

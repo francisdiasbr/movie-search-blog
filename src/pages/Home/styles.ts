@@ -6,6 +6,17 @@ export const Container = styled.div`
   padding: 16px;
 `;
 
+export const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+`;
+
 export const NoPostsMessage = styled.p`
   text-align: center;
   color: gray;

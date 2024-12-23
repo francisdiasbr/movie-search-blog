@@ -1,21 +1,20 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { fetchBlogPost } from '../../features/blogPost/blogPostSlice';
-import { fetchAllImageUrls } from '../../features/blogPost/blogPostImagesSlice';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ErrorMessage } from '../../components/ErrorMessage';
-import { RootState } from '../../store/types';
 import { Layout } from '../../components/Layout';
-import { Separator } from "@/components/ui/separator";
+import { Separator } from '../../components/ui/separator';
+import { fetchAllImageUrls } from '../../features/blogPost/blogPostImagesSlice';
+import { fetchBlogPost } from '../../features/blogPost/blogPostSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { RootState } from '../../store/types';
 import * as S from './styles';
 
 function BlogPost() {
   const { movieId } = useParams();
   const dispatch = useAppDispatch();
 
-  const { data, loading, error } = useAppSelector((state: RootState) => state.blogPost);
+  const { data, error } = useAppSelector((state: RootState) => state.blogPost);
   const { imageUrls } = useAppSelector((state: RootState) => state.blogPostImages);
 
   useEffect(() => {
@@ -25,7 +24,6 @@ function BlogPost() {
     }
   }, [dispatch, movieId]);
 
-  if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
   if (!data) return null;
 
@@ -55,19 +53,23 @@ function BlogPost() {
         </S.Container>
       </div>
       {data.poster_url && (
-        <div style={{ width: '25%', margin: '0 auto', aspectRatio: 2 / 3, backgroundColor: '#f9fafb', borderRadius: '8px', overflow: 'hidden' }}>
-          <img
-            src={data.poster_url}
-            alt={data.primaryTitle}
-            className="w-full h-full object-cover"
-          />
+        <div
+          style={{
+            width: '25%',
+            margin: '0 auto',
+            aspectRatio: 2 / 3,
+            backgroundColor: '#f9fafb',
+            borderRadius: '8px',
+            overflow: 'hidden',
+          }}
+        >
+          <img src={data.poster_url} alt={data.primaryTitle} className="w-full h-full object-cover" />
         </div>
       )}
     </Layout>
   );
 }
 
-// Componente auxiliar para as seções
 function Section({ title, content }: { title: string; content: string }) {
   if (!content) return null;
 
@@ -82,7 +84,6 @@ function Section({ title, content }: { title: string; content: string }) {
   );
 }
 
-// Componente auxiliar para exibir imagens
 function ImageGallery({ images }: { images: string[] }) {
   if (!images || images.length === 0) return null;
 
@@ -97,4 +98,4 @@ function ImageGallery({ images }: { images: string[] }) {
   );
 }
 
-export default BlogPost; 
+export default BlogPost;

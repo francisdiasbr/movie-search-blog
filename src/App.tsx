@@ -1,12 +1,13 @@
 import { Provider } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import './index.css';
+import AboutUs from './pages/AboutUs';
+import BlogPost from './pages/BlogPost';
+import Home from './pages/Home';
+import Reviews from './pages/Reviews';
 import { store } from './store/store';
 import { GlobalStyles } from './styles/GlobalStyles';
-import Home from './pages/Home';
-import BlogPost from './pages/BlogPost';
-import AboutUs from './pages/AboutUs';
-import './index.css';
-import Reviews from './pages/Reviews';
 
 function App() {
   return (

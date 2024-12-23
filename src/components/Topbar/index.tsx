@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useNavigate } from 'react-router-dom';
 
 export function Topbar() {
   const navigate = useNavigate();
@@ -8,17 +8,23 @@ export function Topbar() {
   return (
     <div className="border-b">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <div 
+        <div
           className="flex items-center gap-2 cursor-pointer"
           onClick={() => navigate('/')}
+          onKeyDown={e => e.key === 'Enter' && navigate('/')}
+          role="button"
+          tabIndex={0}
         >
           <span className="text-3xl font-bold">The Movie Blog</span>
         </div>
 
         <div className="flex items-center gap-4">
-          <span 
+          <span
             className="cursor-pointer text-lg font-medium"
             onClick={() => navigate('/aboutus')}
+            onKeyDown={e => e.key === 'Enter' && navigate('/')}
+            role="button"
+            tabIndex={0}
           >
             ABOUT
           </span>
@@ -32,4 +38,4 @@ export function Topbar() {
       </div>
     </div>
   );
-} 
+}

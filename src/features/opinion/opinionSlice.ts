@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
 import BaseService from '../../api/service';
 
 interface OpinionState {
@@ -23,29 +24,26 @@ interface OpinionResponse {
   };
 }
 
-export const fetchOpinion = createAsyncThunk<OpinionState['data'], string>(
-  'opinion/fetchOpinion',
-  async (movieId) => {
-    try {
-      const response = await BaseService.get<OpinionResponse>(`/api/personal-opinion/${movieId}`);
-      return response.data;
-    } catch (error) {
-      console.error(`Error fetching opinion for movieId ${movieId}:`, error);
-      return {
-        opinion: "Esse filme é um verdadeiro achado. Uma lufada de ar fresco.",
-        rate: "10.0"
-      };
-    }
+export const fetchOpinion = createAsyncThunk<OpinionState['data'], string>('opinion/fetchOpinion', async movieId => {
+  try {
+    const response = await BaseService.get<OpinionResponse>(`/api/personal-opinion/${movieId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching opinion for movieId ${movieId}:`, error);
+    return {
+      opinion: 'Esse filme é um verdadeiro achado. Uma lufada de ar fresco.',
+      rate: '10.0',
+    };
   }
-);
+});
 
 const opinionSlice = createSlice({
   name: 'opinion',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchOpinion.pending, (state) => {
+      .addCase(fetchOpinion.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -53,7 +51,7 @@ const opinionSlice = createSlice({
         state.loading = false;
         state.data = action.payload;
       })
-      .addCase(fetchOpinion.rejected, (state) => {
+      .addCase(fetchOpinion.rejected, state => {
         state.loading = false;
         state.error = 'Falha ao buscar a opinião. Por favor, tente novamente mais tarde.';
       });
