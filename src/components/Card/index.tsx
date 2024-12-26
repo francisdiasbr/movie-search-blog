@@ -15,8 +15,8 @@ const Card: React.FC<CardProps> = ({ post, onClick }) => {
   return (
     <S.CardContainer onClick={() => onClick(post.tconst)}>
       <S.CardHeader>
-        <S.CardImage src="https://github.com/francisdiasbr.png" alt="Francis Dias" />
         <S.CardTitle>{post.title}</S.CardTitle>
+        {/* <S.CardImage src="https://github.com/francisdiasbr.png" alt="Francis Dias" /> */}
       </S.CardHeader>
       <S.CardDate>{post.created_at}</S.CardDate>
     </S.CardContainer>
