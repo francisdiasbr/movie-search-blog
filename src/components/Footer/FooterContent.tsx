@@ -39,7 +39,9 @@ const SocialLinksContainer = styled.div`
 const FooterContent = () => (
   <FooterContentContainer>
     <CopyrightContainer>
-      <div style={{ color: '#fff' }}>The Movie Search &copy; {new Date().getFullYear()}</div>
+      <div style={{ color: '#fff' }}>
+        The Movie Search &copy; {new Date().getFullYear()}
+      </div>
     </CopyrightContainer>
     <SocialLinksContainer>
       <SocialLinks />

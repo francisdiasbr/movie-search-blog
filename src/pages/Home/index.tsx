@@ -47,21 +47,27 @@ export default function Home() {
 
   return (
     <Layout>
-      {loading && (
-        <GridContainer>
-          {[...Array(3)].map((_, index) => (
-            <SkeletonCard key={index} />
-          ))}
-        </GridContainer>
-      )}
-      {!loading && !hasEntries && <p style={{ textAlign: 'center' }}>Nenhum post encontrado.</p>}
-      {!loading && hasEntries && (
-        <GridContainer>
-          {entries.map(post => (
-            <Card key={`${post.tconst}-${post.title}`} post={post} onClick={handleCardClick} />
-          ))}
-        </GridContainer>
-      )}
+      <div style={{ marginTop: 30 }}>
+        {loading && (
+          <GridContainer>
+            {[...Array(3)].map((_, index) => (
+              <SkeletonCard key={index} />
+            ))}
+          </GridContainer>
+        )}
+        {!loading && !hasEntries && <p style={{ textAlign: 'center' }}>Nenhum post encontrado.</p>}
+        {!loading && hasEntries && (
+          <GridContainer>
+            {entries.map(post => (
+              <Card
+                key={`${post.tconst}-${post.title}`}
+                post={post}
+                onClick={handleCardClick}
+              />
+            ))}
+          </GridContainer>
+        )}
+      </div>
     </Layout>
   );
 }

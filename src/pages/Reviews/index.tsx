@@ -14,7 +14,9 @@ import * as S from './styles';
 export default function Home() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { data, error, loading } = useAppSelector((state: RootState) => state.searchBlogPost);
+  const { data, error, loading } = useAppSelector(
+    (state: RootState) => state.searchBlogPost
+  );
   const [query, setQuery] = useState('');
 
   const handleSearch = useCallback(async () => {
@@ -58,7 +60,12 @@ export default function Home() {
   return (
     <Layout>
       <div style={{ padding: '16px', maxWidth: '1200px', margin: '0 auto' }}>
-        <ReviewSearch query={query} onInputChange={handleInputChange} onKeyPress={handleKeyPress} onSearch={handleSearch} />
+        <ReviewSearch
+          query={query}
+          onInputChange={handleInputChange}
+          onKeyPress={handleKeyPress}
+          onSearch={handleSearch}
+        />
         {loading && (
           <S.GridContainer>
             {[...Array(3)].map((_, index) => (
@@ -66,11 +73,20 @@ export default function Home() {
             ))}
           </S.GridContainer>
         )}
-        {!loading && !hasEntries && <p style={{ textAlign: 'center', color: '#666' }}>Nenhum post encontrado.</p>}
+        {!loading && !hasEntries && (
+          <p style={{ textAlign: 'center', color: '#666' }}>
+            Nenhum post encontrado.
+          </p>
+        )}
         {!loading && hasEntries && (
           <S.GridContainer>
             {entries.map(post => (
-              <Card key={post.tconst} post={post} onClick={handleCardClick} />
+              // eslint-disable-next-line prettier/prettier
+              <Card
+                key={post.tconst}
+                post={post}
+                onClick={handleCardClick}
+              />
             ))}
           </S.GridContainer>
         )}

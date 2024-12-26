@@ -24,14 +24,21 @@ interface ImageResponse {
   images: { url: string; filename: string }[];
 }
 
-export const fetchAllImageUrls = createAsyncThunk<{ urls: string[]; names: string[] }, { tconst: string }>(
+export const fetchAllImageUrls = createAsyncThunk<
+  { urls: string[]; names: string[] },
+  { tconst: string }
+>(
   '/uploadImages/fetchAllImageUrls',
   async ({ tconst }, { rejectWithValue }) => {
     try {
-      const response = (await baseService.get(`/personal-opinion/get-all-image-urls/${tconst}`)) as ImageResponse;
+      const response = (await baseService.get(
+        `/personal-opinion/get-all-image-urls/${tconst}`
+      )) as ImageResponse;
 
       const urls = response.images.map((image: { url: string }) => image.url);
-      const names = response.images.map((image: { filename: string }) => image.filename);
+      const names = response.images.map(
+        (image: { filename: string }) => image.filename
+      );
 
       return { urls, names };
     } catch (error) {
@@ -48,10 +55,18 @@ export const fetchAllImageUrls = createAsyncThunk<{ urls: string[]; names: strin
 const uploadImagesSlice = createSlice({
   name: 'uploadImages',
   initialState,
-  reducers: {},
+  reducers: {
+    clearImageState: state => {
+      state.status = 'idle';
+      state.error = null;
+      state.objectName = null;
+      state.imageUrl = null;
+      state.imageUrls = [];
+      state.imageNames = [];
+    },
+  },
   extraReducers: builder => {
     builder
-
       .addCase(fetchAllImageUrls.pending, state => {
         state.status = 'loading';
         state.error = null;
@@ -69,4 +84,5 @@ const uploadImagesSlice = createSlice({
   },
 });
 
+export const { clearImageState } = uploadImagesSlice.actions;
 export default uploadImagesSlice.reducer;

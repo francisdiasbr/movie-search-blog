@@ -33,7 +33,7 @@ export const MainContent = styled.main`
   padding-top: 24px;
   margin-top: 16px;
   padding: 16px;
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 0 auto;
   width: 100%;
 `;

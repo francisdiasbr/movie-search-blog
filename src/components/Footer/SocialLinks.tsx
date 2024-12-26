@@ -16,7 +16,7 @@ const SocialLinkItem = styled.li`
 `;
 
 const SocialLink = styled.a`
-  color: #FFF;
+  color: #fff;
   font-size: 0.875rem;
   font-weight: 500;
   display: block;

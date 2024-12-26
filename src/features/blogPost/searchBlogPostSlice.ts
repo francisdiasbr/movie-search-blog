@@ -40,7 +40,10 @@ export const searchBlogPosts = createAsyncThunk<SearchResponse, SearchParams>(
     }
   ) => {
     try {
-      const response = await BaseService.post('/generate-blogpost/search', params);
+      const response = await BaseService.post(
+        '/generate-blogpost/search',
+        params
+      );
       return response as SearchResponse;
     } catch (error) {
       console.error('Error searching blog posts:', error);
@@ -71,7 +74,8 @@ const searchBlogPostSlice = createSlice({
       })
       .addCase(searchBlogPosts.rejected, state => {
         state.loading = false;
-        state.error = 'Falha ao buscar posts do blog. Por favor, tente novamente mais tarde.';
+        state.error =
+          'Falha ao buscar posts do blog. Por favor, tente novamente mais tarde.';
       });
   },
 });

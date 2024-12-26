@@ -22,4 +22,3 @@ export const NavItem = styled.span<{ isSelected: boolean }>`
 export const SubTopbarContainer = styled.div`
   border-bottom: 1px solid #e5e7eb;
 `;
-

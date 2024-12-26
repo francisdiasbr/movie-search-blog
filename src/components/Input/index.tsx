@@ -17,7 +17,13 @@ const StyledInput = styled.input`
   box-sizing: border-box;
 `;
 
-const Input: React.FC<InputProps> = ({ type, value, onChange, onKeyPress, placeholder }) => {
+const Input: React.FC<InputProps> = ({
+  type,
+  value,
+  onChange,
+  onKeyPress,
+  placeholder,
+}) => {
   return (
     <StyledInput
       type={type}
@@ -29,4 +35,4 @@ const Input: React.FC<InputProps> = ({ type, value, onChange, onKeyPress, placeh
   );
 };
 
-export default Input; 
+export default Input;

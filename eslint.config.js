@@ -76,30 +76,38 @@ export default [
       'jsx-a11y/heading-has-content': 'error',
       'jsx-a11y/interactive-supports-focus': 'error',
       'jsx-a11y/no-noninteractive-element-interactions': 'error',
-      'prettier/prettier': [
-        'error',
-        {
-          useTabs: false,
-          tabWidth: 2,
-          endOfLine: 'auto',
-          semi: true,
-          singleQuote: true,
-          printWidth: 140,
-          trailingComma: 'es5',
-          bracketSpacing: true,
-          arrowParens: 'avoid',
-          proseWrap: 'preserve',
-          htmlWhitespaceSensitivity: 'css',
-          vueIndentScriptAndStyle: false,
-          indent: 'off'
-        }
-      ],
+      // 'prettier/prettier': [
+      //   'error',
+      //   {
+      //     useTabs: false,
+      //     tabWidth: 2,
+      //     endOfLine: 'auto',
+      //     semi: true,
+      //     singleQuote: true,
+      //     printWidth: 130,
+      //     trailingComma: 'es5',
+      //     bracketSpacing: true,
+      //     arrowParens: 'avoid',
+      //     proseWrap: 'preserve',
+      //     htmlWhitespaceSensitivity: 'css',
+      //     vueIndentScriptAndStyle: false,
+      //     indent: 'off'
+      //   }
+      // ],
       'react/prop-types': 'off',
       'react/react-in-jsx-scope': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       'import/no-anonymous-default-export': 'off',
-      'react-hooks/exhaustive-deps': 'off'
+      'react-hooks/exhaustive-deps': 'off',
+      'react/jsx-max-props-per-line': [
+        'error',
+        {
+          maximum: 2,
+          when: 'always'
+        }
+      ],
+      'import/newline-after-import': 'off'
     }
   },
   {

@@ -24,18 +24,23 @@ interface OpinionResponse {
   };
 }
 
-export const fetchOpinion = createAsyncThunk<OpinionState['data'], string>('opinion/fetchOpinion', async movieId => {
-  try {
-    const response = await BaseService.get<OpinionResponse>(`/api/personal-opinion/${movieId}`);
-    return response.data;
-  } catch (error) {
-    console.error(`Error fetching opinion for movieId ${movieId}:`, error);
-    return {
-      opinion: 'Esse filme é um verdadeiro achado. Uma lufada de ar fresco.',
-      rate: '10.0',
-    };
+export const fetchOpinion = createAsyncThunk<OpinionState['data'], string>(
+  'opinion/fetchOpinion',
+  async movieId => {
+    try {
+      const response = await BaseService.get<OpinionResponse>(
+        `/api/personal-opinion/${movieId}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching opinion for movieId ${movieId}:`, error);
+      return {
+        opinion: 'Esse filme é um verdadeiro achado. Uma lufada de ar fresco.',
+        rate: '10.0',
+      };
+    }
   }
-});
+);
 
 const opinionSlice = createSlice({
   name: 'opinion',
@@ -53,7 +58,8 @@ const opinionSlice = createSlice({
       })
       .addCase(fetchOpinion.rejected, state => {
         state.loading = false;
-        state.error = 'Falha ao buscar a opinião. Por favor, tente novamente mais tarde.';
+        state.error =
+          'Falha ao buscar a opinião. Por favor, tente novamente mais tarde.';
       });
   },
 });

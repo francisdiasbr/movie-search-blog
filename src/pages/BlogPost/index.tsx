@@ -4,8 +4,9 @@ import { useParams } from 'react-router-dom';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
 import Separator from '../../components/Separator';
-import { fetchAllImageUrls } from '../../features/blogPost/blogPostImagesSlice';
-import { fetchBlogPost } from '../../features/blogPost/blogPostSlice';
+import SkeletonBlogPost from '../../components/SkeletonBlogPost';
+import { clearImageState, fetchAllImageUrls } from '../../features/blogPost/blogPostImagesSlice';
+import { clearBlogPostState, fetchBlogPost } from '../../features/blogPost/blogPostSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/types';
 import * as S from './styles';
@@ -14,7 +15,7 @@ function BlogPost() {
   const { movieId } = useParams();
   const dispatch = useAppDispatch();
 
-  const { data, error } = useAppSelector((state: RootState) => state.blogPost);
+  const { data, error, loading } = useAppSelector((state: RootState) => state.blogPost);
   const { imageUrls } = useAppSelector((state: RootState) => state.blogPostImages);
 
   useEffect(() => {
@@ -22,40 +23,48 @@ function BlogPost() {
       dispatch(fetchAllImageUrls({ tconst: movieId }));
       dispatch(fetchBlogPost(movieId));
     }
+
+    return () => {
+      dispatch(clearBlogPostState());
+      dispatch(clearImageState());
+    };
   }, [dispatch, movieId]);
 
   if (error) return <ErrorMessage message={error} />;
-  if (!data) return null;
+  if (!data && !loading) return null;
 
   const hasImages = imageUrls && imageUrls.length > 0;
 
   return (
     <Layout>
-      <>
-        <S.BlogPostTitleContainer>
-          <h2>{data.title}</h2>
-        </S.BlogPostTitleContainer>
-        <S.Container hasImages={hasImages}>
-          <S.ContentColumn hasImages={hasImages}>
-            <Section title="Introdução" content={data.introduction} />
-            <Section title="Elenco e Personagens" content={data.stars_and_characters} />
-            <Section title="Contexto Histórico" content={data.historical_context} />
-            <Section title="Importância Cultural" content={data.cultural_importance} />
-            <Section title="Análise Técnica" content={data.technical_analysis} />
-            <Section title="Trilha Sonora Original" content={data.original_movie_soundtrack} />
-            <Section title="Conclusão" content={data.conclusion} />
-          </S.ContentColumn>
-          {hasImages && (
-            <S.ImageColumn>
-              <ImageGallery images={imageUrls} />
-            </S.ImageColumn>
+      {loading && <SkeletonBlogPost />}
+      {!loading && data && (
+        <>
+          <S.BlogPostTitleContainer>
+            <h2>{data.title}</h2>
+          </S.BlogPostTitleContainer>
+          <S.Container hasImages={hasImages}>
+            <S.ContentColumn hasImages={hasImages}>
+              <Section title="Introdução" content={data.introduction} />
+              <Section title="Elenco e Personagens" content={data.stars_and_characters} />
+              <Section title="Contexto Histórico" content={data.historical_context} />
+              <Section title="Importância Cultural" content={data.cultural_importance} />
+              <Section title="Análise Técnica" content={data.technical_analysis} />
+              <Section title="Trilha Sonora Original" content={data.original_movie_soundtrack} />
+              <Section title="Conclusão" content={data.conclusion} />
+            </S.ContentColumn>
+            {hasImages && (
+              <S.ImageColumn>
+                <ImageGallery images={imageUrls} />
+              </S.ImageColumn>
+            )}
+          </S.Container>
+          {data.poster_url && (
+            <S.PosterContainer>
+              <img src={data.poster_url} alt={data.primaryTitle} />
+            </S.PosterContainer>
           )}
-        </S.Container>
-      </>
-      {data.poster_url && (
-        <S.PosterContainer>
-          <img src={data.poster_url} alt={data.primaryTitle} />
-        </S.PosterContainer>
+        </>
       )}
     </Layout>
   );
@@ -66,9 +75,9 @@ function Section({ title, content }: { title: string; content: string }) {
 
   return (
     <S.SectionContainer>
-        <h2>{title}</h2>
-        <Separator />
-        <p style={{ textIndent: '32px' }}>{content}</p>
+      <h2>{title}</h2>
+      <Separator />
+      <p style={{ textIndent: '32px' }}>{content}</p>
     </S.SectionContainer>
   );
 }

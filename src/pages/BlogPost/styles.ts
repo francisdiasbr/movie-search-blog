@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-
 export const BlogPostTitleContainer = styled.div`
   text-align: center;
   margin-bottom: 16px;
@@ -39,6 +38,10 @@ export const ImageColumn = styled.div`
 
 export const ImageWrapper = styled.div`
   margin-bottom: 16px;
+  img {
+    width: calc(100% - 32px);
+    margin: 0 16px;
+  }
 `;
 
 export const PosterContainer = styled.div`
