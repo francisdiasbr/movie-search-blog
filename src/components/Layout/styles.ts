@@ -18,7 +18,10 @@ export const InnerContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 16px;
+  
+  @media (min-width: 768px) {
+    padding: 16px;
+  }
 `;
 
 export const GoBackWrapper = styled.div<{ isMobile: boolean }>`
@@ -30,10 +33,12 @@ export const GoBackWrapper = styled.div<{ isMobile: boolean }>`
 
 export const MainContent = styled.main`
   flex-grow: 1;
-  padding-top: 24px;
-  margin-top: 16px;
-  padding: 16px;
+  width: 100%;
   max-width: 1600px;
   margin: 0 auto;
-  width: 100%;
+  margin-top: 16px;
+  
+  @media (min-width: 768px) {
+    padding: 24px 16px;
+  }
 `;

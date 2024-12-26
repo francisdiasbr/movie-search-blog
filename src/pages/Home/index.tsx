@@ -5,11 +5,12 @@ import Card from '../../components/Card';
 import SkeletonCard from '../../components/Card/Skeleton';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
+import { NoPostsMessage } from '../../components/NoPostsMessage';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { searchBlogPosts } from '../../features/blogPost/searchBlogPostSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/types';
-import { GridContainer } from './styles';
+import * as S from './styles';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -49,17 +50,17 @@ export default function Home() {
 
   return (
     <Layout>
-      <div style={{ marginTop: 30 }}>
+      <S.Container>
         {loading && (
-          <GridContainer>
+          <S.GridContainer>
             {[...Array(3)].map((_, index) => (
               <SkeletonCard key={index} />
             ))}
-          </GridContainer>
+          </S.GridContainer>
         )}
-        {!loading && !hasEntries && <p style={{ textAlign: 'center' }}>Nenhum post encontrado.</p>}
+        {!loading && !hasEntries && <NoPostsMessage />}
         {!loading && hasEntries && (
-          <GridContainer>
+          <S.GridContainer>
             {entries.map(post => (
               <Card
                 key={`${post.tconst}-${post.content[language].title}`}
@@ -70,9 +71,9 @@ export default function Home() {
                 onClick={handleCardClick}
               />
             ))}
-          </GridContainer>
+          </S.GridContainer>
         )}
-      </div>
+      </S.Container>
     </Layout>
   );
 }

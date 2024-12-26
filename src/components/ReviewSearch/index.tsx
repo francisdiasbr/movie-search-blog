@@ -1,8 +1,10 @@
 import React from 'react';
 
+import { useLanguage } from '../../contexts/LanguageContext';
 import Button from '../Button';
 import Input from '../Input';
 import * as S from './styles';
+
 interface ReviewSearchProps {
   query: string;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -16,6 +18,8 @@ const ReviewSearch: React.FC<ReviewSearchProps> = ({
   onKeyPress,
   onSearch,
 }) => {
+  const { language } = useLanguage();
+
   return (
     <S.ReviewSearchContainer>
       <Input
@@ -23,10 +27,10 @@ const ReviewSearch: React.FC<ReviewSearchProps> = ({
         value={query}
         onChange={onInputChange}
         onKeyPress={onKeyPress}
-        placeholder="Pesquisar por título do post ou nome do filme"
+        placeholder={language === 'pt' ? 'Pesquisar por título do post ou nome do filme' : 'Search by post title or movie name'}
       />
       <Button hasMarginLeft onClick={onSearch}>
-        Buscar
+        {language === 'pt' ? 'Buscar' : 'Search'}
       </Button>
     </S.ReviewSearchContainer>
   );

@@ -13,6 +13,16 @@ export const LogoContainer = styled.div`
   cursor: pointer;
   font-size: 24px;
   font-weight: bold;
+
+  &::after {
+    content: 'TMB';
+  }
+
+  @media (min-width: 768px) {
+    &::after {
+      content: 'The Movie Blog';
+    }
+  }
 `;
 
 export const NavLink = styled.div`

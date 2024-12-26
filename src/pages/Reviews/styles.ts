@@ -1,5 +1,11 @@
 import styled from 'styled-components';
 
+export const Container = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+`;
+
 export const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(1, 1fr);

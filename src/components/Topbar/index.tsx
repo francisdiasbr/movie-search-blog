@@ -16,9 +16,7 @@ export function Topbar() {
           onKeyDown={e => e.key === 'Enter' && navigate('/')}
           role="button"
           tabIndex={0}
-        >
-          The Movie Blog
-        </S.LogoContainer>
+        />
         <S.NavContainer>
           <LanguageToggle />
           <S.NavLink

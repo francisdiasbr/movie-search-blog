@@ -6,19 +6,21 @@ import SkeletonCard from '../../components/Card/Skeleton';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
 import ReviewSearch from '../../components/ReviewSearch';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { searchBlogPosts } from '../../features/blogPost/searchBlogPostSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/types';
 import * as S from './styles';
+import { NoPostsMessage } from '../../components/NoPostsMessage';
 
-export default function Home() {
+export default function Reviews() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { data, error, loading } = useAppSelector(
     (state: RootState) => state.searchBlogPost
   );
   const [query, setQuery] = useState('');
-
+  const { language } = useLanguage();
   const handleSearch = useCallback(async () => {
     const params = {
       filters: query.trim()
@@ -59,7 +61,7 @@ export default function Home() {
 
   return (
     <Layout>
-      <div style={{ padding: '16px', maxWidth: '1200px', margin: '0 auto' }}>
+      <S.Container>
         <ReviewSearch
           query={query}
           onInputChange={handleInputChange}
@@ -73,24 +75,22 @@ export default function Home() {
             ))}
           </S.GridContainer>
         )}
-        {!loading && !hasEntries && (
-          <p style={{ textAlign: 'center', color: '#666' }}>
-            Nenhum post encontrado.
-          </p>
-        )}
+        {!loading && !hasEntries && <NoPostsMessage />}
         {!loading && hasEntries && (
           <S.GridContainer>
             {entries.map(post => (
-              // eslint-disable-next-line prettier/prettier
               <Card
-                key={post.tconst}
-                post={post}
+                key={`${post.tconst}-${post.content[language].title}`}
+                post={{
+                  ...post,
+                  title: post.content[language].title,
+                }}
                 onClick={handleCardClick}
               />
             ))}
           </S.GridContainer>
         )}
-      </div>
+      </S.Container>
     </Layout>
   );
 }

@@ -1,6 +1,49 @@
 import { Layout } from '../../components/Layout';
+import { useLanguage } from '../../contexts/LanguageContext';
+
+const translations = {
+  pt: {
+    title: 'Links',
+    description: 'Essa é uma pequena lista de sites que visito recorrentemente.',
+    sites: [
+      {
+        name: 'A Sharper Focus',
+        url: 'https://www.asharperfocus.com/'
+      },
+      {
+        name: 'IMDb',
+        url: 'https://imdb.com'
+      },
+      {
+        name: 'Filmsite',
+        url: 'https://www.filmsite.org/'
+      }
+    ]
+  },
+  en: {
+    title: 'Links',
+    description: 'This is a small list of websites I frequently visit.',
+    sites: [
+      {
+        name: 'A Sharper Focus',
+        url: 'https://www.asharperfocus.com/'
+      },
+      {
+        name: 'IMDb',
+        url: 'https://imdb.com'
+      },
+      {
+        name: 'Filmsite',
+        url: 'https://www.filmsite.org/'
+      }
+    ]
+  }
+};
 
 export default function Links() {
+  const { language } = useLanguage();
+  const content = translations[language];
+
   return (
     <Layout>
       <div
@@ -12,36 +55,20 @@ export default function Links() {
           textAlign: 'center',
         }}
       >
-        <h1>Links</h1>
-        <p>Essa é uma pequena lista de sites que visito recorrentemente.</p>
+        <h1>{content.title}</h1>
+        <p>{content.description}</p>
         <ul>
-          <li>
-            <a
-              href="https://www.asharperfocus.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              A Sharper Focus
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://imdb.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              IMDb
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://www.filmsite.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Filmsite
-            </a>
-          </li>
+          {content.sites.map((site) => (
+            <li key={site.url}>
+              <a
+                href={site.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {site.name}
+              </a>
+            </li>
+          ))}
         </ul>
       </div>
     </Layout>

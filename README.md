@@ -1,31 +1,77 @@
-# Movie Search Blog 🎬
+# The Movie Blog 🎬
 
-## Sobre o Projeto
-Uma aplicação web que permite aos usuários explorar posts de blog sobre filmes clássicos. 
-
-Disponível em: https://themoviesearchblog.netlify.app/
+[English Version](README_EN.md)
 
 
-## Tecnologias Utilizadas
-- React
-- TypeScript
-- Redux Toolkit
-- React Router DOM
-- Styled Components
+Uma aplicação web bilíngue (PT/EN) para explorar análises detalhadas de filmes clássicos, com foco em aspectos técnicos, históricos e culturais.
 
+## 🌟 Características
 
-## Funcionalidades
-- 🔍 Busca de posts de blog sobre filmes
-- 📖 Visualização detalhada de cada post
+- **Interface Bilíngue**: Suporte completo para Português e Inglês
+- **Análises Detalhadas**: Seções estruturadas cobrindo diversos aspectos dos filmes
+- **Design Responsivo**: Experiência otimizada para diferentes dispositivos
+- **Navegação Intuitiva**: Interface limpa e fácil de usar
+- **Galeria de Imagens**: Visualização de cenas e cartazes dos filmes
+- **Trilhas Sonoras**: Informações sobre as músicas originais dos filmes
 
-## Como Executar
+## 🚀 Tecnologias
 
-1. Instale as dependências:
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Redux Toolkit](https://redux-toolkit.js.org/)
+- [Styled Components](https://styled-components.com/)
+- [React Router](https://reactrouter.com/)
+
+## 📦 Instalação
+
+Instale as dependências
 ```bash
-yarn
+npm install
+```
+Inicie o servidor de desenvolvimento
+```bash
+npm run dev
 ```
 
-3. Execute o projeto:
+## Configuração
+
+1. crie um arquivo .env na raiz do projeto com as seguintes variáveis:
 ```bash
-yarn dev
+VITE_MOVIE_SEARCH_BLOG_API_URL=api_url_aqui
 ```
+
+## Estrutura do Projeto
+
+```bash
+src/
+├── components/ # Componentes reutilizáveis
+├── contexts/ # Contexto de idioma com ContextAPI
+├── features/ # Features Redux
+├── pages/ # Componentes de página
+├── store/ # Configuração do Redux
+├── styles/ # Estilos globais
+└── types/ # Definições de tipos TypeScript
+```
+
+## 🎯 Principais Funcionalidades
+
+### Navegação Bilíngue
+- Toggle fácil entre PT/EN
+- Persistência da preferência de idioma
+- Conteúdo totalmente traduzido
+
+### Análise de Filmes
+- Introdução
+- Elenco e Personagens
+- Contexto Histórico
+- Importância Cultural
+- Análise Técnica
+- Trilha Sonora Original
+- Conclusão
+
+### Galeria de Mídia
+- Cartazes dos filmes
+- Cenas importantes
+- Interface responsiva
+
+
