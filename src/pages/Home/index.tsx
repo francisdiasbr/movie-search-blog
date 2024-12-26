@@ -5,6 +5,7 @@ import Card from '../../components/Card';
 import SkeletonCard from '../../components/Card/Skeleton';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { searchBlogPosts } from '../../features/blogPost/searchBlogPostSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/types';
@@ -15,9 +16,7 @@ export default function Home() {
   const dispatch = useAppDispatch();
   const { data, error, loading } = useAppSelector((state: RootState) => state.searchBlogPost);
   const [query, setQuery] = useState('');
-  const [language, setLanguage] = useState<'pt' | 'en'>(() => 
-    localStorage.getItem('language') as 'pt' | 'en' || 'pt'
-  );
+  const { language } = useLanguage();
 
   const handleSearch = useCallback(async () => {
     const params = {
@@ -43,12 +42,6 @@ export default function Home() {
     navigate(`/movie/${movieId}`);
   };
 
-  const toggleLanguage = () => {
-    const newLanguage = language === 'pt' ? 'en' : 'pt';
-    setLanguage(newLanguage);
-    localStorage.setItem('language', newLanguage);
-  };
-
   if (error) return <ErrorMessage message={error} />;
 
   const entries = data?.entries || [];
@@ -57,9 +50,6 @@ export default function Home() {
   return (
     <Layout>
       <div style={{ marginTop: 30 }}>
-        <button onClick={toggleLanguage}>
-          {language === 'pt' ? 'PT >> EN' : 'EN >> PT'}
-        </button>
         {loading && (
           <GridContainer>
             {[...Array(3)].map((_, index) => (
@@ -75,7 +65,7 @@ export default function Home() {
                 key={`${post.tconst}-${post.content[language].title}`}
                 post={{
                   ...post,
-                  title: post.content[language as keyof typeof post.content].title,
+                  title: post.content[language].title,
                 }}
                 onClick={handleCardClick}
               />

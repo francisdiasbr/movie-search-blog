@@ -15,12 +15,14 @@ export const LogoContainer = styled.div`
   font-weight: bold;
 `;
 
-export const NavLink = styled.span`
+export const NavLink = styled.div`
   cursor: pointer;
-  font-size: 18px;
   font-weight: 500;
-  margin-right: 16px;
-  transition: color 0.3s;
+  transition: opacity 0.2s ease-in-out;
+
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
 export const TopbarContainer = styled.div`
@@ -35,4 +37,10 @@ export const TopbarWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
+`;
+
+export const NavContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
 `;

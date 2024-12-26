@@ -1,31 +1,45 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
 import Separator from '../../components/Separator';
 import SkeletonBlogPost from '../../components/SkeletonBlogPost';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { clearImageState, fetchAllImageUrls } from '../../features/blogPost/blogPostImagesSlice';
 import { clearBlogPostState, fetchBlogPost } from '../../features/blogPost/blogPostSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/types';
 import * as S from './styles';
 
+const sectionTitles = {
+  pt: {
+    introduction: 'Introdução',
+    stars_and_characters: 'Elenco e Personagens',
+    historical_context: 'Contexto Histórico',
+    cultural_importance: 'Importância Cultural',
+    technical_analysis: 'Análise Técnica',
+    original_movie_soundtrack: 'Trilha Sonora Original',
+    conclusion: 'Conclusão'
+  },
+  en: {
+    introduction: 'Introduction',
+    stars_and_characters: 'Cast and Characters',
+    historical_context: 'Historical Context',
+    cultural_importance: 'Cultural Importance',
+    technical_analysis: 'Technical Analysis',
+    original_movie_soundtrack: 'Original Soundtrack',
+    conclusion: 'Conclusion'
+  }
+};
+
 function BlogPost() {
   const { movieId } = useParams();
   const dispatch = useAppDispatch();
-  const [language, setLanguage] = useState<'pt' | 'en'>(() => 
-    localStorage.getItem('language') as 'pt' | 'en' || 'pt'
-  );
+  const { language } = useLanguage();
 
   const { data, error, loading } = useAppSelector((state: RootState) => state.blogPost);
   const { imageUrls } = useAppSelector((state: RootState) => state.blogPostImages);
-
-  const toggleLanguage = () => {
-    const newLanguage = language === 'pt' ? 'en' : 'pt';
-    setLanguage(newLanguage);
-    localStorage.setItem('language', newLanguage);
-  };
 
   useEffect(() => {
     if (movieId) {
@@ -50,17 +64,38 @@ function BlogPost() {
       {!loading && data && (
         <>
           <S.BlogPostTitleContainer>
-            <h2>{data.content[language as keyof typeof data.content].title}</h2>
+            <h2>{data.content[language].title}</h2>
           </S.BlogPostTitleContainer>
           <S.Container hasImages={hasImages}>
             <S.ContentColumn hasImages={hasImages}>
-              <Section title="Introdução" content={data.content[language as keyof typeof data.content].introduction} />
-              <Section title="Elenco e Personagens" content={data.content[language as keyof typeof data.content].stars_and_characters} />
-              <Section title="Contexto Histórico" content={data.content[language as keyof typeof data.content].historical_context} />
-              <Section title="Importância Cultural" content={data.content[language as keyof typeof data.content].cultural_importance} />
-              <Section title="Análise Técnica" content={data.content[language as keyof typeof data.content].technical_analysis} />
-              <Section title="Trilha Sonora Original" content={data.original_movie_soundtrack} />
-              <Section title="Conclusão" content={data.content[language as keyof typeof data.content].conclusion} />
+              <Section 
+                title={sectionTitles[language].introduction} 
+                content={data.content[language].introduction} 
+              />
+              <Section 
+                title={sectionTitles[language].stars_and_characters} 
+                content={data.content[language].stars_and_characters} 
+              />
+              <Section 
+                title={sectionTitles[language].historical_context} 
+                content={data.content[language].historical_context} 
+              />
+              <Section 
+                title={sectionTitles[language].cultural_importance} 
+                content={data.content[language].cultural_importance} 
+              />
+              <Section 
+                title={sectionTitles[language].technical_analysis} 
+                content={data.content[language].technical_analysis} 
+              />
+              <Section 
+                title={sectionTitles[language].original_movie_soundtrack} 
+                content={data.original_movie_soundtrack} 
+              />
+              <Section 
+                title={sectionTitles[language].conclusion} 
+                content={data.content[language].conclusion} 
+              />
             </S.ContentColumn>
             {hasImages && (
               <S.ImageColumn>

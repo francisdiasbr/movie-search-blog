@@ -2,6 +2,7 @@ import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
 
+import { LanguageToggle } from '../LanguageToggle';
 import * as S from './styles';
 
 export function Topbar() {
@@ -18,7 +19,8 @@ export function Topbar() {
         >
           The Movie Blog
         </S.LogoContainer>
-        <div>
+        <S.NavContainer>
+          <LanguageToggle />
           <S.NavLink
             onClick={() => navigate('/about')}
             onKeyDown={e => e.key === 'Enter' && navigate('/about')}
@@ -41,7 +43,7 @@ export function Topbar() {
           >
             <FontAwesomeIcon icon={faLinkedin} size="lg" />
           </S.IconLink>
-        </div>
+        </S.NavContainer>
       </S.TopbarWrapper>
     </S.TopbarContainer>
   );
