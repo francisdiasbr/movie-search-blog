@@ -15,6 +15,9 @@ export default function Home() {
   const dispatch = useAppDispatch();
   const { data, error, loading } = useAppSelector((state: RootState) => state.searchBlogPost);
   const [query, setQuery] = useState('');
+  const [language, setLanguage] = useState<'pt' | 'en'>(() => 
+    localStorage.getItem('language') as 'pt' | 'en' || 'pt'
+  );
 
   const handleSearch = useCallback(async () => {
     const params = {
@@ -40,6 +43,12 @@ export default function Home() {
     navigate(`/movie/${movieId}`);
   };
 
+  const toggleLanguage = () => {
+    const newLanguage = language === 'pt' ? 'en' : 'pt';
+    setLanguage(newLanguage);
+    localStorage.setItem('language', newLanguage);
+  };
+
   if (error) return <ErrorMessage message={error} />;
 
   const entries = data?.entries || [];
@@ -48,6 +57,9 @@ export default function Home() {
   return (
     <Layout>
       <div style={{ marginTop: 30 }}>
+        <button onClick={toggleLanguage}>
+          {language === 'pt' ? 'PT >> EN' : 'EN >> PT'}
+        </button>
         {loading && (
           <GridContainer>
             {[...Array(3)].map((_, index) => (
@@ -60,8 +72,11 @@ export default function Home() {
           <GridContainer>
             {entries.map(post => (
               <Card
-                key={`${post.tconst}-${post.title}`}
-                post={post}
+                key={`${post.tconst}-${post.content[language].title}`}
+                post={{
+                  ...post,
+                  title: post.content[language as keyof typeof post.content].title,
+                }}
                 onClick={handleCardClick}
               />
             ))}

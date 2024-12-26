@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { ErrorMessage } from '../../components/ErrorMessage';
@@ -14,9 +14,18 @@ import * as S from './styles';
 function BlogPost() {
   const { movieId } = useParams();
   const dispatch = useAppDispatch();
+  const [language, setLanguage] = useState<'pt' | 'en'>(() => 
+    localStorage.getItem('language') as 'pt' | 'en' || 'pt'
+  );
 
   const { data, error, loading } = useAppSelector((state: RootState) => state.blogPost);
   const { imageUrls } = useAppSelector((state: RootState) => state.blogPostImages);
+
+  const toggleLanguage = () => {
+    const newLanguage = language === 'pt' ? 'en' : 'pt';
+    setLanguage(newLanguage);
+    localStorage.setItem('language', newLanguage);
+  };
 
   useEffect(() => {
     if (movieId) {
@@ -41,17 +50,17 @@ function BlogPost() {
       {!loading && data && (
         <>
           <S.BlogPostTitleContainer>
-            <h2>{data.title}</h2>
+            <h2>{data.content[language as keyof typeof data.content].title}</h2>
           </S.BlogPostTitleContainer>
           <S.Container hasImages={hasImages}>
             <S.ContentColumn hasImages={hasImages}>
-              <Section title="Introdução" content={data.introduction} />
-              <Section title="Elenco e Personagens" content={data.stars_and_characters} />
-              <Section title="Contexto Histórico" content={data.historical_context} />
-              <Section title="Importância Cultural" content={data.cultural_importance} />
-              <Section title="Análise Técnica" content={data.technical_analysis} />
+              <Section title="Introdução" content={data.content[language as keyof typeof data.content].introduction} />
+              <Section title="Elenco e Personagens" content={data.content[language as keyof typeof data.content].stars_and_characters} />
+              <Section title="Contexto Histórico" content={data.content[language as keyof typeof data.content].historical_context} />
+              <Section title="Importância Cultural" content={data.content[language as keyof typeof data.content].cultural_importance} />
+              <Section title="Análise Técnica" content={data.content[language as keyof typeof data.content].technical_analysis} />
               <Section title="Trilha Sonora Original" content={data.original_movie_soundtrack} />
-              <Section title="Conclusão" content={data.conclusion} />
+              <Section title="Conclusão" content={data.content[language as keyof typeof data.content].conclusion} />
             </S.ContentColumn>
             {hasImages && (
               <S.ImageColumn>
