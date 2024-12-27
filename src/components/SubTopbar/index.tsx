@@ -16,6 +16,12 @@ export function SubTopbar() {
     <SubTopbarContainer>
       <InnerContainer>
         <NavItem
+          onClick={() => handleClick('/favorites')}
+          isSelected={selectedItem === '/favorites'}
+        >
+          A - Z
+        </NavItem>
+        <NavItem
           onClick={() => handleClick('/reviews')}
           isSelected={selectedItem === '/reviews'}
         >

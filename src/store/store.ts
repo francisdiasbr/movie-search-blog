@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import blogPostImagesReducer from '../features/blogPost/blogPostImagesSlice';
 import blogPostReducer from '../features/blogPost/blogPostSlice';
 import searchBlogPostReducer from '../features/blogPost/searchBlogPostSlice';
+import favoritesReducer from '../features/favorites/favoritesSlice';
 import opinionReducer from '../features/opinion/opinionSlice';
 
 export const store = configureStore({
@@ -11,6 +12,7 @@ export const store = configureStore({
     blogPostImages: blogPostImagesReducer,
     searchBlogPost: searchBlogPostReducer,
     opinion: opinionReducer,
+    favorites: favoritesReducer,
   },
 });
 

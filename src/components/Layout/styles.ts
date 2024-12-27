@@ -18,6 +18,8 @@ export const InnerContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  max-width: 1600px;
+
   
   @media (min-width: 768px) {
     padding: 16px;
@@ -34,7 +36,6 @@ export const GoBackWrapper = styled.div<{ isMobile: boolean }>`
 export const MainContent = styled.main`
   flex-grow: 1;
   width: 100%;
-  max-width: 1600px;
   margin: 0 auto;
   margin-top: 16px;
   
