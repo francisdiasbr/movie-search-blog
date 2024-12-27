@@ -48,6 +48,25 @@ export default function Home() {
   const entries = data?.entries || [];
   const hasEntries = entries.length > 0;
 
+  const parseDate = (dateString: string) => {
+    const [day, month, year] = dateString.split('/');
+    return new Date(`${year}-${month}-${day}`);
+  };
+
+  const sortedEntries = [...entries].sort((a, b) => {
+    const dateA = parseDate(a.created_at).getTime();
+    const dateB = parseDate(b.created_at).getTime();
+    return dateB - dateA;
+  });
+
+  console.log('sortedEntries', sortedEntries);
+
+  const formatDate = (date: Date) => {
+    return language === 'en'
+      ? date.toLocaleDateString('en-US')
+      : date.toLocaleDateString('pt-BR');
+  };
+
   return (
     <Layout>
       <S.Container>
@@ -61,12 +80,13 @@ export default function Home() {
         {!loading && !hasEntries && <NoPostsMessage />}
         {!loading && hasEntries && (
           <S.GridContainer>
-            {entries.map(post => (
+            {sortedEntries.map(post => (
               <Card
                 key={`${post.tconst}-${post.content[language].title}`}
                 post={{
                   ...post,
                   title: post.content[language].title,
+                  created_at: formatDate(parseDate(post.created_at)),
                 }}
                 onClick={handleCardClick}
               />
