@@ -23,12 +23,12 @@ export default function Home() {
     const params = {
       filters: query.trim()
         ? {
-            $or: [
-              { title: { $regex: query.trim(), $options: 'i' } },
-              { primaryTitle: { $regex: query.trim(), $options: 'i' } },
-              { introduction: { $regex: query.trim(), $options: 'i' } },
-            ],
-          }
+          $or: [
+            { title: { $regex: query.trim(), $options: 'i' } },
+            { primaryTitle: { $regex: query.trim(), $options: 'i' } },
+            { introduction: { $regex: query.trim(), $options: 'i' } },
+          ],
+        }
         : {},
     };
 
@@ -69,31 +69,29 @@ export default function Home() {
 
   return (
     <Layout>
-      <S.Container>
-        {loading && (
-          <S.GridContainer>
-            {[...Array(3)].map((_, index) => (
-              <SkeletonCard key={index} />
-            ))}
-          </S.GridContainer>
-        )}
-        {!loading && !hasEntries && <NoPostsMessage />}
-        {!loading && hasEntries && (
-          <S.GridContainer>
-            {sortedEntries.map(post => (
-              <Card
-                key={`${post.tconst}-${post.content[language].title}`}
-                post={{
-                  ...post,
-                  title: post.content[language].title,
-                  created_at: formatDate(parseDate(post.created_at)),
-                }}
-                onClick={handleCardClick}
-              />
-            ))}
-          </S.GridContainer>
-        )}
-      </S.Container>
+      {loading && (
+        <S.GridContainer>
+          {[...Array(3)].map((_, index) => (
+            <SkeletonCard key={index} />
+          ))}
+        </S.GridContainer>
+      )}
+      {!loading && !hasEntries && <NoPostsMessage />}
+      {!loading && hasEntries && (
+        <S.GridContainer>
+          {sortedEntries.map(post => (
+            <Card
+              key={`${post.tconst}-${post.content[language].title}`}
+              post={{
+                ...post,
+                title: post.content[language].title,
+                created_at: formatDate(parseDate(post.created_at)),
+              }}
+              onClick={handleCardClick}
+            />
+          ))}
+        </S.GridContainer>
+      )}
     </Layout>
   );
 }

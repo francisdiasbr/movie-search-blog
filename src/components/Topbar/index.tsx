@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
 
 import { LanguageToggle } from '../LanguageToggle';
+import { ThemeToggle } from '../ThemeToggle';
 import * as S from './styles';
 
 export function Topbar() {
@@ -18,6 +19,7 @@ export function Topbar() {
           tabIndex={0}
         />
         <S.NavContainer>
+          <ThemeToggle />
           <LanguageToggle />
           <S.NavLink
             onClick={() => navigate('/about')}

@@ -1,14 +1,18 @@
 import styled from 'styled-components';
 
 export const CardContainer = styled.div`
-  background-color: #f9f9f9;
-  border-radius: 8px;
+  background-color: ${({ theme }) => theme.colors.card};
+  border: 1px solid ${({ theme }) => theme.colors.border};
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
   cursor: pointer;
-  padding: 16px;
-  height: 100%;
-  min-height: 140px;
   gap: 16px;
+  padding: 16px;
+  min-height: 140px;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.hover};
+  }
 `;
 
 export const CardHeader = styled.div`
@@ -26,6 +30,7 @@ export const CardImage = styled.img`
 export const CardTitle = styled.h3`
   font-weight: 600;
   height: 90px;
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 export const CardDate = styled.p`
