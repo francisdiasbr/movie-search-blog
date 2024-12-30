@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const IconLink = styled.a`
-  color: #000;
+  color: ${({ theme }) => theme.colors.text};
   margin-left: 16px;
   transition: color 0.3s;
 `;
@@ -40,17 +40,17 @@ export const TopbarContainer = styled.div`
 `;
 
 export const TopbarWrapper = styled.div`
-  max-width: 1120px;
-  margin: 0 auto;
+  align-items: center;
   display: flex;
   height: 64px;
-  align-items: center;
   justify-content: space-between;
+  margin: 0 auto;
+  max-width: 1120px;
   padding: 0 16px;
 `;
 
 export const NavContainer = styled.div`
-  display: flex;
   align-items: center;
+  display: flex;
   gap: 16px;
 `;

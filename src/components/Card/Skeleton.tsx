@@ -8,7 +8,7 @@ const SkeletonCardContainer = styled.div`
   cursor: pointer;
   padding: 16px;
   height: 100%;
-  min-height: 140px;
+  min-height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

@@ -1,25 +1,25 @@
 import styled from 'styled-components';
 
 export const LayoutContainer = styled.div`
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: white;
-  color: #1e293b;
 `;
 
 export const ContentWrapper = styled.div`
   display: flex;
-  justify-content: center;
   flex-grow: 1;
+  justify-content: center;
 `;
 
 export const InnerContainer = styled.div`
-  width: 100%;
-  display: flex;
+display: flex;
   flex-direction: column;
   max-width: 1200px;
   padding: 16px;
+  width: 100%;
 `;
 
 export const GoBackWrapper = styled.div<{ isMobile: boolean }>`

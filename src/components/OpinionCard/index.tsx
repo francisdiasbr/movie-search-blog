@@ -5,7 +5,7 @@ interface OpinionCardProps {
   githubUsername?: string;
 }
 
-export default function OpinionCard({ opinion, githubUsername = 'augustolimads' }: OpinionCardProps) {
+export default function OpinionCard({ opinion, githubUsername = 'francisdiasbr' }: OpinionCardProps) {
   return (
     <S.OpinionCard>
       <S.AvatarContainer>

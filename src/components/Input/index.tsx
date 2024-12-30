@@ -10,7 +10,7 @@ interface InputProps {
 }
 
 const StyledInput = styled.input`
-  border: 1px solid #ccc;
+  border: 1px solid ${({ theme }) => theme.colors.border};
   padding: 8px;
   border-radius: 4px;
   width: 100%;
