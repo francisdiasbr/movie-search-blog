@@ -17,6 +17,7 @@ export interface FavoritesEntry {
   primaryTitle: string;
   startYear: string;
   director: string;
+  plot_keywords: string[];
 }
 
 const initialState: SearchFavoritesState = {

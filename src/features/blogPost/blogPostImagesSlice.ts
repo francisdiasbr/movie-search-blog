@@ -32,7 +32,7 @@ export const fetchAllImageUrls = createAsyncThunk<
   async ({ tconst }, { rejectWithValue }) => {
     try {
       const response = (await baseService.get(
-        `/personal-opinion/get-all-image-urls/${tconst}`
+        `/images/${tconst}`
       )) as ImageResponse;
 
       const urls = response.images.map((image: { url: string }) => image.url);

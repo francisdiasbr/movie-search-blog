@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import Chip from '../../components/Chip';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
 import Separator from '../../components/Separator';
@@ -8,6 +9,7 @@ import SkeletonBlogPost from '../../components/SkeletonBlogPost';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { clearImageState, fetchAllImageUrls } from '../../features/blogPost/blogPostImagesSlice';
 import { clearBlogPostState, fetchBlogPost } from '../../features/blogPost/blogPostSlice';
+import { searchFavorites } from '../../features/favorites/favoritesSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/types';
 import * as S from './styles';
@@ -40,11 +42,13 @@ function BlogPost() {
 
   const { data, error, loading } = useAppSelector((state: RootState) => state.blogPost);
   const { imageUrls } = useAppSelector((state: RootState) => state.blogPostImages);
+  const { data: favoritesData } = useAppSelector((state: RootState) => state.favorites);
 
   useEffect(() => {
     if (movieId) {
       dispatch(fetchAllImageUrls({ tconst: movieId }));
       dispatch(fetchBlogPost(movieId));
+      dispatch(searchFavorites({ filters: { tconst: movieId } }));
     }
 
     return () => {
@@ -57,6 +61,7 @@ function BlogPost() {
   if (!data && !loading) return null;
 
   const hasImages = imageUrls && imageUrls.length > 0;
+  const currentMovie = favoritesData?.entries?.[0];
 
   return (
     <Layout>
@@ -68,6 +73,13 @@ function BlogPost() {
           </S.BlogPostTitleContainer>
           <S.Container hasImages={hasImages}>
             <S.ContentColumn hasImages={hasImages}>
+              <S.ChipsContainer>
+                {currentMovie?.plot_keywords
+                  ?.slice(0, 10)
+                  .map((keyword, index) => (
+                    <Chip key={index} label={keyword} />
+                  ))}
+              </S.ChipsContainer>
               <Section 
                 title={sectionTitles[language].introduction} 
                 content={data.content[language].introduction} 

@@ -17,13 +17,8 @@ export const Container = styled.div<{ hasImages: boolean }>`
 `;
 
 export const ContentColumn = styled.div<{ hasImages: boolean }>`
-  width: ${({ hasImages }) => (hasImages ? '62%' : '100%')};
-  padding-right: ${({ hasImages }) => (hasImages ? '1rem' : '0')};
-
-  @media (max-width: 1024px) {
-    width: 100%;
-    padding-right: 0;
-  }
+  flex: ${({ hasImages }) => (hasImages ? '2' : '1')};
+  min-width: 0;
 `;
 
 export const ImageColumn = styled.div`
@@ -56,4 +51,18 @@ export const PosterContainer = styled.div`
 
 export const SectionContainer = styled.div`
   margin-bottom: 16px;
+`;
+
+export const ChipsContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 0 16px;
+  justify-content: center;
+  align-items: center;
+
+  @media (min-width: 768px) {
+    padding: 0;
+  }
 `;
