@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import Chip from '../../components/Chip';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
+import OpinionCard from '../../components/OpinionCard';
 import Separator from '../../components/Separator';
 import SkeletonBlogPost from '../../components/SkeletonBlogPost';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -42,7 +43,6 @@ function BlogPost() {
 
   const { data, error, loading } = useAppSelector((state: RootState) => state.blogPost);
   const { imageUrls } = useAppSelector((state: RootState) => state.blogPostImages);
-  const { data: favoritesData } = useAppSelector((state: RootState) => state.favorites);
 
   useEffect(() => {
     if (movieId) {
@@ -61,7 +61,6 @@ function BlogPost() {
   if (!data && !loading) return null;
 
   const hasImages = imageUrls && imageUrls.length > 0;
-  const currentMovie = favoritesData?.entries?.[0];
 
   return (
     <Layout>
@@ -71,15 +70,9 @@ function BlogPost() {
           <S.BlogPostTitleContainer>
             <h2>{data.content[language].title}</h2>
           </S.BlogPostTitleContainer>
+          <OpinionCard opinion="Opinião" githubUsername="francisdiasbr" />
           <S.Container hasImages={hasImages}>
             <S.ContentColumn hasImages={hasImages}>
-              <S.ChipsContainer>
-                {currentMovie?.plot_keywords
-                  ?.slice(0, 10)
-                  .map((keyword, index) => (
-                    <Chip key={index} label={keyword} />
-                  ))}
-              </S.ChipsContainer>
               <Section 
                 title={sectionTitles[language].introduction} 
                 content={data.content[language].introduction} 
