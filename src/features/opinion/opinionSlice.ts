@@ -4,8 +4,9 @@ import BaseService from '../../api/service';
 
 interface OpinionState {
   data: {
+    enjoying_1: string;
+    enjoying_2: string;
     opinion: string;
-    rate: string;
   } | null;
   loading: boolean;
   error: string | null;
@@ -19,14 +20,15 @@ const initialState: OpinionState = {
 
 interface OpinionResponse {
   data: {
+    enjoying_1: string;
+    enjoying_2: string;
     opinion: string;
-    rate: string;
   };
 }
 
 export const fetchOpinion = createAsyncThunk<OpinionState['data'], string>(
   'opinion/fetchOpinion',
-  async movieId => {
+  async (movieId, { rejectWithValue }) => {
     try {
       const response = await BaseService.get<OpinionResponse>(
         `/api/personal-opinion/${movieId}`
@@ -34,10 +36,7 @@ export const fetchOpinion = createAsyncThunk<OpinionState['data'], string>(
       return response.data;
     } catch (error) {
       console.error(`Error fetching opinion for movieId ${movieId}:`, error);
-      return {
-        opinion: 'Esse filme é um verdadeiro achado. Uma lufada de ar fresco.',
-        rate: '10.0',
-      };
+      return rejectWithValue('Falha ao buscar a opinião');
     }
   }
 );
@@ -60,6 +59,11 @@ const opinionSlice = createSlice({
         state.loading = false;
         state.error =
           'Falha ao buscar a opinião. Por favor, tente novamente mais tarde.';
+        state.data = {
+          enjoying_1: 'Enjoy this movie!',
+          enjoying_2: 'Enjoy this movie!',
+          opinion: 'Enjoy this movie is a glory!',
+        };
       });
   },
 });

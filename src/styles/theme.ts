@@ -5,7 +5,8 @@ export const lightTheme = {
     card: '#8ACE00',
     text: '#1e293b',
     border: '#e0e0e0',
-    hover: '#f8f9fa'
+    hover: '#f8f9fa',
+    link: '#1e293b'
   }
 };
 
@@ -16,7 +17,8 @@ export const darkTheme = {
     card: '#2d2d2d',
     text: '#e5e7eb',
     border: '#fff',
-    hover: '#333333'
+    hover: '#333333',
+    link: '#FFF'
   }
 };
 

@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Chip from '../../components/Chip';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
 import OpinionCard from '../../components/OpinionCard';
@@ -10,37 +9,19 @@ import SkeletonBlogPost from '../../components/SkeletonBlogPost';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { clearImageState, fetchAllImageUrls } from '../../features/blogPost/blogPostImagesSlice';
 import { clearBlogPostState, fetchBlogPost } from '../../features/blogPost/blogPostSlice';
-import { searchFavorites } from '../../features/favorites/favoritesSlice';
+import { fetchOpinion } from '../../features/opinion/opinionSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/types';
+import { sectionTitles } from './sectionTitles';
 import * as S from './styles';
 
-const sectionTitles = {
-  pt: {
-    introduction: 'Introdução',
-    stars_and_characters: 'Elenco e Personagens',
-    historical_context: 'Contexto Histórico',
-    cultural_importance: 'Importância Cultural',
-    technical_analysis: 'Análise Técnica',
-    original_movie_soundtrack: 'Trilha Sonora Original',
-    conclusion: 'Conclusão'
-  },
-  en: {
-    introduction: 'Introduction',
-    stars_and_characters: 'Cast and Characters',
-    historical_context: 'Historical Context',
-    cultural_importance: 'Cultural Importance',
-    technical_analysis: 'Technical Analysis',
-    original_movie_soundtrack: 'Original Soundtrack',
-    conclusion: 'Conclusion'
-  }
-};
 
 function BlogPost() {
   const { movieId } = useParams();
   const dispatch = useAppDispatch();
   const { language } = useLanguage();
 
+  const { data: opinionData } = useAppSelector((state: RootState) => state.opinion);
   const { data, error, loading } = useAppSelector((state: RootState) => state.blogPost);
   const { imageUrls } = useAppSelector((state: RootState) => state.blogPostImages);
 
@@ -48,7 +29,7 @@ function BlogPost() {
     if (movieId) {
       dispatch(fetchAllImageUrls({ tconst: movieId }));
       dispatch(fetchBlogPost(movieId));
-      dispatch(searchFavorites({ filters: { tconst: movieId } }));
+      dispatch(fetchOpinion(movieId));
     }
 
     return () => {
@@ -70,7 +51,12 @@ function BlogPost() {
           <S.BlogPostTitleContainer>
             <h2>{data.content[language].title}</h2>
           </S.BlogPostTitleContainer>
-          <OpinionCard opinion="Opinião" githubUsername="francisdiasbr" />
+          {opinionData && (
+            <OpinionCard 
+              enjoying_1={opinionData.enjoying_1}
+              githubUsername="francisdiasbr" 
+            />
+          )}
           <S.Container hasImages={hasImages}>
             <S.ContentColumn hasImages={hasImages}>
               <Section 

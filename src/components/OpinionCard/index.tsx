@@ -1,11 +1,11 @@
 import * as S from './styles';
 
 interface OpinionCardProps {
-  opinion: string;
+  enjoying_1: string;
   githubUsername?: string;
 }
 
-export default function OpinionCard({ opinion, githubUsername = 'francisdiasbr' }: OpinionCardProps) {
+export default function OpinionCard({ enjoying_1, githubUsername = 'francisdiasbr' }: OpinionCardProps) {
   return (
     <S.OpinionCard>
       <S.AvatarContainer>
@@ -14,7 +14,7 @@ export default function OpinionCard({ opinion, githubUsername = 'francisdiasbr' 
           alt={`${githubUsername}'s avatar`}
         />
       </S.AvatarContainer>
-      <S.OpinionText>{opinion}</S.OpinionText>
+      <S.OpinionText>{enjoying_1}</S.OpinionText>
     </S.OpinionCard>
   );
 }
