@@ -1,13 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import BaseService from '../../api/service';
+import { OpinionEntry } from './types';
 
 interface OpinionState {
-  data: {
-    enjoying_1: string;
-    enjoying_2: string;
-    opinion: string;
-  } | null;
+  data: OpinionEntry | null;
   loading: boolean;
   error: string | null;
 }
@@ -19,11 +16,7 @@ const initialState: OpinionState = {
 };
 
 interface OpinionResponse {
-  data: {
-    enjoying_1: string;
-    enjoying_2: string;
-    opinion: string;
-  };
+  data: OpinionEntry;
 }
 
 export const fetchOpinion = createAsyncThunk<OpinionState['data'], string>(
@@ -31,7 +24,7 @@ export const fetchOpinion = createAsyncThunk<OpinionState['data'], string>(
   async (movieId, { rejectWithValue }) => {
     try {
       const response = await BaseService.get<OpinionResponse>(
-        `/api/personal-opinion/${movieId}`
+        `/personal-opinion/${movieId}`
       );
       return response.data;
     } catch (error) {

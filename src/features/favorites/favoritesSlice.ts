@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import BaseService from '../../api/service';
+import { FavoritesEntry } from './types';
 
 interface SearchFavoritesState {
   data: {
@@ -9,15 +10,6 @@ interface SearchFavoritesState {
   } | null;
   loading: boolean;
   error: string | null;
-}
-
-export interface FavoritesEntry {
-  _id: string;
-  tconst: string;
-  primaryTitle: string;
-  startYear: string;
-  director: string;
-  plot_keywords: string[];
 }
 
 const initialState: SearchFavoritesState = {

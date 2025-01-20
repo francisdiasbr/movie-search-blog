@@ -13,7 +13,6 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ post, onClick }) => {
-  console.log('Card imageUrl:', post.imageUrl);
   return (
     <S.CardContainer onClick={() => onClick(post.tconst)} imageUrl={post.imageUrl}>
       <S.CardHeader>

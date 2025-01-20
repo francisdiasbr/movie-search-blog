@@ -11,7 +11,7 @@ export default function Home() {
   const { language } = useLanguage();
   const {
     error,
-    loading,
+    status,
     entries,
     hasEntries,
     postImages,
@@ -30,15 +30,15 @@ export default function Home() {
 
   return (
     <Layout>
-      {loading && (
+      {status === 'loading' && (
         <S.GridContainer>
           {[...Array(3)].map((_, index) => (
             <SkeletonCard key={index} />
           ))}
         </S.GridContainer>
       )}
-      {!loading && !hasEntries && <NoPostsMessage />}
-      {!loading && hasEntries && (
+      {status === 'succeeded' && !hasEntries && <NoPostsMessage />}
+      {status === 'succeeded' && hasEntries && (
         <S.GridContainer>
           {sortedEntries.map(post => (
             <Card
