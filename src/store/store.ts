@@ -5,6 +5,7 @@ import blogPostReducer from '../features/blogPost/blogPostSlice';
 import searchBlogPostReducer from '../features/blogPost/searchBlogPostSlice';
 import favoritesReducer from '../features/favorites/favoritesSlice';
 import opinionReducer from '../features/opinion/opinionSlice';
+import writeReviewsReducer from '../features/writeReviews/writeReviewsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     searchBlogPost: searchBlogPostReducer,
     opinion: opinionReducer,
     favorites: favoritesReducer,
+    writeReviews: writeReviewsReducer,
   },
 });
 

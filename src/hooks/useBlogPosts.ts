@@ -4,15 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { fetchAllImageUrls } from '../features/blogPost/blogPostImagesSlice';
 import { searchBlogPosts } from '../features/blogPost/searchBlogPostSlice';
+// import { fetchAllAuthoralReviews } from '../features/writeReviews/writeReviewsSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { RootState } from '../store/types';
 
 export const useBlogPosts = (initialQuery = '') => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { data, error, loading } = useAppSelector(
-    (state: RootState) => state.searchBlogPost
-  );
+  const { data, error, status } = useAppSelector((state: RootState) => state.searchBlogPost);
+  // const { data, error, status } = useAppSelector((state: RootState) => state.writeReviews);
+
+
   const [query, setQuery] = useState(initialQuery);
   const { language } = useLanguage();
   const [postImages, setPostImages] = useState<Record<string, string[]>>({});
@@ -30,7 +32,12 @@ export const useBlogPosts = (initialQuery = '') => {
         : {},
     };
     await dispatch(searchBlogPosts(params));
-  }, [query, dispatch]);
+    // await dispatch(fetchAllAuthoralReviews({
+    //   filters: params.filters || {},
+    //   page: 1,
+    //   pageSize: 10,
+    // }));
+  }, [query]);
 
   const parseDate = (dateString: string) => {
     const [day, month, year] = dateString.split('/');
@@ -51,8 +58,11 @@ export const useBlogPosts = (initialQuery = '') => {
   const hasEntries = entries.length > 0;
 
   useEffect(() => {
-    handleSearch();
-  }, [handleSearch]);
+    const initialSearch = () => {
+      handleSearch();
+    };
+    initialSearch();
+  }, []);
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -76,7 +86,7 @@ export const useBlogPosts = (initialQuery = '') => {
     query,
     setQuery,
     error,
-    loading,
+    status,
     entries,
     hasEntries,
     postImages,
