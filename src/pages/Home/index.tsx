@@ -4,8 +4,10 @@ import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
 import { NoPostsMessage } from '../../components/NoPostsMessage';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { CombinedEntry } from '../../features/blogPostsAndReviews/types';
 import { useBlogPosts } from '../../hooks/useBlogPosts';
 import * as S from './styles';
+
 
 export default function Home() {
   const { language } = useLanguage();
@@ -15,9 +17,9 @@ export default function Home() {
     entries,
     hasEntries,
     postImages,
-    handleCardClick,
     parseDate,
     formatDate,
+    handleCardClick,
   } = useBlogPosts();
 
   if (error) return <ErrorMessage message={error} />;
@@ -27,6 +29,14 @@ export default function Home() {
     const dateB = parseDate(b.created_at).getTime();
     return dateB - dateA;
   });
+
+  const getPostTitle = (post: CombinedEntry) => {
+    if ('content' in post && post.content.pt && post.content.en) {
+      return post.content[language].title;
+    }
+    return post.primaryTitle;
+  };
+
 
   return (
     <Layout>
@@ -42,14 +52,14 @@ export default function Home() {
         <S.GridContainer>
           {sortedEntries.map(post => (
             <Card
-              key={`${post.tconst}-${post.content[language].title}`}
+              key={`${post.tconst}-${getPostTitle(post)}`}
               post={{
                 ...post,
-                title: post.content[language].title,
+                title: getPostTitle(post),
                 created_at: formatDate(parseDate(post.created_at)),
                 imageUrl: postImages[post.tconst]?.[0] ? encodeURI(postImages[post.tconst][0]) : undefined,
               }}
-              onClick={handleCardClick}
+              onClick={() => handleCardClick(post)}
             />
           ))}
         </S.GridContainer>

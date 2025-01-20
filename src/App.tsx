@@ -11,6 +11,7 @@ import BlogPost from './pages/BlogPost';
 import Favorites from './pages/Favorites';
 import Home from './pages/Home';
 import Links from './pages/Links';
+import Review from './pages/Review';
 import Reviews from './pages/Reviews';
 import { store } from './store/store';
 import { GlobalStyles } from './styles/GlobalStyles';
@@ -26,6 +27,7 @@ function ThemedApp() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/movie/:movieId" element={<BlogPost />} />
+        <Route path="/review/:movieId" element={<Review />} />
         <Route path="/about" element={<About />} />
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/links" element={<Links />} />

@@ -22,6 +22,7 @@ export interface BlogPostEntry {
   };
   created_at: string;
   images: string[];
+  isAiGenerated: boolean;
   original_movie_soundtrack: string;
   poster_url: string;
   primaryTitle: string;

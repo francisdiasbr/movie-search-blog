@@ -7,6 +7,7 @@ import { Layout } from '../../components/Layout';
 import { NoPostsMessage } from '../../components/NoPostsMessage';
 import ReviewSearch from '../../components/ReviewSearch';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { CombinedEntry } from '../../features/blogPostsAndReviews/types';
 import { useBlogPosts } from '../../hooks/useBlogPosts';
 import * as S from './styles';
 
@@ -16,7 +17,7 @@ export default function Reviews() {
     query,
     setQuery,
     error,
-    loading,
+    status,
     entries,
     hasEntries,
     postImages,
@@ -44,6 +45,13 @@ export default function Reviews() {
     return dateB - dateA;
   });
 
+  const getPostTitle = (post: CombinedEntry) => {
+    if ('content' in post && post.content.pt && post.content.en) {
+      return post.content[language].title;
+    }
+    return post.primaryTitle;
+  };
+
   return (
     <Layout>
       <S.Container>
@@ -53,26 +61,26 @@ export default function Reviews() {
           onKeyPress={handleKeyPress}
           onSearch={handleSearch}
         />
-        {loading && (
+        {status === 'loading' && (
           <S.GridContainer>
             {[...Array(3)].map((_, index) => (
               <SkeletonCard key={index} />
             ))}
           </S.GridContainer>
         )}
-        {!loading && !hasEntries && <NoPostsMessage />}
-        {!loading && hasEntries && (
+        {status === 'succeeded' && !hasEntries && <NoPostsMessage />}
+        {status === 'succeeded' && hasEntries && (
           <S.GridContainer>
             {sortedEntries.map(post => (
               <Card
                 key={`${post.tconst}-${post.content[language].title}`}
                 post={{
                   ...post,
-                  title: post.content[language].title,
+                  title: getPostTitle(post),
                   created_at: formatDate(parseDate(post.created_at)),
                   imageUrl: postImages[post.tconst]?.[0] ? encodeURI(postImages[post.tconst][0]) : undefined,
                 }}
-                onClick={handleCardClick}
+                onClick={() => handleCardClick(post)}
               />
             ))}
           </S.GridContainer>
