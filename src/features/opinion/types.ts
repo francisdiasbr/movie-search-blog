@@ -1,6 +1,7 @@
 export interface OpinionEntry {
+  enjoying_1: string;
+  enjoying_2: string;
   opinion: string;
-  rate: string;
 }
 
 export interface OpinionState {

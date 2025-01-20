@@ -2,15 +2,20 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import BaseService from '../../api/service';
 import { formatDate } from '../../utils/dateUtils';
-import { BlogPostEntry } from './blogPostSlice';
+import { BlogPostEntry } from './types';
 
 interface SearchBlogPostState {
   data: {
     entries: BlogPostEntry[];
     total_documents: number;
   } | null;
-  loading: boolean;
+  status: 'failed' | 'idle' | 'loading' | 'succeeded';
   error: string | null;
+}
+
+interface SearchResponse {
+  entries: BlogPostEntry[];
+  total_documents: number;
 }
 
 interface SearchParams {
@@ -19,14 +24,9 @@ interface SearchParams {
   page_size?: number;
 }
 
-interface SearchResponse {
-  entries: BlogPostEntry[];
-  total_documents: number;
-}
-
 const initialState: SearchBlogPostState = {
   data: null,
-  loading: false,
+  status: 'idle',
   error: null,
 };
 
@@ -59,11 +59,11 @@ const searchBlogPostSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(searchBlogPosts.pending, state => {
-        state.loading = true;
+        state.status = 'loading';
         state.error = null;
       })
       .addCase(searchBlogPosts.fulfilled, (state, action) => {
-        state.loading = false;
+        state.status = 'succeeded';
         state.data = {
           entries: action.payload.entries.map(entry => ({
             ...entry,
@@ -73,7 +73,7 @@ const searchBlogPostSlice = createSlice({
         };
       })
       .addCase(searchBlogPosts.rejected, state => {
-        state.loading = false;
+        state.status = 'failed';
         state.error =
           'Falha ao buscar posts do blog. Por favor, tente novamente mais tarde.';
       });
