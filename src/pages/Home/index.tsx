@@ -3,14 +3,11 @@ import SkeletonCard from '../../components/Card/Skeleton';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
 import { NoPostsMessage } from '../../components/NoPostsMessage';
-import { useLanguage } from '../../contexts/LanguageContext';
-import { CombinedEntry } from '../../features/blogPostsAndReviews/types';
 import { useBlogPosts } from '../../hooks/useBlogPosts';
 import * as S from './styles';
 
 
 export default function Home() {
-  const { language } = useLanguage();
   const {
     error,
     status,
@@ -30,13 +27,6 @@ export default function Home() {
     return dateB - dateA;
   });
 
-  const getPostTitle = (post: CombinedEntry) => {
-    if ('content' in post && post.content.pt && post.content.en) {
-      return post.content[language].title;
-    }
-    return post.primaryTitle;
-  };
-
 
   return (
     <Layout>
@@ -52,10 +42,10 @@ export default function Home() {
         <S.GridContainer>
           {sortedEntries.map(post => (
             <Card
-              key={`${post.tconst}-${getPostTitle(post)}`}
+              key={`${post.tconst}-${post.primaryTitle}`}
               post={{
                 ...post,
-                title: getPostTitle(post),
+                title: post.primaryTitle,
                 created_at: formatDate(parseDate(post.created_at)),
                 imageUrl: postImages[post.tconst]?.[0] ? encodeURI(postImages[post.tconst][0]) : undefined,
               }}

@@ -45,13 +45,7 @@ export default function Reviews() {
     return dateB - dateA;
   });
 
-  const getPostTitle = (post: CombinedEntry) => {
-    if ('content' in post && post.content.pt && post.content.en) {
-      return post.content[language].title;
-    }
-    return post.primaryTitle;
-  };
-
+  
   return (
     <Layout>
       <S.Container>
@@ -73,10 +67,10 @@ export default function Reviews() {
           <S.GridContainer>
             {sortedEntries.map(post => (
               <Card
-                key={`${post.tconst}-${post.content[language].title}`}
+                key={`${post.tconst}-${post.primaryTitle}`}
                 post={{
                   ...post,
-                  title: getPostTitle(post),
+                  title: post.primaryTitle,
                   created_at: formatDate(parseDate(post.created_at)),
                   imageUrl: postImages[post.tconst]?.[0] ? encodeURI(postImages[post.tconst][0]) : undefined,
                 }}

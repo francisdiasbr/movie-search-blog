@@ -15,16 +15,24 @@ export const CardHeader = styled.div`
 
 
 export const CardDate = styled.p`
-  color: #ffffff;
+  color: ${({ theme }) => theme.colors.text};
   text-align: right;
   position: relative;
   z-index: 1;
-  transition: opacity 0.2s ease-in-out;
+  transition: text-shadow 0.2s ease-in-out;
 `;
 
+export const CardTitle = styled.h3`
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.text};
+  position: relative;
+  z-index: 1;
+  line-height: 1.2;
+  transition: text-shadow 0.2s ease-in-out;
+`;
 
 export const CardContainer = styled.div<CardContainerProps>`
-  background-color: ${({ theme }) => theme.colors.card};
+  background-color: ${({ theme, imageUrl }) => imageUrl ? 'transparent' : theme.colors.card};
   background-image: ${({ imageUrl }) => imageUrl ? `url(${imageUrl})` : 'none'};
   background-size: cover;
   background-position: center;
@@ -53,23 +61,25 @@ export const CardContainer = styled.div<CardContainerProps>`
     transition: all 0.2s ease-in-out;
   }
 
+  ${CardTitle}, ${CardDate} {
+    color: ${({ imageUrl, theme }) => imageUrl ? '#ffffff' : theme.colors.text};
+    text-shadow: ${({ imageUrl }) => imageUrl ? '1px 1px 3px rgba(0, 0, 0, 0.92)' : 'none'};
+  }
+
   &:hover {
     transform: translateY(-2px);
+    background-color: ${({ theme, imageUrl }) => imageUrl ? 'transparent' : theme.colors.cardHover};
     
     &::before {
       background: transparent;
     }
 
-    ${CardHeader}, ${CardDate} {
-      opacity: 0;
+    ${CardTitle}, ${CardDate} {
+      opacity: 1;
+      color: ${({ imageUrl, theme }) => imageUrl ? '#ffffff' : theme.colors.text};
+      text-shadow: ${({ imageUrl }) => 
+        imageUrl ? '2px 2px 4px rgba(0, 0, 0, 0.92), -1px -1px 4px rgba(0, 0, 0, 0.92)' : 'none'};
     }
   }
 `;
 
-export const CardTitle = styled.h3`
-  font-weight: 600;
-  color: white;
-  position: relative;
-  z-index: 1;
-  line-height: 1.2;
-`;
