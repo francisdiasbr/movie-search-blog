@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
-import OpinionCard from '../../components/OpinionCard';
 import Separator from '../../components/Separator';
 import SkeletonBlogPost from '../../components/SkeletonBlogPost';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -24,7 +23,6 @@ function BlogPost() {
   const dispatch = useAppDispatch();
   const { language } = useLanguage();
 
-  const { data: opinionData } = useAppSelector((state: RootState) => state.opinion);
   const { data, error, status } = useAppSelector((state: RootState) => state.blogPost);
   const { imageUrls } = useAppSelector((state: RootState) => state.blogPostImages);
 
@@ -63,12 +61,6 @@ function BlogPost() {
           <S.BlogPostTitleContainer>
             <h2>{title}</h2>
           </S.BlogPostTitleContainer>
-          {opinionData && (
-            <OpinionCard 
-              enjoying_1={opinionData.enjoying_1}
-              githubUsername="francisdiasbr" 
-            />
-          )}
           {isBlogPost ? (
             <S.Container hasImages={hasImages}>
               <S.ContentColumn hasImages={hasImages}>
@@ -121,11 +113,6 @@ function BlogPost() {
                 </S.ImageColumn>
               )}
             </S.Container>
-          )}
-          {data.poster_url && (
-            <S.PosterContainer>
-              <img src={data.poster_url} alt={data.primaryTitle} />
-            </S.PosterContainer>
           )}
         </>
       )}

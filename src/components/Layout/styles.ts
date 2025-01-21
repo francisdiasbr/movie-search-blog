@@ -17,7 +17,6 @@ export const ContentWrapper = styled.div`
 export const InnerContainer = styled.div`
 display: flex;
   flex-direction: column;
-  max-width: 1200px;
   padding: 16px;
   width: 100%;
 `;

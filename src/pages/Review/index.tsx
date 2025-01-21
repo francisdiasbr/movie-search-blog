@@ -34,21 +34,6 @@ export default function Review() {
               <p key={index} style={{ marginBottom: '1rem' }}>{paragraph}</p>
             ))}
           </div>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            marginTop: '2rem' 
-          }}>
-            <img 
-              src="https://github.com/francisdiasbr.png" 
-              alt="Francis Dias"
-              style={{ 
-                width: '50px', 
-                height: '50px', 
-                borderRadius: '50%'
-              }} 
-            />
-          </div>
         </>
       )}
     </Layout>

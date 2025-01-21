@@ -1,8 +1,11 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { fetchBlogPostsAndReviews } from '../../features/blogPostsAndReviews/blogPostsAndReviewsSlice';
 import { searchFavorites } from '../../features/favorites/favoritesSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/types';
@@ -19,14 +22,17 @@ const translations = {
 };
 
 export default function Favorites() {
+  const navigate = useNavigate();
   const { language } = useLanguage();
   const dispatch = useAppDispatch();
   const { data, error } = useAppSelector(
     (state: RootState) => state.favorites
   );
+  const { data: postsAndReviews } = useAppSelector((state: RootState) => state.blogPostsAndReviews);
 
   useEffect(() => {
     dispatch(searchFavorites({}));
+    dispatch(fetchBlogPostsAndReviews({ page: 1, pageSize: 100 }));
   }, [dispatch]);
 
   const content = translations[language];
@@ -36,10 +42,20 @@ export default function Favorites() {
   const entries = data?.entries || [];
   const hasEntries = entries.length > 0;
 
-  // Ordenar os filmes por título
+  const moviesWithContent = new Set([
+    ...(postsAndReviews?.blogPosts.entries || []).map(post => post.tconst),
+    ...(postsAndReviews?.reviews.entries || []).map(review => review.tconst)
+  ]);
+
+  const handleMovieClick = (tconst: string) => {
+    if (moviesWithContent.has(tconst)) {
+      const isBlogPost = postsAndReviews?.blogPosts.entries.some(post => post.tconst === tconst);
+      navigate(isBlogPost ? `/movie/${tconst}` : `/review/${tconst}`);
+    }
+  };
+
   const sortedEntries = [...entries].sort((a, b) => a.primaryTitle.localeCompare(b.primaryTitle));
 
-  // Agrupar os filmes por letra inicial
   const groupedEntries = sortedEntries.reduce((acc, item) => {
     const firstLetter = item.primaryTitle[0].toUpperCase();
     if (!acc[firstLetter]) {
@@ -67,7 +83,19 @@ export default function Favorites() {
             <div key={letter} style={{ marginBottom: '28px' }}>
               <h2>{letter}</h2>
               {groupedEntries[letter].map(item => (
-                <p key={item.tconst}><em><strong>{item.primaryTitle}</strong></em> - {item.director}, {item.startYear}</p>
+                <p key={item.tconst}>
+                  <span 
+                    style={{ 
+                      textDecoration: moviesWithContent.has(item.tconst) ? 'underline' : 'none',
+                      cursor: moviesWithContent.has(item.tconst) ? 'pointer' : 'default',
+                      color: moviesWithContent.has(item.tconst) ? '#4A7200' : 'inherit'
+                    }}
+                    onClick={() => handleMovieClick(item.tconst)}
+                  >
+                    <em><strong>{item.primaryTitle}</strong></em>
+                  </span>
+                  {` - ${item.director}, ${item.startYear}`}
+                </p>
               ))}
             </div>
           ))
