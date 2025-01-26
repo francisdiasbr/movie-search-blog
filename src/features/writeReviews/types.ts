@@ -1,8 +1,20 @@
+export interface ReviewContent {
+  pt: {
+    text: string;
+  };
+  en: {
+    text: string;
+  };
+}
+
 export interface MovieReviewResponse {
-  content: any;
+  _id: string;
+  tconst: string;
+  primaryTitle: string;
+  content: ReviewContent;
   created_at: string;
   isAiGenerated: boolean;
-  primaryTitle: string;
-  tconst: string;
+  references?: string[];
+  images?: string[];
 }
 

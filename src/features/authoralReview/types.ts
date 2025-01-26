@@ -1,12 +1,19 @@
-export interface MovieReviewResponse {
-  primaryTitle: string;
-  content: any;
-  tconst: string;
-  isAiGenerated: boolean;
+export interface ReviewContent {
+  en: {
+    text: string;
+  };
+  pt: {
+    text: string;
+  };
 }
 
-export interface AuthoralReviewState {
-  data: MovieReviewResponse | null;
-  error: unknown;
-  status: 'failed' | 'idle' | 'loading' | 'succeeded';
+export interface AuthoralReview {
+  _id: string;
+  tconst: string;
+  primaryTitle: string;
+  content: ReviewContent;
+  created_at: string;
+  isAiGenerated: boolean;
+  references?: string[];
+  images?: string[];
 }

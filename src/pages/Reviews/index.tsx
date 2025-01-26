@@ -6,13 +6,10 @@ import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
 import { NoPostsMessage } from '../../components/NoPostsMessage';
 import ReviewSearch from '../../components/ReviewSearch';
-import { useLanguage } from '../../contexts/LanguageContext';
-import { CombinedEntry } from '../../features/blogPostsAndReviews/types';
 import { useBlogPosts } from '../../hooks/useBlogPosts';
 import * as S from './styles';
 
 export default function Reviews() {
-  const { language } = useLanguage();
   const {
     query,
     setQuery,

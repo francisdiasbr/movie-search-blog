@@ -7,14 +7,12 @@ import { MovieReviewResponse } from './types';
 
 interface MovieReviewState {
   data: MovieReviewResponse | null;
-  entries: MovieReviewResponse[];
   error: unknown;
   status: 'failed' | 'idle' | 'loading' | 'succeeded';
 }
 
 const initialState: MovieReviewState = {
   data: null,
-  entries: [],
   error: null,
   status: 'idle',
 };

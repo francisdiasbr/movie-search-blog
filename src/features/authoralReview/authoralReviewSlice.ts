@@ -2,22 +2,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import BaseService from '../../api/service';
 import { formatDate } from '../../utils/dateUtils';
-interface ReviewContent {
-  pt: {
-    text: string;
-  };
-}
+import { AuthoralReview } from './types';
 
-export interface AuthoralReview {
-  _id: string;
-  tconst: string;
-  primaryTitle: string;
-  content: ReviewContent;
-  created_at: string;
-  isAiGenerated: boolean;
-  references: string[];
-  images: string[];
-}
 
 interface AuthoralReviewState {
   data: AuthoralReview | null;
