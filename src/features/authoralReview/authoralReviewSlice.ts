@@ -30,7 +30,7 @@ const authoralReviewSlice = createSlice({
   name: 'authoralReview',
   initialState,
   reducers: {
-    clearState: (state) => {
+    clearAuthoralReviewState: (state) => {
       state.data = null;
       state.error = null;
       state.status = 'idle';
@@ -55,4 +55,5 @@ const authoralReviewSlice = createSlice({
   },
 });
 
+export const { clearAuthoralReviewState } = authoralReviewSlice.actions;
 export default authoralReviewSlice.reducer;

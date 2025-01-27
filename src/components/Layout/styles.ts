@@ -23,7 +23,7 @@ display: flex;
 
 export const GoBackWrapper = styled.div<{ isMobile: boolean }>`
   position: relative;
-  margin-left: ${({ isMobile }) => (isMobile ? '16px' : '16px')};
+  margin-left: 0;
   margin-top: 16px;
   z-index: 10;
 `;
