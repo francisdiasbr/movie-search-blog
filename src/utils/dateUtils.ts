@@ -1,14 +1,34 @@
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-
-// Muda de 2024-12-11T10:05:00.000Z para 11 de dez. de 2024 às 10:05
-
-export const formatDate = (data: string): string => {
-  const date = new Date(data);
-  if (isNaN(date.getTime())) {
-    console.error('Data inválida:', data);
-    return 'Data inválida';
+export const parseDate = (dateString: string) => {
+  if (!dateString) return new Date();
+  try {
+    const [day, month, year] = dateString.split('/');
+    const date = new Date(`${year}-${month}-${day}`);
+    if (isNaN(date.getTime())) {
+      return new Date();
+    }
+    return date;
+  } catch {
+    return new Date();
   }
-  const formattedDate = format(date, 'dd/MM/yyyy', { locale: ptBR });
-  return formattedDate;
+};
+
+export const formatDate = (date: Date | string) => {
+  try {
+    if (typeof date === 'string') {
+      // Se já estiver no formato DD/MM/YYYY, retorna direto
+      if (/^\d{2}\/\d{2}\/\d{4}$/.test(date)) {
+        return date;
+      }
+      // Caso contrário, tenta converter
+      return parseDate(date).toLocaleDateString('pt-BR');
+    }
+    
+    if (date instanceof Date && !isNaN(date.getTime())) {
+      return date.toLocaleDateString('pt-BR');
+    }
+    
+    return new Date().toLocaleDateString('pt-BR');
+  } catch {
+    return new Date().toLocaleDateString('pt-BR');
+  }
 };

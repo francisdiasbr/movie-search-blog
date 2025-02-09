@@ -6,7 +6,7 @@ import { Layout } from '../../components/Layout';
 import Separator from '../../components/Separator';
 import SkeletonBlogPost from '../../components/SkeletonBlogPost';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { clearImageState, fetchAllImageUrls } from '../../features/blogPost/blogPostImagesSlice';
+import { fetchAllImageUrls } from '../../features/blogPost/blogPostImagesSlice';
 import { clearBlogPostState, fetchBlogPost } from '../../features/blogPost/blogPostSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/types';
@@ -31,7 +31,6 @@ function BlogPost() {
 
     return () => {
       dispatch(clearBlogPostState());
-      dispatch(clearImageState());
     };
   }, [dispatch, movieId]);
 

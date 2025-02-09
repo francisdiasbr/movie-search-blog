@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import Card from '../../components/Card';
 import SkeletonCard from '../../components/Card/Skeleton';
 import { ErrorMessage } from '../../components/ErrorMessage';
@@ -14,19 +16,35 @@ export default function Home() {
     entries,
     hasEntries,
     postImages,
+    handleCardClick,
     parseDate,
     formatDate,
-    handleCardClick,
   } = useBlogPosts();
+  
+  const memoizedCards = useMemo(() => {
+    if (!hasEntries || status !== 'succeeded') return null;
+
+    const sortedEntries = [...entries].sort((a, b) => {
+      const dateA = parseDate(a.created_at).getTime();
+      const dateB = parseDate(b.created_at).getTime();
+      return dateB - dateA;
+    });
+
+    return sortedEntries.map(post => (
+      <Card
+        key={`${post.tconst}-${post.primaryTitle}`}
+        post={{
+          ...post,
+          title: post.primaryTitle,
+          created_at: formatDate(parseDate(post.created_at)),
+          imageUrl: postImages[post.tconst]?.[0] ? encodeURI(postImages[post.tconst][0]) : undefined,
+        }}
+        onClick={() => handleCardClick(post)}
+      />
+    ));
+  }, [entries, postImages, handleCardClick, hasEntries, status]);
 
   if (error) return <ErrorMessage message={error} />;
-
-  const sortedEntries = [...entries].sort((a, b) => {
-    const dateA = parseDate(a.created_at).getTime();
-    const dateB = parseDate(b.created_at).getTime();
-    return dateB - dateA;
-  });
-
 
   return (
     <Layout>
@@ -40,18 +58,7 @@ export default function Home() {
       {status === 'succeeded' && !hasEntries && <NoPostsMessage />}
       {status === 'succeeded' && hasEntries && (
         <S.GridContainer>
-          {sortedEntries.map(post => (
-            <Card
-              key={`${post.tconst}-${post.primaryTitle}`}
-              post={{
-                ...post,
-                title: post.primaryTitle,
-                created_at: formatDate(parseDate(post.created_at)),
-                imageUrl: postImages[post.tconst]?.[0] ? encodeURI(postImages[post.tconst][0]) : undefined,
-              }}
-              onClick={() => handleCardClick(post)}
-            />
-          ))}
+          {memoizedCards}
         </S.GridContainer>
       )}
     </Layout>

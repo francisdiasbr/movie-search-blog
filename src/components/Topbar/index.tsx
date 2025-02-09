@@ -30,7 +30,7 @@ export function Topbar() {
             ABOUT
           </S.NavLink>
           <S.IconLink
-            href="https://github.com/francisdiasbr"
+            href="https://github.com/francisdiasbr/movie-search-blog"
             target="_blank"
             rel="noopener noreferrer"
           >

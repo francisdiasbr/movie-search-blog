@@ -34,7 +34,7 @@ export default function Reviews() {
     }
   };
 
-  if (error) return <ErrorMessage message={error} />;
+  if (error && !hasEntries) return <ErrorMessage message={error} />;
 
   const sortedEntries = [...entries].sort((a, b) => {
     const dateA = parseDate(a.created_at).getTime();

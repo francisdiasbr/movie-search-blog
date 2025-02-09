@@ -44,6 +44,7 @@ export const searchBlogPosts = createAsyncThunk<SearchResponse, SearchParams>(
         '/generate-blogpost/search',
         params
       );
+      console.log('response searchBlogPosts', response);
       return response as SearchResponse;
     } catch (error) {
       console.error('Error searching blog posts:', error);
@@ -65,10 +66,7 @@ const searchBlogPostSlice = createSlice({
       .addCase(searchBlogPosts.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.data = {
-          entries: action.payload.entries.map(entry => ({
-            ...entry,
-            created_at: formatDate(entry.created_at),
-          })),
+          entries: action.payload.entries,
           total_documents: action.payload.total_documents,
         };
       })

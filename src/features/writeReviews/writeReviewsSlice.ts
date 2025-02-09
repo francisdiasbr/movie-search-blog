@@ -33,7 +33,6 @@ export const fetchAllAuthoralReviews = createAsyncThunk(
         page: params.page,
         page_size: params.pageSize,
       };
-      console.log('fetchBody allAuthoralReviews', fetchBody);
       const response = await BaseService.post(url, fetchBody);
       console.log('response fetchAllAuthoralReviews', response);
       if (response) {
@@ -68,10 +67,7 @@ const allAuthoralReviewsSlice = createSlice({
       .addCase(fetchAllAuthoralReviews.fulfilled, (state, action) => {
         const payload = action.payload as MovieReviewResponse;
         state.status = 'succeeded';
-        state.data = {
-          ...payload,
-          created_at: formatDate(payload.created_at),
-        };
+        state.data = payload;
       })
       .addCase(fetchAllAuthoralReviews.rejected, (state, action) => {
         state.status = 'failed';

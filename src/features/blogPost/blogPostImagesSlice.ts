@@ -9,6 +9,12 @@ interface UploadImageState {
   imageUrl: string | null;
   imageUrls: string[];
   imageNames: string[];
+  imageCache: {
+    [tconst: string]: {
+      urls: string[];
+      names: string[];
+    };
+  };
 }
 
 const initialState: UploadImageState = {
@@ -18,6 +24,7 @@ const initialState: UploadImageState = {
   imageUrl: null,
   imageUrls: [],
   imageNames: [],
+  imageCache: {},
 };
 
 interface ImageResponse {
@@ -29,25 +36,26 @@ export const fetchAllImageUrls = createAsyncThunk<
   { tconst: string }
 >(
   '/uploadImages/fetchAllImageUrls',
-  async ({ tconst }, { rejectWithValue }) => {
+  async ({ tconst }, { getState, rejectWithValue }) => {
+    const state = getState() as { blogPostImages: UploadImageState };
+
+    // Verifica cache
+    const cachedData = state.blogPostImages.imageCache[tconst];
+    if (cachedData?.urls.length > 0) {
+      return {
+        urls: cachedData.urls,
+        names: cachedData.names,
+      };
+    }
+
     try {
-      const response = (await baseService.get(
-        `/images/${tconst}`
-      )) as ImageResponse;
-
-      const urls = response.images.map((image: { url: string }) => image.url);
-      const names = response.images.map(
-        (image: { filename: string }) => image.filename
-      );
-
-      return { urls, names };
+      const response = (await baseService.get(`/images/${tconst}`)) as ImageResponse;
+      return {
+        urls: response.images.map(image => image.url),
+        names: response.images.map(image => image.filename),
+      };
     } catch (error) {
-      console.error('Error fetching all image URLs:', error);
-      if (error instanceof Error) {
-        return rejectWithValue(error.message);
-      } else {
-        return rejectWithValue('An unexpected error occurred');
-      }
+      return rejectWithValue('Error fetching images');
     }
   }
 );
@@ -56,13 +64,17 @@ const uploadImagesSlice = createSlice({
   name: 'uploadImages',
   initialState,
   reducers: {
-    clearImageState: state => {
+    clearImageCache: (state) => {
+      state.imageCache = {};
+    },
+    clearImageState: (state) => {
       state.status = 'idle';
       state.error = null;
       state.objectName = null;
       state.imageUrl = null;
       state.imageUrls = [];
       state.imageNames = [];
+      state.imageCache = {};
     },
   },
   extraReducers: builder => {
@@ -72,10 +84,16 @@ const uploadImagesSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchAllImageUrls.fulfilled, (state, action) => {
+        const tconst = action.meta.arg.tconst;
         state.status = 'succeeded';
         state.imageUrls = action.payload.urls;
         state.imageNames = action.payload.names;
-        console.log('Nomes das imagens no slice:', action.payload.names);
+        
+        // Adicionar ao cache
+        state.imageCache[tconst] = {
+          urls: action.payload.urls,
+          names: action.payload.names,
+        };
       })
       .addCase(fetchAllImageUrls.rejected, (state, action) => {
         state.status = 'failed';
@@ -84,5 +102,5 @@ const uploadImagesSlice = createSlice({
   },
 });
 
-export const { clearImageState } = uploadImagesSlice.actions;
+export const { clearImageCache, clearImageState } = uploadImagesSlice.actions;
 export default uploadImagesSlice.reducer;
