@@ -1,5 +1,7 @@
 # The Movie Blog 🎬
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/7431b07d-a0e7-4853-a1fe-bb8a878b3a37/deploy-status)](https://app.netlify.com/sites/themoviesearchblog/deploys)
+
 [English Version](README_EN.md)
 
 
