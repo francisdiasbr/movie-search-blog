@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import { SubTopbarContainer, InnerContainer, NavItem } from './styles';
 
 export function SubTopbar() {
   const navigate = useNavigate();
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const location = useLocation();
+  const [selectedItem, setSelectedItem] = useState<string>(location.pathname);
 
   const handleClick = (path: string) => {
     setSelectedItem(path);
@@ -15,12 +16,12 @@ export function SubTopbar() {
   return (
     <SubTopbarContainer>
       <InnerContainer>
-        {/* <NavItem
-          onClick={() => handleClick('/reviews')}
-          isSelected={selectedItem === '/reviews'}
+        <NavItem
+          onClick={() => handleClick('/')}
+          isSelected={selectedItem === '/'}
         >
           REVIEWS
-        </NavItem> */}
+        </NavItem>
         <NavItem
           onClick={() => handleClick('/links')}
           isSelected={selectedItem === '/links'}

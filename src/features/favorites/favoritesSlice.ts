@@ -27,20 +27,46 @@ interface SearchParams {
 interface SearchResponse {
   entries: FavoritesEntry[];
   total_documents: number;
+  total_pages: number;
+  current_page: number;
+  page_size: number;
 }
 
 export const searchFavorites = createAsyncThunk<SearchResponse, SearchParams>(
   'favorites/search',
-  async (
-    params = {
-      filters: {},
-      page: 1,
-      page_size: 50,
-    }
-  ) => {
+  async (params = { filters: {}, page: 1, page_size: 10 }) => {
     try {
-      const response = await BaseService.post('/favorites/search', params);
-      return response as SearchResponse;
+      const firstResponse = await BaseService.post('/favorites/search', {
+        ...params,
+        page: 1,
+        page_size: 10
+      }) as SearchResponse;
+
+      const totalPages = firstResponse.total_pages;
+      let allEntries = [...firstResponse.entries];
+
+      const remainingPages = Array.from({ length: totalPages - 1 }, (_, i) => i + 2);
+      const remainingRequests = remainingPages.map(page =>
+        BaseService.post('/favorites/search', {
+          ...params,
+          page,
+          page_size: 10
+        })
+      );
+
+      const remainingResponses = await Promise.all(remainingRequests);
+      
+      remainingResponses.forEach(response => {
+        allEntries = [...allEntries, ...(response as SearchResponse).entries];
+      });
+
+      return {
+        entries: allEntries,
+        total_documents: firstResponse.total_documents,
+        total_pages: totalPages,
+        current_page: 1,
+        page_size: allEntries.length
+      };
     } catch (error) {
       console.error('Error searching favorites:', error);
       throw error;
