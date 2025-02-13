@@ -1,4 +1,4 @@
-import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
 
@@ -35,13 +35,6 @@ export function Topbar() {
             rel="noopener noreferrer"
           >
             <FontAwesomeIcon icon={faGithub} size="lg" />
-          </S.IconLink>
-          <S.IconLink
-            href="https://linkedin.com/in/francisdiasbr"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FontAwesomeIcon icon={faLinkedin} size="lg" />
           </S.IconLink>
         </S.NavContainer>
       </S.TopbarWrapper>
