@@ -15,7 +15,7 @@ export default function Home() {
     status,
     entries,
     hasEntries,
-    postImages,
+    // postImages,
     handleCardClick,
     parseDate,
     formatDate,
@@ -37,12 +37,12 @@ export default function Home() {
           ...post,
           title: post.primaryTitle,
           created_at: formatDate(parseDate(post.created_at)),
-          imageUrl: postImages[post.tconst]?.[0] ? encodeURI(postImages[post.tconst][0]) : undefined,
+          // imageUrl: postImages[post.tconst]?.[0] ? encodeURI(postImages[post.tconst][0]) : undefined,
         }}
         onClick={() => handleCardClick(post)}
       />
     ));
-  }, [entries, postImages, handleCardClick, hasEntries, status]);
+  }, [entries, handleCardClick, hasEntries, status]);
 
   if (error) return <ErrorMessage message={error} />;
 
