@@ -6,7 +6,6 @@ import blogPostReducer from '../features/blogPost/blogPostSlice';
 import searchBlogPostReducer from '../features/blogPost/searchBlogPostSlice';
 import blogPostsAndReviewsReducer from '../features/blogPostsAndReviews/blogPostsAndReviewsSlice';
 import favoritesReducer from '../features/favorites/favoritesSlice';
-import opinionReducer from '../features/opinion/opinionSlice';
 import writeReviewsReducer from '../features/writeReviews/writeReviewsSlice';
 
 export const store = configureStore({
@@ -14,11 +13,10 @@ export const store = configureStore({
     authoralReview: authoralReviewReducer,
     blogPost: blogPostReducer,
     blogPostImages: blogPostImagesReducer,
-    searchBlogPost: searchBlogPostReducer,
-    opinion: opinionReducer,
-    favorites: favoritesReducer,
-    writeReviews: writeReviewsReducer,
     blogPostsAndReviews: blogPostsAndReviewsReducer,
+    favorites: favoritesReducer,
+    searchBlogPost: searchBlogPostReducer,
+    writeReviews: writeReviewsReducer,
   },
 });
 

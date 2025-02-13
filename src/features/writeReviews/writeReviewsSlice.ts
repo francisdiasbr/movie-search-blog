@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import BaseService from '../../api/service';
-import { formatDate } from '../../utils/dateUtils';
 import { MovieReviewResponse } from './types';
 
 

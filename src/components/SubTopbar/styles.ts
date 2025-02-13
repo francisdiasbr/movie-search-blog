@@ -14,11 +14,16 @@ export const InnerContainer = styled.div`
 export const NavItem = styled.span<{ isSelected: boolean }>`
   cursor: pointer;
   font-size: 18px;
-  font-weight: 500;
-  text-decoration: ${({ isSelected }) => (isSelected ? 'underline' : 'none')};
-  color: ${({ isSelected }) => (isSelected ? 'purple' : 'inherit')};
+  font-weight: ${({ isSelected }) => (isSelected ? '700' : '600')};
+  position: relative;
+  color: ${({ isSelected }) => (isSelected ? '#000' : '#666')};
+  transition: all 0.2s ease;
+  
+  &:hover {
+    color: #000;
+  }
 `;
-
 export const SubTopbarContainer = styled.div`
   border-bottom: 1px solid #e5e7eb;
+  background-color: #fff;
 `;

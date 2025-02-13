@@ -32,6 +32,7 @@ function ThemedApp() {
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/links" element={<Links />} />
         <Route path="/favorites" element={<Favorites />} />
+        
       </Routes>
     </StyledThemeProvider>
   );

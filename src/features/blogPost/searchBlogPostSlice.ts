@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import BaseService from '../../api/service';
-import { formatDate } from '../../utils/dateUtils';
 import { BlogPostEntry } from './types';
 
 interface SearchBlogPostState {
