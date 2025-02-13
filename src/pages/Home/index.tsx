@@ -1,13 +1,11 @@
 import { useMemo } from 'react';
 
 import Card from '../../components/Card';
-import SkeletonCard from '../../components/Card/Skeleton';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
 import { NoPostsMessage } from '../../components/NoPostsMessage';
 import { useBlogPosts } from '../../hooks/useBlogPosts';
 import * as S from './styles';
-
 
 export default function Home() {
   const {
@@ -15,7 +13,6 @@ export default function Home() {
     status,
     entries,
     hasEntries,
-    // postImages,
     handleCardClick,
     parseDate,
     formatDate,
@@ -49,11 +46,11 @@ export default function Home() {
   return (
     <Layout>
       {status === 'loading' && (
-        <S.GridContainer>
-          {[...Array(3)].map((_, index) => (
-            <SkeletonCard key={index} />
-          ))}
-        </S.GridContainer>
+        <S.LoadingContainer>
+          <S.ActivityIndicator>
+            <span />
+          </S.ActivityIndicator>
+        </S.LoadingContainer>
       )}
       {status === 'succeeded' && !hasEntries && <NoPostsMessage />}
       {status === 'succeeded' && hasEntries && (

@@ -6,11 +6,36 @@ export const Container = styled.div`
 `;
 
 export const GridContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: ${({ theme }) => theme.spacing.sm};
   width: 100%;
-  padding: 16px;
+  padding: ${({ theme }) => theme.spacing.sm};
+  justify-content: center;
+
+  > * {
+    flex: 0 0 250px;
+    margin: 0;
+    animation: fadeIn 0.4s ease-out;
+    animation-fill-mode: both;
+  }
+
+  @media (min-width: 846px) {
+    justify-content: flex-start;
+    
+    > * {
+      flex: 0 1 250px;
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `;
 
 export const NoPostsMessage = styled.p`
@@ -64,4 +89,46 @@ export const CardDate = styled.p`
   text-align: right;
   color: #757575;
   font-size: 0.9rem;
+`;
+
+export const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: ${({ theme }) => theme.spacing.xl} 0;
+`;
+
+export const ActivityIndicator = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.xs};
+  align-items: center;
+
+  &::before,
+  &::after,
+  & span {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background-color: ${({ theme }) => theme.colors.primary};
+    border-radius: 50%;
+    animation: bounce 1s infinite ease-in-out;
+  }
+
+  &::before {
+    animation-delay: -0.32s;
+  }
+
+  & span {
+    animation-delay: -0.16s;
+  }
+
+  @keyframes bounce {
+    0%, 80%, 100% {
+      transform: scale(0);
+      opacity: 0.3;
+    }
+    40% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
 `;
