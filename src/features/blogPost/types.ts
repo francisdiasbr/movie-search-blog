@@ -23,7 +23,8 @@ export interface BlogPostEntry {
   _id: string;
   content: BlogPostContent;
   created_at: string;
-  images: string[];
+  images?: string[];
+  imageUrl?: string;
   isAiGenerated: boolean;
   original_movie_soundtrack: string;
   poster_url: string;

@@ -56,7 +56,14 @@ export const fetchBlogPostsAndReviews = createAsyncThunk<CombinedResponse, Searc
 
     return {
       blogPosts: {
-        entries: blogPostsResponse.entries || []
+        entries: blogPostsResponse.entries.map(post => ({
+          ...post,
+          imageUrl: post.poster_url || post.images?.find(img => 
+            img.startsWith('http') && 
+            !img.includes('encrypted-tbn') && 
+            !img.includes('googlelogo')
+          ) || undefined
+        })) || []
       },
       reviews: {
         entries: (reviewsResponse as any)?.entries || []

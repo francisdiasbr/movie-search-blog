@@ -7,13 +7,10 @@ export const Container = styled.div`
 
 export const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 16px;
-  margin-top: 16px;
-
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  width: 100%;
+  padding: 16px;
 `;
 
 export const NoPostsMessage = styled.p`

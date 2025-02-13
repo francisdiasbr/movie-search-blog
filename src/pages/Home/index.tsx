@@ -37,7 +37,7 @@ export default function Home() {
           ...post,
           title: post.primaryTitle,
           created_at: formatDate(parseDate(post.created_at)),
-          // imageUrl: postImages[post.tconst]?.[0] ? encodeURI(postImages[post.tconst][0]) : undefined,
+          imageUrl: post.imageUrl
         }}
         onClick={() => handleCardClick(post)}
       />

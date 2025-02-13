@@ -41,13 +41,17 @@ export const CardContainer = styled.div<CardContainerProps>`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.01);
   border-radius: 8px;
   cursor: pointer;
-  padding: 16px;
+  padding: 8px;
   min-height: 200px;
+  aspect-ratio: 1.4/1;
   position: relative;
   transition: all 0.2s ease-in-out;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  overflow: hidden;
+  width: 100%;
+  max-width: 250px;
   
   &::before {
     content: '';

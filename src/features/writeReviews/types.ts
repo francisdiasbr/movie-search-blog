@@ -16,5 +16,5 @@ export interface MovieReviewResponse {
   isAiGenerated: boolean;
   references?: string[];
   images?: string[];
+  imageUrl?: string;
 }
-
