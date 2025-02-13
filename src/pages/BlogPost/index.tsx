@@ -6,7 +6,7 @@ import { Layout } from '../../components/Layout';
 import Separator from '../../components/Separator';
 import SkeletonBlogPost from '../../components/SkeletonBlogPost';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { fetchAllImageUrls } from '../../features/blogPost/blogPostImagesSlice';
+import { fetchAllImageUrls, clearImageState } from '../../features/blogPost/blogPostImagesSlice';
 import { clearBlogPostState, fetchBlogPost } from '../../features/blogPost/blogPostSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/types';
@@ -21,7 +21,7 @@ function BlogPost() {
   const dispatch = useAppDispatch();
 
   const { data, error, status } = useAppSelector((state: RootState) => state.blogPost);
-  const { imageUrls } = useAppSelector((state: RootState) => state.blogPostImages);
+  const { imageUrls, subtitles } = useAppSelector((state: RootState) => state.blogPostImages);
 
   useEffect(() => {
     if (movieId) {
@@ -31,6 +31,7 @@ function BlogPost() {
 
     return () => {
       dispatch(clearBlogPostState());
+      dispatch(clearImageState());
     };
   }, [dispatch, movieId]);
 
@@ -81,7 +82,7 @@ function BlogPost() {
             </S.ContentColumn>
             {hasImages && (
               <S.ImageColumn>
-                <ImageGallery images={imageUrls} />
+                <ImageGallery images={imageUrls} subtitles={subtitles} />
               </S.ImageColumn>
             )}
           </S.Container>
@@ -103,14 +104,21 @@ function Section({ title, content }: { title: string; content: string }) {
   );
 }
 
-function ImageGallery({ images }: { images: string[] }) {
+function ImageGallery({ images, subtitles }: { images: string[]; subtitles?: string[] }) {
   if (!images || images.length === 0) return null;
 
+  console.log(subtitles, 'subtitles');
   return (
     <>
       {images.map((url, index) => (
         <S.ImageWrapper key={index}>
-          <img src={url} alt={`Imagem ${index + 1}`} />
+          <img 
+            src={url} 
+            alt={`Imagem ${index + 1}`} 
+          />
+          <p>
+            {subtitles?.[index] || 'Cenae'}
+          </p>
         </S.ImageWrapper>
       ))}
     </>

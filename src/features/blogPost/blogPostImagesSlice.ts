@@ -5,56 +5,38 @@ import baseService from '../../api/service';
 interface UploadImageState {
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
-  objectName: string | null;
-  imageUrl: string | null;
   imageUrls: string[];
-  imageNames: string[];
-  imageCache: {
-    [tconst: string]: {
-      urls: string[];
-      names: string[];
-    };
-  };
+  subtitles: string[];
 }
 
 const initialState: UploadImageState = {
   status: 'idle',
   error: null,
-  objectName: null,
-  imageUrl: null,
   imageUrls: [],
-  imageNames: [],
-  imageCache: {},
+  subtitles: [],
 };
 
 interface ImageResponse {
-  images: { url: string; filename: string }[];
+  images: { 
+    url: string; 
+    filename: string;
+    subtitle?: string;
+  }[];
 }
 
-export const fetchAllImageUrls = createAsyncThunk<
-  { urls: string[]; names: string[] },
-  { tconst: string }
->(
+export const fetchAllImageUrls = createAsyncThunk(
   '/uploadImages/fetchAllImageUrls',
-  async ({ tconst }, { getState, rejectWithValue }) => {
-    const state = getState() as { blogPostImages: UploadImageState };
-
-    // Verifica cache
-    const cachedData = state.blogPostImages.imageCache[tconst];
-    if (cachedData?.urls.length > 0) {
-      return {
-        urls: cachedData.urls,
-        names: cachedData.names,
-      };
-    }
-
+  async ({ tconst }: { tconst: string }, { rejectWithValue }) => {
     try {
       const response = (await baseService.get(`/images/${tconst}`)) as ImageResponse;
+      console.log('API Response:', response);
+
       return {
         urls: response.images.map(image => image.url),
-        names: response.images.map(image => image.filename),
+        subtitles: response.images.map(image => image.subtitle || 'Cena do filme'),
       };
     } catch (error) {
+      console.error('Error in fetchAllImageUrls:', error);
       return rejectWithValue('Error fetching images');
     }
   }
@@ -64,17 +46,11 @@ const uploadImagesSlice = createSlice({
   name: 'uploadImages',
   initialState,
   reducers: {
-    clearImageCache: (state) => {
-      state.imageCache = {};
-    },
     clearImageState: (state) => {
       state.status = 'idle';
       state.error = null;
-      state.objectName = null;
-      state.imageUrl = null;
       state.imageUrls = [];
-      state.imageNames = [];
-      state.imageCache = {};
+      state.subtitles = [];
     },
   },
   extraReducers: builder => {
@@ -84,16 +60,9 @@ const uploadImagesSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchAllImageUrls.fulfilled, (state, action) => {
-        const tconst = action.meta.arg.tconst;
         state.status = 'succeeded';
         state.imageUrls = action.payload.urls;
-        state.imageNames = action.payload.names;
-        
-        // Adicionar ao cache
-        state.imageCache[tconst] = {
-          urls: action.payload.urls,
-          names: action.payload.names,
-        };
+        state.subtitles = action.payload.subtitles;
       })
       .addCase(fetchAllImageUrls.rejected, (state, action) => {
         state.status = 'failed';
@@ -102,5 +71,5 @@ const uploadImagesSlice = createSlice({
   },
 });
 
-export const { clearImageCache, clearImageState } = uploadImagesSlice.actions;
+export const { clearImageState } = uploadImagesSlice.actions;
 export default uploadImagesSlice.reducer;

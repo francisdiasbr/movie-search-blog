@@ -34,9 +34,11 @@ export const ImageColumn = styled.div`
 
 export const ImageWrapper = styled.div`
   margin-bottom: 16px;
+  
   img {
-    width: calc(100% - 32px);
-    margin: 0 16px;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
   }
 `;
 
