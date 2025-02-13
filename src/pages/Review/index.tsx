@@ -7,7 +7,9 @@ import SkeletonBlogPost from '../../components/SkeletonBlogPost';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { clearAuthoralReviewState, fetchAuthoralReview } from '../../features/authoralReview/authoralReviewSlice';
 import { clearImageState, fetchAllImageUrls } from '../../features/blogPost/blogPostImagesSlice';
+import { clearFavoriteState, getFavoriteById } from '../../features/favorites/favoritesSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { RootState } from '../../store/store';
 import * as S from './styles';
 
 function Review() {
@@ -18,16 +20,19 @@ function Review() {
   
   const { data, error, status } = useAppSelector(state => state.authoralReview);
   const { imageUrls } = useAppSelector(state => state.blogPostImages);
+  const { currentFavorite } = useAppSelector((state: RootState) => state.favorites);
 
   useEffect(() => {
     if (movieId) {
       dispatch(fetchAllImageUrls({ tconst: movieId }));
       dispatch(fetchAuthoralReview(movieId));
+      dispatch(getFavoriteById(movieId));
     }
 
     return () => {
       dispatch(clearImageState());
       dispatch(clearAuthoralReviewState());
+      dispatch(clearFavoriteState());
     };
   }, [dispatch, movieId]);
 
@@ -43,6 +48,12 @@ function Review() {
         <>
           <S.BlogPostTitleContainer>
             <h2>{data.primaryTitle}</h2>
+            {currentFavorite && (
+              <div>
+                <p><em>{currentFavorite.originalTitle} ({currentFavorite.startYear}) • {currentFavorite.country} • {currentFavorite.director}</em></p>
+                <br/>
+              </div>
+            )}
           </S.BlogPostTitleContainer>
           <S.Container hasImages={hasImages}>
             <S.ContentColumn hasImages={hasImages}>

@@ -8,6 +8,7 @@ import SkeletonBlogPost from '../../components/SkeletonBlogPost';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { fetchAllImageUrls, clearImageState } from '../../features/blogPost/blogPostImagesSlice';
 import { clearBlogPostState, fetchBlogPost } from '../../features/blogPost/blogPostSlice';
+import { clearFavoriteState, getFavoriteById } from '../../features/favorites/favoritesSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/types';
 import { sectionTitles } from './sectionTitles';
@@ -22,16 +23,19 @@ function BlogPost() {
 
   const { data, error, status } = useAppSelector((state: RootState) => state.blogPost);
   const { imageUrls, subtitles } = useAppSelector((state: RootState) => state.blogPostImages);
+  const { currentFavorite } = useAppSelector((state: RootState) => state.favorites);
 
   useEffect(() => {
     if (movieId) {
       dispatch(fetchAllImageUrls({ tconst: movieId }));
-      dispatch(fetchBlogPost(movieId))
+      dispatch(fetchBlogPost(movieId));
+      dispatch(getFavoriteById(movieId));
     }
 
     return () => {
       dispatch(clearBlogPostState());
       dispatch(clearImageState());
+      dispatch(clearFavoriteState());
     };
   }, [dispatch, movieId]);
 
@@ -48,6 +52,12 @@ function BlogPost() {
         <>
           <S.BlogPostTitleContainer>
             <h2>{data.primaryTitle}</h2>
+            {currentFavorite && (
+              <div>
+                <p><em>{currentFavorite.originalTitle} ({currentFavorite.startYear}) • {currentFavorite.country} • {currentFavorite.director}</em></p>
+                <br/>
+              </div>
+            )}
           </S.BlogPostTitleContainer>
           <S.Container hasImages={hasImages}>
             <S.ContentColumn hasImages={hasImages}>

@@ -10,12 +10,16 @@ interface SearchFavoritesState {
   } | null;
   loading: boolean;
   error: string | null;
+  currentFavorite: FavoritesEntry | null;
+  initialFetchDone: boolean;
 }
 
 const initialState: SearchFavoritesState = {
   data: null,
   loading: false,
   error: null,
+  currentFavorite: null,
+  initialFetchDone: false,
 };
 
 interface SearchParams {
@@ -30,6 +34,10 @@ interface SearchResponse {
   total_pages: number;
   current_page: number;
   page_size: number;
+}
+
+interface GetFavoriteByIdResponse {
+  entry: FavoritesEntry | null;
 }
 
 export const searchFavorites = createAsyncThunk<SearchResponse, SearchParams>(
@@ -74,10 +82,39 @@ export const searchFavorites = createAsyncThunk<SearchResponse, SearchParams>(
   }
 );
 
+export const getFavoriteById = createAsyncThunk<GetFavoriteByIdResponse, string>(
+  'favorites/getById',
+  async (tconst) => {
+    try {
+      const response = await BaseService.post('/favorites/search', {
+        filters: {
+          tconst: {
+            $eq: tconst
+          }
+        },
+        page: 1,
+        page_size: 1
+      }) as SearchResponse;
+
+      return {
+        entry: response.entries.length > 0 ? response.entries[0] : null
+      };
+    } catch (error) {
+      console.error('Error fetching favorite:', error);
+      throw error;
+    }
+  }
+);
+
 const favoritesSlice = createSlice({
   name: 'favorites',
   initialState,
-  reducers: {},
+  reducers: {
+    clearFavoriteState: (state) => {
+      state.currentFavorite = null;
+      state.error = null;
+    }
+  },
   extraReducers: builder => {
     builder
       .addCase(searchFavorites.pending, state => {
@@ -87,13 +124,28 @@ const favoritesSlice = createSlice({
       .addCase(searchFavorites.fulfilled, (state, action) => {
         state.loading = false;
         state.data = action.payload;
+        state.initialFetchDone = true;
       })
       .addCase(searchFavorites.rejected, state => {
         state.loading = false;
         state.error =
           'Falha ao buscar filmes favoritos. Por favor, tente novamente mais tarde.';
+      })
+      .addCase(getFavoriteById.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getFavoriteById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentFavorite = action.payload.entry;
+      })
+      .addCase(getFavoriteById.rejected, state => {
+        state.loading = false;
+        state.error = 'Falha ao buscar favorito.';
       });
   },
 });
+
+export const { clearFavoriteState } = favoritesSlice.actions;
 
 export default favoritesSlice.reducer;

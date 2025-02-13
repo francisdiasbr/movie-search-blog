@@ -9,6 +9,7 @@ import { fetchBlogPostsAndReviews } from '../../features/blogPostsAndReviews/blo
 import { searchFavorites } from '../../features/favorites/favoritesSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/types';
+import * as S from './styles';
 
 const translations = {
   pt: {
@@ -25,15 +26,18 @@ export default function Favorites() {
   const navigate = useNavigate();
   const { language } = useLanguage();
   const dispatch = useAppDispatch();
-  const { data, error } = useAppSelector(
+  
+  const { data, error, loading, initialFetchDone } = useAppSelector(
     (state: RootState) => state.favorites
   );
   const { data: postsAndReviews } = useAppSelector((state: RootState) => state.blogPostsAndReviews);
 
   useEffect(() => {
-    dispatch(searchFavorites({}));
-    dispatch(fetchBlogPostsAndReviews({ page: 1, pageSize: 100 }));
-  }, [dispatch]);
+    if (!initialFetchDone) {
+      dispatch(searchFavorites({}));
+      dispatch(fetchBlogPostsAndReviews({ page: 1, pageSize: 100 }));
+    }
+  }, [dispatch, initialFetchDone]);
 
   const content = translations[language];
 
@@ -78,27 +82,35 @@ export default function Favorites() {
       >
         <h1>{content.title}</h1>
         <p>{content.description}</p>
-        {hasEntries && (
-          Object.keys(groupedEntries).map(letter => (
-            <div key={letter} style={{ marginBottom: '28px' }}>
-              <h2>{letter}</h2>
-              {groupedEntries[letter].map(item => (
-                <p key={item.tconst}>
-                  <span 
-                    style={{ 
-                      textDecoration: moviesWithContent.has(item.tconst) ? 'underline' : 'none',
-                      cursor: moviesWithContent.has(item.tconst) ? 'pointer' : 'default',
-                      color: moviesWithContent.has(item.tconst) ? '#4A7200' : 'inherit'
-                    }}
-                    onClick={() => handleMovieClick(item.tconst)}
-                  >
-                    <em><strong>{item.primaryTitle}</strong></em>
-                  </span>
-                  {` - ${item.director}, ${item.startYear}`}
-                </p>
-              ))}
-            </div>
-          ))
+        {loading ? (
+          <S.LoadingContainer>
+            <S.ActivityIndicator>
+              <span />
+            </S.ActivityIndicator>
+          </S.LoadingContainer>
+        ) : (
+          hasEntries && (
+            Object.keys(groupedEntries).map(letter => (
+              <div key={letter} style={{ marginBottom: '28px' }}>
+                <h2>{letter}</h2>
+                {groupedEntries[letter].map(item => (
+                  <p key={item.tconst}>
+                    <span 
+                      style={{ 
+                        textDecoration: moviesWithContent.has(item.tconst) ? 'underline' : 'none',
+                        cursor: moviesWithContent.has(item.tconst) ? 'pointer' : 'default',
+                        color: moviesWithContent.has(item.tconst) ? '#4A7200' : 'inherit'
+                      }}
+                      onClick={() => handleMovieClick(item.tconst)}
+                    >
+                      <em><strong>{item.primaryTitle}</strong></em>
+                    </span>
+                    {` - ${item.director}, ${item.startYear}`}
+                  </p>
+                ))}
+              </div>
+            ))
+          )
         )}
       </div>
     </Layout>
