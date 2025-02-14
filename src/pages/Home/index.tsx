@@ -1,10 +1,14 @@
 import { useMemo } from 'react';
+import { useTheme } from 'styled-components';
+
 
 import Card from '../../components/Card';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
+import LoadingModal from '../../components/LoadingModal';
 import { NoPostsMessage } from '../../components/NoPostsMessage';
 import { useBlogPosts } from '../../hooks/useBlogPosts';
+import { Theme } from '../../styles/theme';
 import * as S from './styles';
 
 export default function Home() {
@@ -16,7 +20,11 @@ export default function Home() {
     handleCardClick,
     parseDate,
     formatDate,
+    isServerStarting
   } = useBlogPosts();
+  
+  const theme = useTheme() as Theme;
+  const isMobile = window.innerWidth < parseInt(theme.breakpoints.sm);
   
   const memoizedCards = useMemo(() => {
     if (!hasEntries || status !== 'succeeded') return null;
@@ -37,14 +45,16 @@ export default function Home() {
           imageUrl: post.imageUrl
         }}
         onClick={() => handleCardClick(post)}
+        // isMobile={isMobile}
       />
     ));
-  }, [entries, handleCardClick, hasEntries, status]);
+  }, [entries, handleCardClick, hasEntries, status, isMobile]);
 
   if (error) return <ErrorMessage message={error} />;
 
   return (
     <Layout>
+      <LoadingModal isOpen={isServerStarting} />
       {status === 'loading' && (
         <S.LoadingContainer>
           <S.ActivityIndicator>

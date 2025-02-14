@@ -19,6 +19,7 @@ export const useBlogPosts = (initialQuery = '') => {
   };
 
   const [query, setQuery] = useState(initialQuery);
+  const [isServerStarting, setIsServerStarting] = useState(false);
   // const [postImages, setPostImages] = useState<Record<string, string[]>>({});
 
   const handleSearch = useCallback(async () => {
@@ -109,6 +110,25 @@ export const useBlogPosts = (initialQuery = '') => {
     // fetchImages();
   }, [entries]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await dispatch(fetchBlogPostsAndReviews({ page: 1, pageSize: 100 })).unwrap();
+        setIsServerStarting(false);
+      } catch (error: any) {
+        if (error.message === 'Failed to fetch' || error.response?.status === 503) {
+          setIsServerStarting(true);
+          // Tentar novamente após alguns segundos
+          setTimeout(() => {
+            fetchData();
+          }, 3000);
+        }
+      }
+    };
+
+    fetchData();
+  }, [dispatch]);
+
   return {
     query,
     setQuery,
@@ -121,5 +141,6 @@ export const useBlogPosts = (initialQuery = '') => {
     handleCardClick,
     parseDate,
     formatDate,
+    isServerStarting,
   };
 }; 
