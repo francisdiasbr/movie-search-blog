@@ -3,6 +3,7 @@ import { ptBR } from 'date-fns/locale';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// import { fetchAllImageUrls } from '../features/blogPost/blogPostImagesSlice';
 import { fetchBlogPostsAndReviews } from '../features/blogPostsAndReviews/blogPostsAndReviewsSlice';
 import { CombinedEntry, CombinedResponse } from '../features/blogPostsAndReviews/types';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
@@ -19,6 +20,7 @@ export const useBlogPosts = (initialQuery = '') => {
 
   const [query, setQuery] = useState(initialQuery);
   const [isServerStarting, setIsServerStarting] = useState(false);
+  // const [postImages, setPostImages] = useState<Record<string, string[]>>({});
 
   const handleSearch = useCallback(async () => {
     const params = {
@@ -74,6 +76,38 @@ export const useBlogPosts = (initialQuery = '') => {
   useEffect(() => {
     if (!entries.length) return;
 
+    // const loadedTconsts = Object.keys(postImages);
+    // const unloadedPosts = entries.filter(post => !loadedTconsts.includes(post.tconst));
+    
+    // if (unloadedPosts.length === 0) return;
+
+    // const fetchImages = async () => {
+    //   const promises = unloadedPosts.map(post => 
+    //     dispatch(fetchAllImageUrls({ tconst: post.tconst }))
+    //       .then(result => {
+    //         if (fetchAllImageUrls.fulfilled.match(result)) {
+    //           return { tconst: post.tconst, urls: result.payload.urls };
+    //         }
+    //         return null;
+    //       })
+    //   );
+
+    //   const results = await Promise.all(promises);
+      
+    //   const newImages = results.reduce((acc, result) => {
+    //     if (result) {
+    //       acc[result.tconst] = result.urls;
+    //     }
+    //     return acc;
+    //   }, {} as Record<string, string[]>);
+
+    //   setPostImages(prev => ({
+    //     ...prev,
+    //     ...newImages
+    //   }));
+    // };
+
+    // fetchImages();
   }, [entries]);
 
   useEffect(() => {
@@ -84,6 +118,7 @@ export const useBlogPosts = (initialQuery = '') => {
       } catch (error: any) {
         if (error.message === 'Failed to fetch' || error.response?.status === 503) {
           setIsServerStarting(true);
+          // Tentar novamente após alguns segundos
           setTimeout(() => {
             fetchData();
           }, 3000);

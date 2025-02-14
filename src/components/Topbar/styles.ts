@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const IconLink = styled.a`
   color: ${({ theme }) => theme.colors.text};
+  margin-left: 16px;
   transition: color 0.3s;
 `;
 
@@ -44,12 +45,12 @@ export const TopbarWrapper = styled.div`
   height: 64px;
   justify-content: space-between;
   margin: 0 auto;
-  max-width: 1300px;
+  max-width: 1120px;
   padding: 0 16px;
 `;
 
 export const NavContainer = styled.div`
   align-items: center;
   display: flex;
-  gap: 24px;
+  gap: 16px;
 `;
