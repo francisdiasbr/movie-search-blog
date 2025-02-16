@@ -1,6 +1,4 @@
 import { useMemo } from 'react';
-import { useTheme } from 'styled-components';
-
 
 import Card from '../../components/Card';
 import { ErrorMessage } from '../../components/ErrorMessage';
@@ -8,7 +6,6 @@ import { Layout } from '../../components/Layout';
 import LoadingModal from '../../components/LoadingModal';
 import { NoPostsMessage } from '../../components/NoPostsMessage';
 import { useBlogPosts } from '../../hooks/useBlogPosts';
-import { Theme } from '../../styles/theme';
 import * as S from './styles';
 
 export default function Home() {
@@ -20,35 +17,27 @@ export default function Home() {
     handleCardClick,
     parseDate,
     formatDate,
-    isServerStarting
+    isServerStarting,
+    coverImages
   } = useBlogPosts();
   
-  const theme = useTheme() as Theme;
-  const isMobile = window.innerWidth < parseInt(theme.breakpoints.sm);
   
   const memoizedCards = useMemo(() => {
     if (!hasEntries || status !== 'succeeded') return null;
 
-    const sortedEntries = [...entries].sort((a, b) => {
-      const dateA = parseDate(a.created_at).getTime();
-      const dateB = parseDate(b.created_at).getTime();
-      return dateB - dateA;
-    });
-
-    return sortedEntries.map(post => (
+    return entries.map(post => (
       <Card
-        key={`${post.tconst}-${post.primaryTitle}`}
+        key={post.tconst}
         post={{
           ...post,
           title: post.primaryTitle,
           created_at: formatDate(parseDate(post.created_at)),
-          imageUrl: post.imageUrl
+          imageUrl: coverImages[post.tconst] || post.imageUrl
         }}
         onClick={() => handleCardClick(post)}
-        // isMobile={isMobile}
       />
     ));
-  }, [entries, handleCardClick, hasEntries, status, isMobile]);
+  }, [entries, status, coverImages]);
 
   if (error) return <ErrorMessage message={error} />;
 

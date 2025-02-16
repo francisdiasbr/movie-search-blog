@@ -7,11 +7,40 @@ interface UploadImageState {
   error: string | null;
   imageUrls: string[];
   subtitles: string[];
+  coverImages: Record<string, string>;
 }
+
+const CACHE_KEY = 'coverImagesCache';
+
+const CACHE_NAME = 'movie-images-cache';
+
+const loadFromCache = async (tconst: string): Promise<string | null> => {
+  try {
+    const cache = await caches.open(CACHE_NAME);
+    const response = await cache.match(`/images/${tconst}`);
+    if (response) {
+      const data = await response.json();
+      return data.images[0]?.url;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+};
+
+const saveToCache = async (tconst: string, response: Response) => {
+  try {
+    const cache = await caches.open(CACHE_NAME);
+    await cache.put(`/images/${tconst}`, response.clone());
+  } catch (error) {
+    console.warn('Erro ao salvar no cache:', error);
+  }
+};
 
 const initialState: UploadImageState = {
   status: 'idle',
   error: null,
+  coverImages: {},
   imageUrls: [],
   subtitles: [],
 };
@@ -42,6 +71,29 @@ export const fetchAllImageUrls = createAsyncThunk(
   }
 );
 
+export const fetchCoverImage = createAsyncThunk(
+  'uploadImages/fetchCoverImage',
+  async ({ tconst }: { tconst: string }, { rejectWithValue }) => {
+    try {
+      // Tenta carregar do cache primeiro
+      const cachedUrl = await loadFromCache(tconst);
+      if (cachedUrl) {
+        return { tconst, coverUrl: cachedUrl };
+      }
+
+      const response = await baseService.get(`/images/${tconst}`) as ImageResponse;
+      await saveToCache(tconst, new Response(JSON.stringify(response)));
+      
+      return {
+        tconst,
+        coverUrl: response.images[0]?.url
+      };
+    } catch (error) {
+      return rejectWithValue('Error fetching cover image');
+    }
+  }
+);
+
 const uploadImagesSlice = createSlice({
   name: 'uploadImages',
   initialState,
@@ -67,6 +119,20 @@ const uploadImagesSlice = createSlice({
       .addCase(fetchAllImageUrls.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload as string;
+      })
+      .addCase(fetchCoverImage.fulfilled, (state, action) => {
+        if (action.payload.coverUrl) {
+          state.coverImages[action.payload.tconst] = action.payload.coverUrl;
+          // Atualiza o cache
+          try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify({
+              timestamp: Date.now(),
+              data: state.coverImages
+            }));
+          } catch (error) {
+            console.warn('Erro ao salvar cache:', error);
+          }
+        }
       });
   },
 });

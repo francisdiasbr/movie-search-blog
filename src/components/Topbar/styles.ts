@@ -54,3 +54,32 @@ export const NavContainer = styled.div`
   display: flex;
   gap: 16px;
 `;
+
+export const DropdownContainer = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+export const DropdownMenu = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: ${({ theme }) => theme.colors.background};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 4px;
+  padding: 8px 0;
+  min-width: 180px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 1000;
+`;
+
+export const DropdownItem = styled.div`
+  padding: 8px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  color: ${({ theme }) => theme.colors.text};
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.hover};
+  }
+`;

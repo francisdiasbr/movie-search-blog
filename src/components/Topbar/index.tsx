@@ -1,13 +1,17 @@
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useLanguage } from '../../contexts/LanguageContext';
 import { LanguageToggle } from '../LanguageToggle';
 import { ThemeToggle } from '../ThemeToggle';
 import * as S from './styles';
 
 export function Topbar() {
+  const { language } = useLanguage();
   const navigate = useNavigate();
+  const [showDropdown, setShowDropdown] = useState(false);
 
   return (
     <S.TopbarContainer>
@@ -21,21 +25,24 @@ export function Topbar() {
         <S.NavContainer>
           <ThemeToggle />
           <LanguageToggle />
-          <S.NavLink
-            onClick={() => navigate('/about')}
-            onKeyDown={e => e.key === 'Enter' && navigate('/about')}
-            role="button"
-            tabIndex={0}
+          <S.DropdownContainer
+            onMouseEnter={() => setShowDropdown(true)}
+            onMouseLeave={() => setShowDropdown(false)}
           >
-            ABOUT
-          </S.NavLink>
-          <S.IconLink
-            href="https://github.com/francisdiasbr/movie-search-blog"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FontAwesomeIcon icon={faGithub} size="lg" />
-          </S.IconLink>
+            <S.NavLink>
+              {language === 'pt' ? 'SOBRE' : 'ABOUT'} <FontAwesomeIcon icon={faChevronDown} />
+            </S.NavLink>
+            {showDropdown && (
+              <S.DropdownMenu>
+                <S.DropdownItem onClick={() => navigate('/about-project')}>
+                  {language === 'pt' ? 'Sobre este projeto' : 'About this project'}
+                </S.DropdownItem>
+                <S.DropdownItem onClick={() => navigate('/about-me')}>
+                  {language === 'pt' ? 'Quem escreve' : 'About me'}
+                </S.DropdownItem>
+              </S.DropdownMenu>
+            )}
+          </S.DropdownContainer>
         </S.NavContainer>
       </S.TopbarWrapper>
     </S.TopbarContainer>
