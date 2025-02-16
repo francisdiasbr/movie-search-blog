@@ -20,12 +20,10 @@ export default function Home() {
     handleCardClick,
     parseDate,
     formatDate,
-    isServerStarting
+    isServerStarting,
   } = useBlogPosts();
   
-  const theme = useTheme() as Theme;
-  const isMobile = window.innerWidth < parseInt(theme.breakpoints.sm);
-  
+
   const memoizedCards = useMemo(() => {
     if (!hasEntries || status !== 'succeeded') return null;
 
@@ -45,10 +43,9 @@ export default function Home() {
           imageUrl: post.imageUrl
         }}
         onClick={() => handleCardClick(post)}
-        // isMobile={isMobile}
       />
     ));
-  }, [entries, handleCardClick, hasEntries, status, isMobile]);
+  }, [entries, handleCardClick, hasEntries, status]);
 
   if (error) return <ErrorMessage message={error} />;
 

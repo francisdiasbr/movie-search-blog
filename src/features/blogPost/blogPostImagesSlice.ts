@@ -3,10 +3,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import baseService from '../../api/service';
 
 interface UploadImageState {
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
   imageUrls: string[];
+  isCoverImage: boolean[];
   subtitles: string[];
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
 }
 
 const initialState: UploadImageState = {
@@ -14,6 +15,7 @@ const initialState: UploadImageState = {
   error: null,
   imageUrls: [],
   subtitles: [],
+  isCoverImage: [],
 };
 
 interface ImageResponse {
@@ -21,6 +23,7 @@ interface ImageResponse {
     url: string; 
     filename: string;
     subtitle?: string;
+    isCoverImage: boolean;
   }[];
 }
 
@@ -34,6 +37,7 @@ export const fetchAllImageUrls = createAsyncThunk(
       return {
         urls: response.images.map(image => image.url),
         subtitles: response.images.map(image => image.subtitle || 'Cena do filme'),
+        isCoverImage: response.images.map(image => image.isCoverImage),
       };
     } catch (error) {
       console.error('Error in fetchAllImageUrls:', error);
@@ -51,6 +55,7 @@ const uploadImagesSlice = createSlice({
       state.error = null;
       state.imageUrls = [];
       state.subtitles = [];
+      state.isCoverImage = [];
     },
   },
   extraReducers: builder => {
@@ -63,6 +68,7 @@ const uploadImagesSlice = createSlice({
         state.status = 'succeeded';
         state.imageUrls = action.payload.urls;
         state.subtitles = action.payload.subtitles;
+        state.isCoverImage = action.payload.isCoverImage;
       })
       .addCase(fetchAllImageUrls.rejected, (state, action) => {
         state.status = 'failed';

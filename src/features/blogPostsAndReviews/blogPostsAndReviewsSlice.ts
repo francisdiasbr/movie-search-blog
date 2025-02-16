@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
+import baseService from '../../api/service';
 import { RootState } from '../../store/types';
 import { searchBlogPosts } from '../blogPost/searchBlogPostSlice';
 import { fetchAllAuthoralReviews } from '../writeReviews/writeReviewsSlice';
@@ -33,20 +34,11 @@ const formatDateFromISO = (dateString: string) => {
   }
 };
 
-export const fetchBlogPostsAndReviews = createAsyncThunk<CombinedResponse, SearchParams>(
+export const fetchBlogPostsAndReviews = createAsyncThunk(
   'blogPosts/fetchBlogPostsAndReviews',
-  async (params, { dispatch, getState }) => {
-    const state = getState() as RootState;
-    const lastFetched = state.blogPostsAndReviews.lastFetched;
-    const cacheTimeout = 50 * 60 * 1000; // 5 minutos
-
-    // Verifica se os dados em cache ainda são válidos
-    if (lastFetched && Date.now() - lastFetched < cacheTimeout) {
-      return state.blogPostsAndReviews.data as CombinedResponse;
-    }
-
+  async (params: SearchParams, { dispatch }) => {
     const [blogPostsResponse, reviewsResponse] = await Promise.all([
-      dispatch(searchBlogPosts(params)).unwrap(),
+      dispatch(searchBlogPosts(params as any)).unwrap(),
       dispatch(fetchAllAuthoralReviews({
         filters: params.filters || {},
         page: 1,
@@ -54,19 +46,41 @@ export const fetchBlogPostsAndReviews = createAsyncThunk<CombinedResponse, Searc
       })).unwrap()
     ]);
 
+    // Buscar imagens para todos os posts e reviews
+    const allTconsts = [
+      ...blogPostsResponse.entries,
+      ...reviewsResponse.entries
+    ].map(entry => entry.tconst);
+
+    const imagesResponse = await Promise.all(
+      allTconsts.map(tconst => 
+        baseService.get(`/images/${tconst}`)
+          .then(response => ({ tconst, images: response.images }))
+          .catch(() => ({ tconst, images: [] }))
+      )
+    );
+
+    const imagesMap = imagesResponse.reduce((acc, { tconst, images }) => {
+      acc[tconst] = images;
+      return acc;
+    }, {} as Record<string, any[]>);
+
     return {
       blogPosts: {
         entries: blogPostsResponse.entries.map(post => ({
           ...post,
-          imageUrl: post.poster_url || post.images?.find(img => 
-            img.startsWith('http') && 
-            !img.includes('encrypted-tbn') && 
-            !img.includes('googlelogo')
-          ) || undefined
-        })) || []
+          imageUrl: imagesMap[post.tconst]?.find(img => img.isCoverImage)?.url || 
+                   imagesMap[post.tconst]?.[0]?.url ||
+                   post.poster_url
+        }))
       },
       reviews: {
-        entries: (reviewsResponse as any)?.entries || []
+        entries: reviewsResponse.entries.map((review: MovieReviewResponse) => ({
+          ...review,
+          created_at: formatDateFromISO(review.created_at),
+          imageUrl: imagesMap[review.tconst]?.find(img => img.isCoverImage)?.url || 
+                   imagesMap[review.tconst]?.[0]?.url
+        }))
       }
     };
   }
