@@ -21,7 +21,7 @@ export const GridContainer = styled.div`
   }
 
   @media (min-width: 846px) {
-    justify-content: flex-start;
+    justify-content: center;
     
     > * {
       flex: 0 1 250px;

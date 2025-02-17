@@ -8,17 +8,18 @@ const AboutMe = () => {
   return (
     <Layout>
       <S.Container>
-        <S.FlexContainer>
-          <S.Avatar
-            src="https://github.com/francisdiasbr.png"
-            alt="Francis Dias"
-          />
-          <S.Content>
-            <S.Title>{language === 'pt' ? 'Quem escreve' : 'About me'}</S.Title>
+        <S.Content>
+          <S.Title>{language === 'pt' ? 'Quem escreve' : 'The author'}</S.Title>
+          <S.FlexContainer>
+            <S.Avatar
+              src="https://github.com/francisdiasbr.png"
+              alt="Francis Dias"
+            />
             <S.Content>
+              Hi, I'm Francis Dias. I'm happy to have the honor of your visit here. Here I can share some of the contents I've been consuming.
             </S.Content>
-          </S.Content>
-        </S.FlexContainer>
+          </S.FlexContainer>
+        </S.Content>
       </S.Container>
     </Layout>
   );

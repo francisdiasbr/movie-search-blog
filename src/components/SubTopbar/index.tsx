@@ -29,10 +29,10 @@ export function SubTopbar() {
           LINKS
         </NavItem>
         <NavItem
-          onClick={() => handleClick('/favorites')}
-          isSelected={selectedItem === '/favorites'}
+          onClick={() => handleClick('/about-project')}
+          isSelected={selectedItem === '/about-project'}
         >
-          A - Z
+          ABOUT
         </NavItem>
       </InnerContainer>
     </SubTopbarContainer>

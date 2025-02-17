@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+
 export const InnerContainer = styled.div`
   align-items: center;
   display: flex;
@@ -16,14 +17,19 @@ export const NavItem = styled.span<{ isSelected: boolean }>`
   font-size: 18px;
   font-weight: ${({ isSelected }) => (isSelected ? '700' : '600')};
   position: relative;
-  color: ${({ isSelected }) => (isSelected ? '#000' : '#666')};
+  color: ${({ theme, isSelected }) => 
+    isSelected ? theme.colors.text : theme.colors.textSecondary};
   transition: all 0.2s ease;
   
   &:hover {
-    color: #000;
+    color: ${({ theme }) => theme.colors.text};
   }
 `;
+
 export const SubTopbarContainer = styled.div`
-  border-bottom: 1px solid #e5e7eb;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.colors.background};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  position: sticky;
+  top: 0;
 `;
