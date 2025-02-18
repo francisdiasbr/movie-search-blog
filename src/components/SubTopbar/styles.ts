@@ -30,6 +30,4 @@ export const SubTopbarContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
-  position: sticky;
-  top: 0;
 `;

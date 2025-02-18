@@ -6,8 +6,6 @@ import './index.css';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { ThemeProvider } from './contexts/ThemeProvider';
 import { useTheme } from './contexts/useTheme';
-import About from './pages/About';
-import AboutMe from './pages/AboutMe';
 import AboutProject from './pages/AboutProject';
 import CompleteArticle from './pages/CompleteArticle';
 import Favorites from './pages/Favorites';
@@ -28,12 +26,10 @@ function ThemedApp() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/article/:movieId" element={<CompleteArticle />} />
-        <Route path="/about" element={<About />} />
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/links" element={<Links />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/about-project" element={<AboutProject />} />
-        <Route path="/about-me" element={<AboutMe />} />
       </Routes>
     </StyledThemeProvider>
   );

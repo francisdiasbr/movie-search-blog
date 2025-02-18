@@ -14,7 +14,7 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const location = useLocation();
-  const isInternalPage = location.pathname.includes('movie') || location.pathname.includes('review');
+  const isInternalPage = location.pathname.includes('movie') || location.pathname.includes('review') || location.pathname.includes('article');
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
   return (
