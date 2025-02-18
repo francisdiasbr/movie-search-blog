@@ -24,7 +24,6 @@ export const ContentColumn = styled.div<{ hasImages: boolean }>`
 export const ImageColumn = styled.div`
   width: 38%;
   padding-left: 1rem;
-  margin-top: 48px;
 
   @media (max-width: 1024px) {
     width: 100%;
