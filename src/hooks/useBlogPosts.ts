@@ -52,18 +52,29 @@ export const useBlogPosts = (initialQuery = '') => {
   };
 
   const handleCardClick = (post: CombinedEntry) => {
-    if ('isAiGenerated' in post && post.isAiGenerated) {
-      navigate(`/movie/${post.tconst}`);
-    } else {
-      navigate(`/review/${post.tconst}`);
-    }
+    navigate(`/article/${post.tconst}`);
   };
 
   const entries: CombinedEntry[] = useMemo(() => {
-    return [
-      ...(data?.blogPosts?.entries || []),
-      ...(data?.reviews?.entries || [])
-    ];
+    if (!data) return [];
+    
+    // Criar um Map usando tconst como chave para evitar duplicatas
+    const uniqueEntries = new Map();
+    
+    // Adicionar blog posts
+    data.blogPosts?.entries?.forEach(post => {
+      uniqueEntries.set(post.tconst, post);
+    });
+    
+    // Adicionar reviews apenas se não existir um blog post com o mesmo tconst
+    data.reviews?.entries?.forEach(review => {
+      if (!uniqueEntries.has(review.tconst)) {
+        uniqueEntries.set(review.tconst, review);
+      }
+    });
+    
+    // Converter o Map de volta para array
+    return Array.from(uniqueEntries.values());
   }, [data]);
   const hasEntries = entries.length > 0;
 
@@ -76,10 +87,15 @@ export const useBlogPosts = (initialQuery = '') => {
   useEffect(() => {
     if (!entries.length) return;
 
+    // Adicione logs para debug
+    console.log('Entries:', entries);
+    console.log('Cover Images:', coverImages);
+
     // Carrega apenas as imagens que não estão no cache
     entries
       .filter(post => !coverImages[post.tconst])
       .forEach(post => {
+        console.log(`Fetching cover for ${post.tconst}`); // Log adicional
         dispatch(fetchCoverImage({ tconst: post.tconst }));
       });
   }, [entries]);

@@ -20,9 +20,17 @@ const initialState: AuthoralReviewState = {
 export const fetchAuthoralReview = createAsyncThunk(
   'authoralReview/fetchById',
   async (tconst: string) => {
-    const url = `/write-review/${tconst}`;
-    const response = await BaseService.get(url) as { data: AuthoralReview };
-    return response.data;
+    try {
+      const url = `/write-review/${tconst}`;
+      const response = await BaseService.get(url) as { data: AuthoralReview };
+      return response.data;
+    } catch (error: any) {
+      // Se for 404, retornamos null em vez de lançar erro
+      if (error.response?.status === 404) {
+        return null;
+      }
+      throw error;
+    }
   }
 );
 
@@ -43,10 +51,11 @@ const authoralReviewSlice = createSlice({
       })
       .addCase(fetchAuthoralReview.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.data = {
+        state.data = action.payload ? {
           ...action.payload,
           created_at: formatDate(action.payload.created_at),
-        };
+        } : null;
+        state.error = null;
       })
       .addCase(fetchAuthoralReview.rejected, (state, action) => {
         state.status = 'failed';

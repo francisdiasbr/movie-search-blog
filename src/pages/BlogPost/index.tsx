@@ -102,7 +102,7 @@ function BlogPost() {
   );
 }
 
-function Section({ title, content }: { title: string; content: string }) {
+export function Section({ title, content }: { title?: string; content: string }) {
   if (!content) return null;
 
   return (
