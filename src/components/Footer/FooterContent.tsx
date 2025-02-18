@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import SocialLinks from './SocialLinks';
-
 const FooterContentContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -44,7 +42,6 @@ const FooterContent = () => (
       </div>
     </CopyrightContainer>
     <SocialLinksContainer>
-      <SocialLinks />
     </SocialLinksContainer>
   </FooterContentContainer>
 );
