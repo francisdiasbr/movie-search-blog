@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
+import { useLanguage } from '../../contexts/LanguageContext';
 import { SubTopbarContainer, InnerContainer, NavItem } from './styles';
 
 const translations = {
@@ -18,11 +19,10 @@ const translations = {
 
 export function SubTopbar() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const { language } = useLanguage();
   const [selectedItem, setSelectedItem] = useState<string>(location.pathname);
   
-  const currentLanguage = 'pt';
-  const t = translations[currentLanguage];
+  const t = translations[language];
 
   const handleClick = (path: string) => {
     setSelectedItem(path);
