@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import Card from '../../components/Card';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
-import LoadingModal from '../../components/LoadingModal';
 import { NoPostsMessage } from '../../components/NoPostsMessage';
 import { useBlogPosts } from '../../hooks/useBlogPosts';
 import * as S from './styles';
@@ -17,10 +16,8 @@ export default function Home() {
     handleCardClick,
     parseDate,
     formatDate,
-    isServerStarting,
     coverImages
   } = useBlogPosts();
-  
   
   const memoizedCards = useMemo(() => {
     if (!hasEntries || status !== 'succeeded') return null;
@@ -43,7 +40,6 @@ export default function Home() {
 
   return (
     <Layout>
-      <LoadingModal isOpen={isServerStarting} />
       {status === 'loading' && (
         <S.LoadingContainer>
           <S.ActivityIndicator>
