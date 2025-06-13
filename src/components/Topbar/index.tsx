@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { useLanguage } from '../../contexts/LanguageContext';
 import { LanguageToggle } from '../LanguageToggle';
-import { ThemeToggle } from '../ThemeToggle';
 import * as S from './styles';
 
 export function Topbar() {
@@ -19,7 +18,6 @@ export function Topbar() {
           tabIndex={0}
         />
         <S.NavContainer>
-          <ThemeToggle />
           <LanguageToggle />
           <S.NavLink onClick={() => navigate('/about-project')}>
             {language === 'pt' ? 'SOBRE' : 'ABOUT'}

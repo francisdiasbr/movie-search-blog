@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
 import SkeletonBlogPost from '../../components/SkeletonBlogPost';
+import Separator from '../../components/Separator';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { clearAuthoralReviewState, fetchAuthoralReview } from '../../features/authoralReview/authoralReviewSlice';
 import { fetchAllImageUrls, clearImageState } from '../../features/blogPost/blogPostImagesSlice';
@@ -103,6 +104,29 @@ function CompleteArticle() {
                 title={sectionTitles[language].conclusion}
                 content={blogPost.data.content[language].conclusion}
               />
+              {blogPost.data.references && blogPost.data.references.length > 0 && (
+                <S.SectionContainer>
+                  <h2>Referências</h2>
+                  <Separator />
+                  <ol style={{ paddingLeft: '32px' }}>
+                    {blogPost.data.references.map((reference, index) => (
+                      <li key={index} style={{ marginBottom: '0.5rem' }}>
+                        <a 
+                          href={reference} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          style={{ 
+                            color: '#2563eb', 
+                            textDecoration: 'underline'
+                          }}
+                        >
+                          {reference}
+                        </a>
+                      </li>
+                    ))}
+                  </ol>
+                </S.SectionContainer>
+              )}
             </div>
           )}
         </S.ContentColumn>

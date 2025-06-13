@@ -25,6 +25,7 @@ function BlogPost() {
   const { imageUrls, subtitles } = useAppSelector((state: RootState) => state.blogPostImages);
   const { currentFavorite } = useAppSelector((state: RootState) => state.favorites);
 
+  console.log(data, 'data');
   useEffect(() => {
     if (movieId) {
       dispatch(fetchAllImageUrls({ tconst: movieId }));
@@ -58,6 +59,23 @@ function BlogPost() {
                 <br/>
               </div>
             )}
+            <div>
+              <p><em>Referências:</em></p>
+              <ul>
+                {data.references?.map((reference, index) => (
+                  <li key={index}>
+                    <a 
+                      href={reference} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      style={{ color: '#2563eb', textDecoration: 'underline' }}
+                    >
+                      {reference}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </S.BlogPostTitleContainer>
           <S.Container hasImages={hasImages}>
             <S.ContentColumn hasImages={hasImages}>

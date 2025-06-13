@@ -3,7 +3,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 
 const translations = {
   pt: {
-    title: 'Links',
+    title: 'Blogroll',
     description: 'Essa é uma pequena lista de sites que visito recorrentemente.',
     sites: [
       {
@@ -21,7 +21,7 @@ const translations = {
     ]
   },
   en: {
-    title: 'Links',
+    title: 'Blogroll',
     description: 'This is a small list of websites I frequently visit.',
     sites: [
       {
@@ -40,7 +40,7 @@ const translations = {
   }
 };
 
-export default function Links() {
+export default function Blogroll() {
   const { language } = useLanguage();
   const content = translations[language];
 

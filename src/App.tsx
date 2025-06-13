@@ -7,10 +7,10 @@ import { LanguageProvider } from './contexts/LanguageContext';
 import { ThemeProvider } from './contexts/ThemeProvider';
 import { useTheme } from './contexts/useTheme';
 import AboutProject from './pages/AboutProject';
+import Blogroll from './pages/Blogroll';
 import CompleteArticle from './pages/CompleteArticle';
 import Favorites from './pages/Favorites';
 import Home from './pages/Home';
-import Links from './pages/Links';
 import Reviews from './pages/Reviews';
 import { store } from './store/store';
 import { GlobalStyles } from './styles/GlobalStyles';
@@ -27,7 +27,7 @@ function ThemedApp() {
         <Route path="/" element={<Home />} />
         <Route path="/article/:movieId" element={<CompleteArticle />} />
         <Route path="/reviews" element={<Reviews />} />
-        <Route path="/links" element={<Links />} />
+        <Route path="/blogroll" element={<Blogroll />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/about-project" element={<AboutProject />} />
       </Routes>

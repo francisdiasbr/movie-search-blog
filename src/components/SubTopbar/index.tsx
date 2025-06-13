@@ -6,13 +6,13 @@ import { SubTopbarContainer, InnerContainer, NavItem } from './styles';
 
 const translations = {
   pt: {
-    reviews: 'AVALIAÇÕES',
-    links: 'LINKS',
+    reviews: 'FILMES',
+    links: 'BLOGROLL',
     favorites: 'FAVORITOS'
   },
   en: {
     reviews: 'REVIEWS',
-    links: 'LINKS',
+    links: 'BLOGROLL',
     favorites: 'FAVORITES'
   }
 };
@@ -39,8 +39,8 @@ export function SubTopbar() {
           {t.reviews}
         </NavItem>
         <NavItem
-          onClick={() => handleClick('/links')}
-          isSelected={selectedItem === '/links'}
+          onClick={() => handleClick('/blogroll')}
+          isSelected={selectedItem === '/blogroll'}
         >
           {t.links}
         </NavItem>
