@@ -22,18 +22,25 @@ export default function Home() {
   const memoizedCards = useMemo(() => {
     if (!hasEntries || status !== 'succeeded') return null;
 
-    return entries.map(post => (
-      <Card
-        key={post.tconst}
-        post={{
-          ...post,
-          title: post.primaryTitle,
-          created_at: formatDate(parseDate(post.created_at)),
-          imageUrl: coverImages[post.tconst] || post.imageUrl
-        }}
-        onClick={() => handleCardClick(post)}
-      />
-    ));
+    return entries.map(post => {
+      if (post.primaryTitle === "The Pink Panther") {
+        console.log("Pink Panther imageUrl:", coverImages[post.tconst], post.imageUrl);
+      }
+      return (
+        <Card
+          key={post.tconst}
+          post={{
+            ...post,
+            title: post.primaryTitle,
+            created_at: formatDate(parseDate(post.created_at)),
+            imageUrl: coverImages[post.tconst]
+              ? encodeURI(coverImages[post.tconst])
+              : (post.imageUrl ? encodeURI(post.imageUrl) : undefined)
+          }}
+          onClick={() => handleCardClick(post)}
+        />
+      );
+    });
   }, [entries, status, coverImages]);
 
   if (error) return <ErrorMessage message={error} />;
