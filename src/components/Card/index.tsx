@@ -20,7 +20,9 @@ interface CardProps {
   isFirst?: boolean;
 }
 
+
 const Card: React.FC<CardProps> = ({ post, onClick, isFirst }) => {
+  console.log('Post:', post.imageUrl);
   return (
     <S.CardContainer onClick={() => onClick(post.tconst)} imageUrl={post.imageUrl} isFirst={isFirst}>
       <S.CardHeader>

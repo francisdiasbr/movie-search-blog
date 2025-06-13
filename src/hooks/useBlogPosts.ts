@@ -19,6 +19,8 @@ export const useBlogPosts = (initialQuery = '') => {
   };
   const coverImages = useAppSelector((state: RootState) => state.uploadImages.coverImages);
 
+  console.log('Cover Images:', coverImages);
+
   const [query, setQuery] = useState(initialQuery);
 
   const handleSearch = useCallback(async () => {
