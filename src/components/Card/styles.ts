@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 interface CardContainerProps {
   imageUrl?: string;
+  isFirst?: boolean;
 }
 
 export const CardHeader = styled.div`
@@ -42,8 +43,8 @@ export const CardContainer = styled.div<CardContainerProps>`
   border-radius: 8px;
   cursor: pointer;
   padding: 8px;
-  min-height: 200px;
-  aspect-ratio: 1.4/1;
+  min-height: ${({ isFirst }) => isFirst ? '400px' : '300px'};
+  aspect-ratio: ${({ isFirst }) => isFirst ? '2/1' : '1.6/1'};
   position: relative;
   transition: all 0.2s ease-in-out;
   display: flex;
@@ -51,7 +52,6 @@ export const CardContainer = styled.div<CardContainerProps>`
   justify-content: flex-end;
   overflow: hidden;
   width: 100%;
-  max-width: 250px;
   
   &::before {
     content: '';
@@ -60,7 +60,6 @@ export const CardContainer = styled.div<CardContainerProps>`
     left: 0;
     right: 0;
     bottom: 0;
-    background: ${({ imageUrl }) => imageUrl ? 'rgba(0, 0, 0, 0.5)' : 'transparent'};
     border-radius: 8px;
     transition: all 0.2s ease-in-out;
   }
@@ -71,8 +70,9 @@ export const CardContainer = styled.div<CardContainerProps>`
   }
 
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.03);
     background-color: ${({ theme, imageUrl }) => imageUrl ? 'transparent' : theme.colors.cardHover};
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18), 0 1.5px 6px rgba(0,0,0,0.10);
     
     &::before {
       background: transparent;

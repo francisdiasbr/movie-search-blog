@@ -33,11 +33,21 @@ export const ImageColumn = styled.div`
 
 export const ImageWrapper = styled.div`
   margin-bottom: 16px;
-  
+  position: relative;
+  width: 100%;
+  padding-top: 66.66%;
+
   img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 0px;
+    margin-top: 10px;
   }
 `;
 

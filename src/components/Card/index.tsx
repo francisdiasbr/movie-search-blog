@@ -17,11 +17,12 @@ interface CardProps {
     };
   };
   onClick: (movieId: string) => void;
+  isFirst?: boolean;
 }
 
-const Card: React.FC<CardProps> = ({ post, onClick }) => {
+const Card: React.FC<CardProps> = ({ post, onClick, isFirst }) => {
   return (
-    <S.CardContainer onClick={() => onClick(post.tconst)} imageUrl={post.imageUrl}>
+    <S.CardContainer onClick={() => onClick(post.tconst)} imageUrl={post.imageUrl} isFirst={isFirst}>
       <S.CardHeader>
         <S.CardTitle>{post.primaryTitle}</S.CardTitle>
       </S.CardHeader>

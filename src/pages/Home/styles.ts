@@ -6,26 +6,22 @@ export const Container = styled.div`
 `;
 
 export const GridContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: ${({ theme }) => theme.spacing.sm};
   width: 100%;
   padding: ${({ theme }) => theme.spacing.sm};
-  justify-content: center;
+  justify-items: center;
 
-  > * {
-    flex: 0 0 250px;
-    margin: 0;
-    animation: fadeIn 0.4s ease-out;
-    animation-fill-mode: both;
+  > *:first-child {
+    grid-column: 1 / -1;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
   }
 
-  @media (min-width: 846px) {
-    justify-content: center;
-    
-    > * {
-      flex: 0 1 250px;
-    }
+  .card-break {
+    display: none;
   }
 
   @keyframes fadeIn {

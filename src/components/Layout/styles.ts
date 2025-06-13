@@ -18,7 +18,7 @@ export const InnerContainer = styled.div`
 display: flex;
   flex-direction: column;
   padding: 16px;
-  width: 90%;
+  width: 60%;
 `;
 
 export const GoBackWrapper = styled.div<{ isMobile: boolean }>`

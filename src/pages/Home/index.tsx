@@ -22,10 +22,7 @@ export default function Home() {
   const memoizedCards = useMemo(() => {
     if (!hasEntries || status !== 'succeeded') return null;
 
-    return entries.map(post => {
-      if (post.primaryTitle === "The Pink Panther") {
-        console.log("Pink Panther imageUrl:", coverImages[post.tconst], post.imageUrl);
-      }
+    const cards = entries.map((post, index) => {
       return (
         <Card
           key={post.tconst}
@@ -38,9 +35,16 @@ export default function Home() {
               : (post.imageUrl ? encodeURI(post.imageUrl) : undefined)
           }}
           onClick={() => handleCardClick(post)}
+          isFirst={index === 0}
         />
       );
     });
+
+    if (cards.length > 1) {
+      cards.splice(1, 0, <div key="break" className="card-break" />);
+    }
+
+    return cards;
   }, [entries, status, coverImages]);
 
   if (error) return <ErrorMessage message={error} />;

@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
-import SkeletonBlogPost from '../../components/SkeletonBlogPost';
 import Separator from '../../components/Separator';
+import SkeletonBlogPost from '../../components/SkeletonBlogPost';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { clearAuthoralReviewState, fetchAuthoralReview } from '../../features/authoralReview/authoralReviewSlice';
 import { fetchAllImageUrls, clearImageState } from '../../features/blogPost/blogPostImagesSlice';
@@ -13,12 +13,13 @@ import { clearFavoriteState, getFavoriteById } from '../../features/favorites/fa
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/store';
 import { Section } from '../BlogPost';
-import { sectionTitles } from '../BlogPost/sectionTitles';
+import { sectionTitles } from './sectionTitles';
 import * as S from './styles';
 
 function CompleteArticle() {
   const { movieId } = useParams();
   const { language } = useLanguage();
+  
   const dispatch = useAppDispatch();
 
   const blogPost = useAppSelector((state: RootState) => state.blogPost);
@@ -147,10 +148,12 @@ function ImageGallery({ images, subtitles }: { images: string[]; subtitles?: str
   return (
     <>
       {images.map((url, index) => (
-        <S.ImageWrapper key={index}>
-          <img src={url} alt={`Imagem ${index + 1}`} />
+        <div key={index}>
+          <S.ImageWrapper>
+            <img src={url} alt={`Imagem ${index + 1}`} />
+          </S.ImageWrapper>
           <p>{subtitles?.[index] || ''}</p>
-        </S.ImageWrapper>
+        </div>
       ))}
     </>
   );
