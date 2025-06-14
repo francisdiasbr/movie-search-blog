@@ -15,17 +15,17 @@ import { sectionTitles } from './sectionTitles';
 import * as S from './styles';
 
 function SpotifyEmbed({ url }: { url: string }) {
-  console.log('[SpotifyEmbed] url recebida:', url);
-  if (!url) {
-    console.log('[SpotifyEmbed] url está vazia ou undefined');
+  if (!url) return null;
+  const match = url.match(/spotify\.com\/(album|artist|playlist)\/([^/?]+)/);
+  if (!match) {
+    console.warn('URL do Spotify inválida:', url);
     return null;
   }
-  const spotifyId = url.split('/').pop();
-  console.log('[SpotifyEmbed] spotifyId extraído:', spotifyId);
+  const [, type, id] = match;
   return (
     <S.SpotifyEmbedContainer>
       <iframe
-        src={`https://open.spotify.com/embed/album/${spotifyId}`}
+        src={`https://open.spotify.com/embed/${type}/${id}`}
         width="100%"
         height="352"
         frameBorder="0"
@@ -97,16 +97,6 @@ function BlogPost() {
         <>
           <S.BlogPostTitleContainer>
             <h2>{data.primaryTitle}</h2>
-            {(() => {
-              console.log('[BlogPost JSX] Avaliando renderização do SpotifyEmbed:', data.spotify_album_url);
-              if (data.spotify_album_url) {
-                console.log('[BlogPost JSX] Renderizando SpotifyEmbed!');
-                return <SpotifyEmbed url={data.spotify_album_url} />;
-              } else {
-                console.log('[BlogPost JSX] Não há spotify_album_url para renderizar.');
-                return null;
-              }
-            })()}
             {currentFavorite && (
               <div>
                 <p><em>{currentFavorite.originalTitle} ({currentFavorite.startYear}) • {currentFavorite.country} • {currentFavorite.director}</em></p>
@@ -168,6 +158,11 @@ function BlogPost() {
               </S.ImageColumn>
             )}
           </S.Container>
+          {data.spotify_album_url && (
+            <S.SpotifyEmbedFullWidth>
+              <SpotifyEmbed url={data.spotify_album_url} />
+            </S.SpotifyEmbedFullWidth>
+          )}
         </>
       )}
     </Layout>

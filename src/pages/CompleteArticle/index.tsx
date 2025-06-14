@@ -57,7 +57,6 @@ function CompleteArticle() {
     <Layout>
       <S.BlogPostTitleContainer>
         <h2>{blogPost.data?.primaryTitle || review.data?.primaryTitle}</h2>
-        {blogPost.data?.spotify_album_url && <SpotifyEmbed url={blogPost.data.spotify_album_url} />}
         {currentFavorite && (
           <div>
             <p><em>{currentFavorite.originalTitle} ({currentFavorite.startYear}) • {currentFavorite.country} • {currentFavorite.director}</em></p>
@@ -139,6 +138,12 @@ function CompleteArticle() {
           </S.ImageColumn>
         )}
       </S.Container>
+
+      {blogPost.data?.spotify_album_url && (
+        <div style={{ width: '100%', margin: '32px 0 0 0', display: 'flex', justifyContent: 'center' }}>
+          <SpotifyEmbed url={blogPost.data.spotify_album_url} />
+        </div>
+      )}
     </Layout>
   );
 }
@@ -162,11 +167,16 @@ function ImageGallery({ images, subtitles }: { images: string[]; subtitles?: str
 
 function SpotifyEmbed({ url }: { url: string }) {
   if (!url) return null;
-  const spotifyId = url.split('/').pop();
+  const match = url.match(/spotify\.com\/(album|artist|playlist)\/([^/?]+)/);
+  if (!match) {
+    console.warn('URL do Spotify inválida:', url);
+    return null;
+  }
+  const [, type, id] = match;
   return (
     <div style={{ margin: '20px 0', width: '100%', maxWidth: 800, borderRadius: 12, overflow: 'hidden' }}>
       <iframe
-        src={`https://open.spotify.com/embed/album/${spotifyId}`}
+        src={`https://open.spotify.com/embed/${type}/${id}`}
         width="100%"
         height="352"
         frameBorder="0"

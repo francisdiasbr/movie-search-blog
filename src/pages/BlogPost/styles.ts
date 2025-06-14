@@ -53,3 +53,10 @@ export const SpotifyEmbedContainer = styled.div`
   border-radius: 12px;
   overflow: hidden;
 `;
+
+export const SpotifyEmbedFullWidth = styled.div`
+  width: 100%;
+  margin: 32px 0 0 0;
+  display: flex;
+  justify-content: center;
+`;
