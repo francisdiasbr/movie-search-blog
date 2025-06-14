@@ -12,9 +12,20 @@ import { clearBlogPostState, fetchBlogPost } from '../../features/blogPost/blogP
 import { clearFavoriteState, getFavoriteById } from '../../features/favorites/favoritesSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/store';
-import { Section } from '../BlogPost';
 import { sectionTitles } from './sectionTitles';
 import * as S from './styles';
+
+export function Section({ title, content }: { title?: string; content: string }) {
+  if (!content) return null;
+
+  return (
+    <S.SectionContainer>
+      <h2>{title}</h2>
+      <Separator />
+      <p style={{ textIndent: '32px' }}>{content}</p>
+    </S.SectionContainer>
+  );
+}
 
 function CompleteArticle() {
   const { movieId } = useParams();

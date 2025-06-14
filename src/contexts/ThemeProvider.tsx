@@ -6,7 +6,7 @@ type ThemeMode = 'dark' | 'light';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<ThemeMode>(() => 
-    localStorage.getItem('theme') as ThemeMode || 'dark'
+    localStorage.getItem('theme') as ThemeMode || 'light'
   );
 
   const toggleTheme = () => {
