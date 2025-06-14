@@ -14,6 +14,27 @@ import { RootState } from '../../store/types';
 import { sectionTitles } from './sectionTitles';
 import * as S from './styles';
 
+function SpotifyEmbed({ url }: { url: string }) {
+  console.log('[SpotifyEmbed] url recebida:', url);
+  if (!url) {
+    console.log('[SpotifyEmbed] url está vazia ou undefined');
+    return null;
+  }
+  const spotifyId = url.split('/').pop();
+  console.log('[SpotifyEmbed] spotifyId extraído:', spotifyId);
+  return (
+    <S.SpotifyEmbedContainer>
+      <iframe
+        src={`https://open.spotify.com/embed/album/${spotifyId}`}
+        width="100%"
+        height="352"
+        frameBorder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+      />
+    </S.SpotifyEmbedContainer>
+  );
+}
 
 function BlogPost() {
   const { movieId } = useParams();
@@ -40,12 +61,35 @@ function BlogPost() {
     };
   }, [dispatch, movieId]);
 
-  
-  if (error) return <ErrorMessage message={error} />;
-  if (status === 'loading') return <Layout><SkeletonBlogPost /></Layout>;
-  if (!data) return null;
+  console.log('[BlogPost] status:', status);
+  console.log('[BlogPost] data:', data);
+  if (data) {
+    console.log('[BlogPost] data.spotify_album_url:', data.spotify_album_url);
+    if (!data.spotify_album_url) {
+      console.log('[BlogPost] spotify_album_url está undefined ou vazio');
+    }
+  } else {
+    console.log('[BlogPost] data está null');
+  }
+
+  if (error) {
+    console.log('[BlogPost] error:', error);
+    return <ErrorMessage message={error} />;
+  }
+  if (status === 'loading') {
+    console.log('[BlogPost] status é loading');
+    return <Layout><SkeletonBlogPost /></Layout>;
+  }
+  if (!data) {
+    console.log('[BlogPost] data é null, retornando null');
+    return null;
+  }
+
+  console.log('BlogPost data:', data);
+  console.log('BlogPost spotify_album_url:', data.spotify_album_url);
 
   const hasImages = imageUrls && imageUrls.length > 0;
+  console.log('[BlogPost] hasImages:', hasImages);
 
   return (
     <Layout>
@@ -53,6 +97,16 @@ function BlogPost() {
         <>
           <S.BlogPostTitleContainer>
             <h2>{data.primaryTitle}</h2>
+            {(() => {
+              console.log('[BlogPost JSX] Avaliando renderização do SpotifyEmbed:', data.spotify_album_url);
+              if (data.spotify_album_url) {
+                console.log('[BlogPost JSX] Renderizando SpotifyEmbed!');
+                return <SpotifyEmbed url={data.spotify_album_url} />;
+              } else {
+                console.log('[BlogPost JSX] Não há spotify_album_url para renderizar.');
+                return null;
+              }
+            })()}
             {currentFavorite && (
               <div>
                 <p><em>{currentFavorite.originalTitle} ({currentFavorite.startYear}) • {currentFavorite.country} • {currentFavorite.director}</em></p>

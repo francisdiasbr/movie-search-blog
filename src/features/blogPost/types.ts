@@ -31,6 +31,8 @@ export interface BlogPostEntry {
   primaryTitle: string;
   references: string[];
   soundtrack_video_url: string;
+  spotify_album_url: string;
   tconst: string;
   type?: 'blogpost' | 'review';
+  soundtrack?: string;
 }

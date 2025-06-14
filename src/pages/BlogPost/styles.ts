@@ -45,3 +45,11 @@ export const ImageWrapper = styled.div`
 export const SectionContainer = styled.div`
   margin-bottom: 16px;
 `;
+
+export const SpotifyEmbedContainer = styled.div`
+  margin: 20px 0;
+  width: 100%;
+  max-width: 800px;
+  border-radius: 12px;
+  overflow: hidden;
+`;

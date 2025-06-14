@@ -57,6 +57,7 @@ function CompleteArticle() {
     <Layout>
       <S.BlogPostTitleContainer>
         <h2>{blogPost.data?.primaryTitle || review.data?.primaryTitle}</h2>
+        {blogPost.data?.spotify_album_url && <SpotifyEmbed url={blogPost.data.spotify_album_url} />}
         {currentFavorite && (
           <div>
             <p><em>{currentFavorite.originalTitle} ({currentFavorite.startYear}) • {currentFavorite.country} • {currentFavorite.director}</em></p>
@@ -156,6 +157,23 @@ function ImageGallery({ images, subtitles }: { images: string[]; subtitles?: str
         </div>
       ))}
     </>
+  );
+}
+
+function SpotifyEmbed({ url }: { url: string }) {
+  if (!url) return null;
+  const spotifyId = url.split('/').pop();
+  return (
+    <div style={{ margin: '20px 0', width: '100%', maxWidth: 800, borderRadius: 12, overflow: 'hidden' }}>
+      <iframe
+        src={`https://open.spotify.com/embed/album/${spotifyId}`}
+        width="100%"
+        height="352"
+        frameBorder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+      />
+    </div>
   );
 }
 
