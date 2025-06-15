@@ -110,7 +110,7 @@ function CompleteArticle() {
               )}
               {blogPost.data.references && blogPost.data.references.length > 0 && (
                 <S.SectionBottom>
-                  <h2>Referências</h2>
+                  <h2>{sectionTitles[language].references}</h2>
                   <ol style={{ paddingLeft: '32px' }}>
                     {blogPost.data.references.map((reference, index) => (
                       <li key={index} style={{ marginBottom: '0.5rem' }}>

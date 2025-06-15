@@ -3,9 +3,10 @@ export const sectionTitles = {
     introduction: '',
     plot_summary: '',
     acting_analysis: '',
-    personal_impressions: 'Minhas Impressões',
+    personal_impressions: 'Minhas impressões',
     recommendations: 'Recomendações',
-    original_movie_soundtrack: 'Trilha Sonora Original',
+    original_movie_soundtrack: 'Trilha sonora',
+    references: 'Referências'
   },
   en: {
     introduction: '',
@@ -13,6 +14,7 @@ export const sectionTitles = {
     acting_analysis: '',
     personal_impressions: 'Personal Impressions',
     recommendations: 'Recommendations',
-    original_movie_soundtrack: 'Original Soundtrack',
+    original_movie_soundtrack: 'Original Movie Soundtrack',
+    references: 'References'
   }
 };

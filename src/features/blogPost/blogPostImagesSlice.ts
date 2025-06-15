@@ -6,7 +6,7 @@ interface UploadImageState {
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
   imageUrls: string[];
-  subtitles: string[];
+  subtitles: { en: string; pt: string; }[];
   coverImages: Record<string, string>;
 }
 
@@ -49,7 +49,8 @@ interface ImageResponse {
   images: { 
     url: string; 
     filename: string;
-    subtitle?: string;
+    subtitle_en?: string;
+    subtitle_pt?: string;
   }[];
 }
 
@@ -58,11 +59,13 @@ export const fetchAllImageUrls = createAsyncThunk(
   async ({ tconst }: { tconst: string }, { rejectWithValue }) => {
     try {
       const response = (await baseService.get(`/images/${tconst}`)) as ImageResponse;
-      // console.log('API Response:', response);
 
       return {
         urls: response.images.map(image => image.url),
-        subtitles: response.images.map(image => image.subtitle || 'Cena do filme'),
+        subtitles: response.images.map(image => ({
+          en: image.subtitle_en || 'Movie scene',
+          pt: image.subtitle_pt || 'Cena do filme'
+        })),
       };
     } catch (error) {
       console.error('Error in fetchAllImageUrls:', error);

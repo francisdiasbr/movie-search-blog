@@ -1,4 +1,5 @@
 import * as S from './styles';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 export function Section({ title, content }: { title?: string; content: string }) {
   if (!content) return null;
@@ -33,7 +34,12 @@ export function SpotifyEmbed({ url }: { url: string }) {
   );
 }
 
-export function ImageGallery({ images, subtitles }: { images: string[]; subtitles?: string[] }) {
+export function ImageGallery({ images, subtitles }: { 
+  images: string[]; 
+  subtitles?: { en: string; pt: string; }[] 
+}) {
+  const { language } = useLanguage();
+  
   if (!images || images.length === 0) return null;
 
   return (
@@ -43,7 +49,7 @@ export function ImageGallery({ images, subtitles }: { images: string[]; subtitle
           <S.ImageWrapper>
             <img src={url} alt={`Imagem ${index + 1}`} />
           </S.ImageWrapper>
-          <p>{subtitles?.[index] || ''}</p>
+          <p>{subtitles?.[index]?.[language] || ''}</p>
         </div>
       ))}
     </>

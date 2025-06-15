@@ -50,7 +50,7 @@ function Review() {
             <h2>{data.primaryTitle}</h2>
             {currentFavorite && (
               <div>
-                <p><em>{currentFavorite.originalTitle} ({currentFavorite.startYear}) • {currentFavorite.country} • {currentFavorite.director}</em></p>
+                <p><em>{currentFavorite.startYear} • {currentFavorite.country} • {currentFavorite.director}</em></p>
                 <br/>
               </div>
             )}
