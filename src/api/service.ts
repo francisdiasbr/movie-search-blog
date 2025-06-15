@@ -69,12 +69,12 @@ class BaseService {
     try {
       const response = await fetch(url, options);
 
-      console.log('API Response:', {
-        status: response.status,
-        url,
-        method,
-        response,
-      });
+      // console.log('API Response:', {
+      //   status: response.status,
+      //   url,
+      //   method,
+      //   response,
+      // });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);

@@ -17,6 +17,8 @@ export const CardHeader = styled.div`
 
 export const CardDate = styled.p`
   color: ${({ theme }) => theme.colors.text};
+  font-family: ${({ theme }) => theme.fonts.secondary};
+  font-weight: 600;
   text-align: right;
   position: relative;
   z-index: 1;
@@ -26,6 +28,8 @@ export const CardDate = styled.p`
 export const CardTitle = styled.h3`
   font-weight: 600;
   color: ${({ theme }) => theme.colors.text};
+  font-family: ${({ theme }) => theme.fonts.secondary};
+  font-weight: 600;
   position: relative;
   z-index: 1;
   line-height: 1.2;

@@ -51,6 +51,25 @@ export const ImageWrapper = styled.div`
   }
 `;
 
+export const Section = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 100%;
+  word-break: break-word;
+`;
+
+export const SectionBottom = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 100%;
+  word-break: break-word;
+  margin-bottom: 50px;
+`;
+
 export const SectionContainer = styled.div`
-  margin-bottom: 16px;
+  margin-bottom: 50px;
 `;

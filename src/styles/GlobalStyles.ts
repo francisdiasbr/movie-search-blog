@@ -14,8 +14,7 @@ export const GlobalStyles = createGlobalStyle<{ theme: Theme }>`
   }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: ${({ theme }) => theme.fonts.primary};
     background-color: ${({ theme }) => theme.colors.background};
     color: ${({ theme }) => theme.colors.text};
     transition: all 0.2s ease-in-out;
@@ -25,21 +24,28 @@ export const GlobalStyles = createGlobalStyle<{ theme: Theme }>`
   }
 
   p, a {
-    font-size: 1rem; /* 16px */
+    line-height: 1.6;
+    font-size: 1.2rem;
+    font-family: ${({ theme }) => theme.fonts.tertiary};
+  }
+
+  h1, h2, h3 {
+    font-family: ${({ theme }) => theme.fonts.secondary};
+    font-weight: 500;
   }
 
   h1 {
-    font-size: 2rem; /* 32px */
+    font-size: 1.7rem;
     margin-bottom: 1rem;
   }
 
   h2 {
-    font-size: 1.5rem; /* 24px */
+    font-size: 1.5rem;
     margin-bottom: 0.75rem;
   }
 
   h3 {
-    font-size: 1.25rem; /* 20px */
+    font-size: 1.25rem;
     margin-bottom: 0.5rem;
   }
 

@@ -30,11 +30,15 @@ export const Content = styled.div`
 
   h1 {
     margin-bottom: 1.5rem;
+    font-family: ${({ theme }) => theme.fonts.secondary};
+    font-weight: 400;
   }
 
   p {
     margin-bottom: 1rem;
     line-height: 1.6;
+    font-family: ${({ theme }) => theme.fonts.primary};
+    font-weight: 400;
   }
 `;
 
@@ -43,8 +47,9 @@ export const ContactContainer = styled.div`
 `;
 
 export const ContactLink = styled.a`
-  color: ${({ theme }) => theme.colors.primary};
   text-decoration: none;
+  font-family: ${({ theme }) => theme.fonts.primary};
+  font-weight: 400;
 
   &:hover {
     text-decoration: underline;

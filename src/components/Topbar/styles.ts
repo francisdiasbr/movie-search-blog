@@ -1,12 +1,7 @@
 import styled from 'styled-components';
 
-export const IconLink = styled.a`
-  color: ${({ theme }) => theme.colors.text};
-  margin-left: 16px;
-  transition: color 0.3s;
-`;
-
 export const LogoContainer = styled.div`
+  font-family: ${({ theme }) => theme.fonts.tertiary};
   display: flex;
   align-items: center;
   gap: 8px;
@@ -26,6 +21,7 @@ export const LogoContainer = styled.div`
 `;
 
 export const NavLink = styled.div`
+  font-family: ${({ theme }) => theme.fonts.secondary};
   cursor: pointer;
   font-weight: 500;
   transition: opacity 0.2s ease-in-out;
@@ -55,31 +51,3 @@ export const NavContainer = styled.div`
   gap: 16px;
 `;
 
-export const DropdownContainer = styled.div`
-  position: relative;
-  display: inline-block;
-`;
-
-export const DropdownMenu = styled.div`
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: ${({ theme }) => theme.colors.background};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 4px;
-  padding: 8px 0;
-  min-width: 180px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  z-index: 1000;
-`;
-
-export const DropdownItem = styled.div`
-  padding: 8px 16px;
-  cursor: pointer;
-  white-space: nowrap;
-  color: ${({ theme }) => theme.colors.text};
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.hover};
-  }
-`;

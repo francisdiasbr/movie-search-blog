@@ -33,7 +33,7 @@ export const fetchAllAuthoralReviews = createAsyncThunk(
         page_size: params.pageSize,
       };
       const response = await BaseService.post(url, fetchBody);
-      console.log('response fetchAllAuthoralReviews', response);
+      // console.log('response fetchAllAuthoralReviews', response);
       if (response) {
         return response;
       } else {

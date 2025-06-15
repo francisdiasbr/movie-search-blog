@@ -1,20 +1,18 @@
 export const sectionTitles = {
   pt: {
-    introduction: 'Introdução',
-    stars_and_characters: 'Elenco e Personagens',
-    historical_context: 'Contexto Histórico',
-    cultural_importance: 'Importância Cultural',
-    technical_analysis: 'Análise Técnica',
+    introduction: '',
+    plot_summary: '',
+    acting_analysis: '',
+    personal_impressions: 'Minhas Impressões',
+    recommendations: 'Recomendações',
     original_movie_soundtrack: 'Trilha Sonora Original',
-    conclusion: 'Conclusão'
   },
   en: {
-    introduction: 'Introduction',
-    stars_and_characters: 'Cast and Characters',
-    historical_context: 'Historical Context',
-    cultural_importance: 'Cultural Importance',
-    technical_analysis: 'Technical Analysis',
+    introduction: '',
+    plot_summary: '',
+    acting_analysis: '',
+    personal_impressions: 'Personal Impressions',
+    recommendations: 'Recommendations',
     original_movie_soundtrack: 'Original Soundtrack',
-    conclusion: 'Conclusion'
   }
 };

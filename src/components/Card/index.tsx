@@ -22,7 +22,6 @@ interface CardProps {
 
 
 const Card: React.FC<CardProps> = ({ post, onClick, isFirst }) => {
-  console.log('Post:', post.imageUrl);
   return (
     <S.CardContainer 
       onClick={() => onClick(post.tconst)} 

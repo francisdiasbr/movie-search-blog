@@ -43,7 +43,7 @@ export const searchBlogPosts = createAsyncThunk<SearchResponse, SearchParams>(
         '/generate-blogpost/search',
         params
       );
-      console.log('response searchBlogPosts', response);
+      // console.log('response searchBlogPosts', response);
       return response as SearchResponse;
     } catch (error) {
       console.error('Error searching blog posts:', error);

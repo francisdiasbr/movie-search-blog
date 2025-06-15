@@ -58,7 +58,7 @@ export const fetchAllImageUrls = createAsyncThunk(
   async ({ tconst }: { tconst: string }, { rejectWithValue }) => {
     try {
       const response = (await baseService.get(`/images/${tconst}`)) as ImageResponse;
-      console.log('API Response:', response);
+      // console.log('API Response:', response);
 
       return {
         urls: response.images.map(image => image.url),

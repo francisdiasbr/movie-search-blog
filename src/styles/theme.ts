@@ -1,9 +1,9 @@
 export const lightTheme = {
   colors: {
-    primary: '#7ebb0b',
-    background: '#ffffff',
-    card: '#7ebb0b',
-    cardHover: '#8ACE00',
+    primary: '#ebe7da',
+    background: '#f4f1e8',
+    card: '#ebe7da',
+    cardHover: '#ebe7da',
     text: '#1e293b',
     border: '#e0e0e0',
     hover: '#f8f9fa',
@@ -35,7 +35,12 @@ export const lightTheme = {
     lg: '@media (min-width: 992px)',
     xl: '@media (min-width: 1200px)',
     xxl: '@media (min-width: 1400px)',
-  }
+  },
+  fonts: {
+    primary: "'Roboto', sans-serif",
+    secondary: "'Montserrat', sans-serif",
+    tertiary: "'Old Standard TT', serif"
+  },
 };
 
 export const darkTheme = {
@@ -75,7 +80,12 @@ export const darkTheme = {
     lg: '@media (min-width: 992px)',
     xl: '@media (min-width: 1200px)',
     xxl: '@media (min-width: 1400px)',
-  }
+  },
+  fonts: {
+    primary: "'Roboto', sans-serif",
+    secondary: "'Montserrat', sans-serif",
+    tertiary: "'Old Standard TT', serif"
+  },
 };
 
 export type Theme = typeof lightTheme; 

@@ -13,6 +13,7 @@ export const InnerContainer = styled.div`
 `;
 
 export const NavItem = styled.span<{ isSelected: boolean }>`
+  font-family: ${({ theme }) => theme.fonts.primary};
   cursor: pointer;
   font-size: 18px;
   font-weight: ${({ isSelected }) => (isSelected ? '700' : '600')};

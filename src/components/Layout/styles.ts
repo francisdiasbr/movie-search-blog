@@ -18,14 +18,14 @@ export const InnerContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 16px;
-  width: 60%;
+  width: 85%;
 
   @media (max-width: 1200px) {
-    width: 70%;
+    width: 90%;
   }
 
   @media (max-width: 992px) {
-    width: 80%;
+    width: 90%;
   }
 
   @media (max-width: 768px) {

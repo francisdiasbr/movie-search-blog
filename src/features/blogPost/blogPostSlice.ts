@@ -23,7 +23,7 @@ export const fetchBlogPost = createAsyncThunk<BlogPostEntry, string>(
       const response = await BaseService.get<BlogPostEntry>(
         `/generate-blogpost/${movieId}`
       );
-      console.log('API Response:', response);
+      // console.log('API Response:', response);
       return response;
     } catch (error) {
       console.error('Error fetching blog post:', error);

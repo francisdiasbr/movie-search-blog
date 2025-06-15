@@ -2,10 +2,11 @@ import { Layout } from '../../components/Layout';
 import { useLanguage } from '../../contexts/LanguageContext';
 import * as S from './styles';
 
+
 const translations = {
   pt: {
     title: 'Bem-vindo(a) ao The Movie Blog!',
-    about: 'The Movie Blog é uma iniciativa autoral que surgiu da necessidade de catalogar os filmes que eu assisti e compartilhar minha paixão por cinema.',
+    about: 'The Movie Blog é uma iniciativa autoral que reúne a necessidade de catalogar os filmes que eu assisti e compartilhar minha empolgação com o que assisto.',
     categories: 'No momento, o blog conta com a categoria de reviews de filmes. Em breve serão adicionadas novas categorias e novas postagens.',
     contact: 'Para parcerias, entre em contato: ',
     thanks: 'Obrigada pela visita!',
@@ -13,7 +14,7 @@ const translations = {
   },
   en: {
     title: 'Welcome to The Movie Blog!',
-    about: 'The Movie Blog is an authorial initiative that arose from the need to catalog the movies I watched and share my passion for cinema.',
+    about: 'The Movie Blog is an authorial initiative that arose from the need to catalog the movies I watched and share my excitement about what I watch.',
     categories: 'Currently, the blog features the movie reviews category. New categories and posts will be added soon.',
     contact: 'For partnerships, please contact:',
     thanks: 'Thank you for visiting!',

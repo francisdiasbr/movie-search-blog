@@ -2,20 +2,20 @@ export interface BlogPostContent {
   en: {
     title: string;
     introduction: string;
+    plot_summary: string;
+    acting_analysis: string;
+    personal_impressions: string;
+    recommendations: string;
     conclusion: string;
-    cultural_importance: string;
-    historical_context: string;
-    stars_and_characters: string;
-    technical_analysis: string;
   };
   pt: {
     title: string;
     introduction: string;
+    plot_summary: string;
+    acting_analysis: string;
+    personal_impressions: string;
+    recommendations: string;
     conclusion: string;
-    cultural_importance: string;
-    historical_context: string;
-    stars_and_characters: string;
-    technical_analysis: string;
   };
 }
 

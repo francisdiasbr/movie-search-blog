@@ -19,8 +19,6 @@ export const useBlogPosts = (initialQuery = '') => {
   };
   const coverImages = useAppSelector((state: RootState) => state.uploadImages.coverImages);
 
-  console.log('Cover Images:', coverImages);
-
   const [query, setQuery] = useState(initialQuery);
 
   const handleSearch = useCallback(async () => {
@@ -88,15 +86,10 @@ export const useBlogPosts = (initialQuery = '') => {
   useEffect(() => {
     if (!entries.length) return;
 
-    // Adicione logs para debug
-    console.log('Entries:', entries);
-    console.log('Cover Images:', coverImages);
-
     // Carrega apenas as imagens que não estão no cache
     entries
       .filter(post => !coverImages[post.tconst])
       .forEach(post => {
-        console.log(`Fetching cover for ${post.tconst}`); // Log adicional
         dispatch(fetchCoverImage({ tconst: post.tconst }));
       });
   }, [entries]);
@@ -108,7 +101,6 @@ export const useBlogPosts = (initialQuery = '') => {
     status,
     entries,
     hasEntries,
-    // postImages,
     handleSearch,
     handleCardClick,
     parseDate,
