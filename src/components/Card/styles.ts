@@ -53,6 +53,27 @@ export const CardContainer = styled.div<CardContainerProps>`
   overflow: hidden;
   width: 100%;
   
+  @media (max-width: 1200px) {
+    min-height: ${({ isFirst }) => isFirst ? '350px' : '280px'};
+  }
+
+  @media (max-width: 992px) {
+    min-height: ${({ isFirst }) => isFirst ? '320px' : '260px'};
+  }
+
+  @media (max-width: 768px) {
+    min-height: ${({ isFirst }) => isFirst ? '300px' : '240px'};
+  }
+
+  @media (max-width: 576px) {
+    min-height: ${({ isFirst }) => isFirst ? '280px' : '220px'};
+  }
+
+  @media (max-width: 400px) {
+    min-height: ${({ isFirst }) => isFirst ? '250px' : '200px'};
+    padding: 6px;
+  }
+  
   &::before {
     content: '';
     position: absolute;

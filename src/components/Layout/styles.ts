@@ -15,10 +15,32 @@ export const ContentWrapper = styled.div`
 `;
 
 export const InnerContainer = styled.div`
-display: flex;
+  display: flex;
   flex-direction: column;
   padding: 16px;
   width: 60%;
+
+  @media (max-width: 1200px) {
+    width: 70%;
+  }
+
+  @media (max-width: 992px) {
+    width: 80%;
+  }
+
+  @media (max-width: 768px) {
+    width: 90%;
+  }
+
+  @media (max-width: 576px) {
+    width: 95%;
+    padding: 12px;
+  }
+
+  @media (max-width: 400px) {
+    width: 100%;
+    padding: 8px;
+  }
 `;
 
 export const GoBackWrapper = styled.div<{ isMobile: boolean }>`

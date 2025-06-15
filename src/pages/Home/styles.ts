@@ -3,6 +3,10 @@ import styled from 'styled-components';
 export const Container = styled.div`
   margin: 0 auto;
   padding: 16px;
+
+  @media (max-width: 400px) {
+    padding: 8px;
+  }
 `;
 
 export const GridContainer = styled.div`
@@ -32,12 +36,41 @@ export const GridContainer = styled.div`
       opacity: 1;
     }
   }
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: ${({ theme }) => theme.spacing.xs};
+  }
+
+  @media (max-width: 576px) {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: ${({ theme }) => theme.spacing.xxs};
+  }
+
+  @media (max-width: 400px) {
+    grid-template-columns: 1fr;
+    padding: 4px;
+    gap: 8px;
+  }
 `;
 
 export const NoPostsMessage = styled.p`
   text-align: center;
   color: gray;
   margin-top: 16px;
+  font-size: 1rem;
+
+  @media (max-width: 400px) {
+    font-size: 0.95rem;
+  }
 `;
 
 export const PostsGrid = styled.div`
@@ -45,47 +78,14 @@ export const PostsGrid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 16px;
   margin-top: 16px;
-`;
 
-export const StyledCard = styled.div`
-  cursor: pointer;
-  transition: background-color 0.3s;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  overflow: hidden;
-  &:hover {
-    background-color: #f5f5f5;
+  @media (max-width: 400px) {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-top: 8px;
   }
 `;
 
-export const CardContent = styled.div`
-  padding: 16px;
-`;
-
-export const CardHeader = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-
-  img {
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-  }
-
-  h3 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin: 0;
-  }
-`;
-
-export const CardDate = styled.p`
-  text-align: right;
-  color: #757575;
-  font-size: 0.9rem;
-`;
 
 export const LoadingContainer = styled.div`
   display: flex;
