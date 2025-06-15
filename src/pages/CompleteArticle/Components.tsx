@@ -14,7 +14,7 @@ export function Section({ title, content }: { title?: string; content: string })
 
 export function SpotifyEmbed({ url }: { url: string }) {
   if (!url) return null;
-  const match = url.match(/spotify\.com\/(album|artist|playlist|episode)\/([^/?]+)/);
+  const match = url.match(/spotify\.com\/(album|artist|playlist|episode|show|track)\/([^/?]+)/);
   if (!match) {
     console.warn('URL do Spotify inválida:', url);
     return null;

@@ -12,6 +12,7 @@ export const CardHeader = styled.div`
   z-index: 1;
   margin-top: auto;
   transition: opacity 0.2s ease-in-out;
+  align-items: flex-end;
 `;
 
 
@@ -19,20 +20,19 @@ export const CardDate = styled.p`
   color: ${({ theme }) => theme.colors.text};
   font-family: ${({ theme }) => theme.fonts.secondary};
   font-weight: 600;
-  text-align: right;
   position: relative;
   z-index: 1;
   transition: text-shadow 0.2s ease-in-out;
 `;
 
-export const CardTitle = styled.h3`
+export const CardTitle = styled.h2`
   font-weight: 600;
   color: ${({ theme }) => theme.colors.text};
   font-family: ${({ theme }) => theme.fonts.secondary};
   font-weight: 600;
   position: relative;
   z-index: 1;
-  line-height: 1.2;
+  line-height: 1;
   transition: text-shadow 0.2s ease-in-out;
 `;
 
