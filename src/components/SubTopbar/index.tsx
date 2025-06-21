@@ -6,14 +6,14 @@ import { SubTopbarContainer, InnerContainer, NavItem } from './styles';
 
 const translations = {
   pt: {
-    reviews: 'FILMES',
+    reviews: 'CRÍTICAS',
     links: 'BLOGROLL',
-    favorites: 'FAVORITOS'
+    favorites: 'VALE A PENA ASSISTIR'
   },
   en: {
     reviews: 'REVIEWS',
     links: 'BLOGROLL',
-    favorites: 'FAVORITES'
+    favorites: 'WORTH WATCHING'
   }
 };
 
