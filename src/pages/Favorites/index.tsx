@@ -53,8 +53,7 @@ export default function Favorites() {
 
   const handleMovieClick = (tconst: string) => {
     if (moviesWithContent.has(tconst)) {
-      const isBlogPost = postsAndReviews?.blogPosts.entries.some(post => post.tconst === tconst);
-      navigate(isBlogPost ? `/movie/${tconst}` : `/review/${tconst}`);
+      navigate(`/article/${tconst}`);
     }
   };
 

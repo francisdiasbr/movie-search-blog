@@ -8,10 +8,11 @@ import { useLanguage } from '../../contexts/LanguageContext';
 import { clearAuthoralReviewState, fetchAuthoralReview } from '../../features/authoralReview/authoralReviewSlice';
 import { fetchAllImageUrls, clearImageState } from '../../features/blogPost/blogPostImagesSlice';
 import { clearBlogPostState, fetchBlogPost } from '../../features/blogPost/blogPostSlice';
+import { fetchBlogPostsAndReviews } from '../../features/blogPostsAndReviews/blogPostsAndReviewsSlice';
 import { clearFavoriteState, getFavoriteById } from '../../features/favorites/favoritesSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/store';
-import { Section, SpotifyEmbed, ImageGallery } from './Components';
+import { Section, SpotifyEmbed, ImageGallery, RecommendedArticles } from './Components';
 import { sectionTitles } from './sectionTitles';
 import * as S from './styles';
 
@@ -24,7 +25,7 @@ function CompleteArticle() {
   const blogPost = useAppSelector((state: RootState) => state.blogPost);
   const review = useAppSelector(state => state.authoralReview);
   const { imageUrls, subtitles } = useAppSelector((state: RootState) => state.blogPostImages);
-  const { currentFavorite } = useAppSelector((state: RootState) => state.favorites);
+  const { currentFavorite, loading: favoritesLoading } = useAppSelector((state: RootState) => state.favorites);
 
   useEffect(() => {
     if (movieId) {
@@ -32,6 +33,8 @@ function CompleteArticle() {
       dispatch(fetchBlogPost(movieId));
       dispatch(fetchAuthoralReview(movieId));
       dispatch(getFavoriteById(movieId));
+      // Carregar outros artigos para as recomendações
+      dispatch(fetchBlogPostsAndReviews({ page: 1, pageSize: 20 }));
     }
 
     return () => {
@@ -45,24 +48,27 @@ function CompleteArticle() {
   if ((blogPost.error && !blogPost.data) || (review.error && !review.data)) {
     return <ErrorMessage message={blogPost.error || review.error || 'Erro desconhecido'} />;
   }
-  if ((blogPost.status === 'loading' && review.status === 'loading')) {
+  if (blogPost.status === 'loading' || review.status === 'loading' || favoritesLoading) {
     return <Layout><SkeletonBlogPost /></Layout>;
   }
   if (!blogPost.data && !review.data) return null;
 
   const hasImages = imageUrls && imageUrls.length > 0;
+  const heroImage = hasImages ? imageUrls[0] : null;
 
   return (
     <Layout>
-      <S.BlogPostTitleContainer>
-        <h2>{blogPost.data?.primaryTitle || review.data?.primaryTitle}</h2>
-        {currentFavorite && (
-          <div>
-            <p><em>{currentFavorite.startYear} • {currentFavorite.country} • {currentFavorite.director}</em></p>
-            <br />
-          </div>
-        )}
-      </S.BlogPostTitleContainer>
+      <S.HeroSection backgroundImage={heroImage}>
+        <S.HeroOverlay />
+        <S.HeroContent>
+          <S.HeroTitle>{blogPost.data?.primaryTitle || review.data?.primaryTitle}</S.HeroTitle>
+          {currentFavorite && (
+            <S.HeroSubtitle>
+              <em>{currentFavorite.startYear} • {currentFavorite.country} • {currentFavorite.director}</em>
+            </S.HeroSubtitle>
+          )}
+        </S.HeroContent>
+      </S.HeroSection>
 
       <S.Container hasImages={hasImages}>
         <S.ContentColumn hasImages={hasImages}>
@@ -141,6 +147,7 @@ function CompleteArticle() {
         )}
       </S.Container>
 
+      <RecommendedArticles currentMovieId={movieId} />
     </Layout>
   );
 }

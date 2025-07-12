@@ -43,13 +43,6 @@ export const InnerContainer = styled.div`
   }
 `;
 
-export const GoBackWrapper = styled.div<{ isMobile: boolean }>`
-  position: relative;
-  margin-left: 0;
-  margin-top: 16px;
-  z-index: 10;
-`;
-
 export const MainContent = styled.main`
   flex-grow: 1;
   width: 100%;
