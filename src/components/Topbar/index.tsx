@@ -27,18 +27,23 @@ export function Topbar() {
   const { language } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
-  const [selectedItem, setSelectedItem] = useState<string>(location.pathname);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   const t = translations[language];
 
   const handleClick = (path: string) => {
-    setSelectedItem(path);
     navigate(path);
+    setIsMenuOpen(false); // Fechar menu após navegação
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
   return (
     <S.TopbarContainer>
       <S.TopbarWrapper>
+        {/* Logo */}
         <S.LogoContainer
           onClick={() => handleClick('/')}
           onKeyDown={e => e.key === 'Enter' && handleClick('/')}
@@ -46,7 +51,8 @@ export function Topbar() {
           tabIndex={0}
         />
         
-        <S.NavContainer>
+        {/* Menu Desktop - apenas visível em telas maiores */}
+        <S.DesktopNavContainer>
           <S.NavItem
             onClick={() => handleClick('/')}
             isSelected={location.pathname === '/'}
@@ -77,13 +83,55 @@ export function Topbar() {
           >
             {t.about}
           </S.NavItem>
-        </S.NavContainer>
+        </S.DesktopNavContainer>
 
+        {/* Controles (sempre visíveis) */}
         <S.ControlsContainer>
           <LanguageToggle />
           <ThemeToggle />
+          
+          {/* Hamburger Menu Button - apenas mobile */}
+          <S.HamburgerButton onClick={toggleMenu} isOpen={isMenuOpen}>
+            <span />
+            <span />
+            <span />
+          </S.HamburgerButton>
         </S.ControlsContainer>
       </S.TopbarWrapper>
+
+      {/* Menu Mobile - dropdown */}
+      <S.MobileNavContainer isOpen={isMenuOpen}>
+        <S.MobileNavItem
+          onClick={() => handleClick('/')}
+          isSelected={location.pathname === '/'}
+        >
+          {t.home}
+        </S.MobileNavItem>
+        <S.MobileNavItem
+          onClick={() => handleClick('/reviews')}
+          isSelected={location.pathname === '/reviews'}
+        >
+          {t.reviews}
+        </S.MobileNavItem>
+        <S.MobileNavItem
+          onClick={() => handleClick('/blogroll')}
+          isSelected={location.pathname === '/blogroll'}
+        >
+          {t.blog}
+        </S.MobileNavItem>
+        <S.MobileNavItem
+          onClick={() => handleClick('/favorites')}
+          isSelected={location.pathname === '/favorites'}
+        >
+          {t.favorites}
+        </S.MobileNavItem>
+        <S.MobileNavItem
+          onClick={() => handleClick('/about-project')}
+          isSelected={location.pathname === '/about-project'}
+        >
+          {t.about}
+        </S.MobileNavItem>
+      </S.MobileNavContainer>
     </S.TopbarContainer>
   );
 }

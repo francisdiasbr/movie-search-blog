@@ -1,5 +1,11 @@
-import * as S from './styles';
+import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import Card from '../../components/Card';
+import { useAppSelector } from '../../store/hooks';
+import { RootState } from '../../store/store';
 import { useLanguage } from '../../contexts/LanguageContext';
+import * as S from './styles';
 
 export function Section({ title, content }: { title?: string; content: string }) {
   if (!content) return null;
@@ -53,5 +59,71 @@ export function ImageGallery({ images, subtitles }: {
         </div>
       ))}
     </>
+  );
+}
+
+export function RecommendedArticles({ currentMovieId }: { currentMovieId?: string }) {
+  const { language } = useLanguage();
+  const navigate = useNavigate();
+  
+  const { data } = useAppSelector((state: RootState) => state.blogPostsAndReviews);
+  const coverImages = useAppSelector((state: RootState) => state.uploadImages.coverImages);
+
+  const recommendedArticles = useMemo(() => {
+    if (!data) return [];
+
+    // Combinar todos os artigos (blog posts e reviews)
+    const allArticles = [
+      ...(data.blogPosts?.entries || []),
+      ...(data.reviews?.entries || [])
+    ];
+
+    // Filtrar o artigo atual e embaralhar
+    const filteredArticles = allArticles
+      .filter(article => article.tconst !== currentMovieId)
+      .sort(() => Math.random() - 0.5);
+
+    // Retornar apenas 3
+    return filteredArticles.slice(0, 3);
+  }, [data, currentMovieId]);
+
+  const parseDate = (dateString: string) => {
+    if (!dateString) return new Date();
+    const [day, month, year] = dateString.split('/');
+    return new Date(`${year}-${month}-${day}`);
+  };
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('pt-BR');
+  };
+
+  const handleCardClick = (article: any) => {
+    navigate(`/article/${article.tconst}`);
+  };
+
+  if (recommendedArticles.length === 0) return null;
+
+  return (
+    <S.RecommendedSection>
+      <S.RecommendedTitle>
+        {language === 'pt' ? 'Você também poderá gostar de:' : 'You might also like:'}
+      </S.RecommendedTitle>
+      <S.RecommendedGrid>
+        {recommendedArticles.map((article) => (
+          <Card
+            key={article.tconst}
+            post={{
+              ...article,
+              title: article.primaryTitle,
+              created_at: formatDate(parseDate(article.created_at)),
+              imageUrl: coverImages[article.tconst]
+                ? encodeURI(coverImages[article.tconst])
+                : (article.imageUrl ? encodeURI(article.imageUrl) : undefined)
+            }}
+            onClick={() => handleCardClick(article)}
+          />
+        ))}
+      </S.RecommendedGrid>
+    </S.RecommendedSection>
   );
 } 
