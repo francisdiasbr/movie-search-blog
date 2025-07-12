@@ -24,7 +24,7 @@ function CompleteArticle() {
   const blogPost = useAppSelector((state: RootState) => state.blogPost);
   const review = useAppSelector(state => state.authoralReview);
   const { imageUrls, subtitles } = useAppSelector((state: RootState) => state.blogPostImages);
-  const { currentFavorite } = useAppSelector((state: RootState) => state.favorites);
+  const { currentFavorite, loading: favoritesLoading } = useAppSelector((state: RootState) => state.favorites);
 
   useEffect(() => {
     if (movieId) {
@@ -45,7 +45,7 @@ function CompleteArticle() {
   if ((blogPost.error && !blogPost.data) || (review.error && !review.data)) {
     return <ErrorMessage message={blogPost.error || review.error || 'Erro desconhecido'} />;
   }
-  if ((blogPost.status === 'loading' && review.status === 'loading')) {
+  if (blogPost.status === 'loading' || review.status === 'loading' || favoritesLoading) {
     return <Layout><SkeletonBlogPost /></Layout>;
   }
   if (!blogPost.data && !review.data) return null;

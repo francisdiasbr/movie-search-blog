@@ -20,7 +20,7 @@ function Review() {
   
   const { data, error, status } = useAppSelector(state => state.authoralReview);
   const { imageUrls } = useAppSelector(state => state.blogPostImages);
-  const { currentFavorite } = useAppSelector((state: RootState) => state.favorites);
+  const { currentFavorite, loading: favoritesLoading } = useAppSelector((state: RootState) => state.favorites);
 
   useEffect(() => {
     if (movieId) {
@@ -37,7 +37,7 @@ function Review() {
   }, [dispatch, movieId]);
 
   if (error) return <ErrorMessage message={error} />;
-  if (status === 'loading') return <Layout><SkeletonBlogPost /></Layout>;
+  if (status === 'loading' || favoritesLoading) return <Layout><SkeletonBlogPost /></Layout>;
   if (!data) return null;
 
   const hasImages = imageUrls && imageUrls.length > 0;
