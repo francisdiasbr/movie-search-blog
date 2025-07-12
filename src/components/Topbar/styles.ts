@@ -40,7 +40,7 @@ export const LogoContainer = styled.div`
   }
 
   &::after {
-    content: 'TMB';
+    content: '🍿';
   }
 
   /* Desktop */
@@ -48,7 +48,7 @@ export const LogoContainer = styled.div`
     font-size: 24px;
     
     &::after {
-      content: 'The Movie Blog';
+      content: '🍿 Cinema & thoughts';
     }
   }
 `;

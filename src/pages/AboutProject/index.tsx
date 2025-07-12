@@ -5,20 +5,12 @@ import * as S from './styles';
 
 const translations = {
   pt: {
-    title: 'Bem-vindo(a) ao The Movie Blog!',
-    about: 'The Movie Blog é uma iniciativa autoral que reúne a necessidade de catalogar os filmes que eu assisti e compartilhar minha empolgação com o que assisto.',
-    categories: 'No momento, o blog conta com a categoria de reviews de filmes. Em breve serão adicionadas novas categorias e novas postagens.',
-    contact: 'Para parcerias, entre em contato: ',
-    thanks: 'Obrigada pela visita!',
-    signature: 'Francis Dias - Dezembro de 2024'
+    title: 'Oi! Seja bem-vindo(a) ao Cinema & Thoughts!',
+    about: 'Aqui eu conjugo a inteção de catalogar os filmes que eu assisti e compartilhar minha empolgação com o que assisto.',
   },
   en: {
-    title: 'Welcome to The Movie Blog!',
-    about: 'The Movie Blog is an authorial initiative that arose from the need to catalog the movies I watched and share my excitement about what I watch.',
-    categories: 'Currently, the blog features the movie reviews category. New categories and posts will be added soon.',
-    contact: 'For partnerships, please contact:',
-    thanks: 'Thank you for visiting!',
-    signature: 'Francis Dias - December 2024'
+    title: 'Hi! Welcome to Cinema & Thoughts!',
+    about: 'Here I combine the intention to catalog the movies I watched and share my excitement about what I watch.',
   }
 };
 
@@ -32,17 +24,7 @@ const AboutProject = () => {
         <S.Content>
           <h1>{content.title}</h1>
           <p>{content.about}</p>
-          <p>{content.categories}</p>
-          <S.ContactContainer>
-            <p>
-              {content.contact} 
-              <S.ContactLink href="mailto:francisdiasbr@gmail.com">
-                francisdiasbr@gmail.com
-              </S.ContactLink>
-            </p>
-          </S.ContactContainer>
-          <p>{content.thanks}</p>
-          <p>{content.signature}</p>
+          <p></p>
         </S.Content>
       </S.Container>
     </Layout>

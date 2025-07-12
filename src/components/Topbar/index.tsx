@@ -78,8 +78,8 @@ export function Topbar() {
             {t.favorites}
           </S.NavItem>
           <S.NavItem
-            onClick={() => handleClick('/about-project')}
-            isSelected={location.pathname === '/about-project'}
+            onClick={() => handleClick('/about')}
+            isSelected={location.pathname === '/about'}
           >
             {t.about}
           </S.NavItem>
@@ -126,8 +126,8 @@ export function Topbar() {
           {t.favorites}
         </S.MobileNavItem>
         <S.MobileNavItem
-          onClick={() => handleClick('/about-project')}
-          isSelected={location.pathname === '/about-project'}
+          onClick={() => handleClick('/about')}
+          isSelected={location.pathname === '/about'}
         >
           {t.about}
         </S.MobileNavItem>
