@@ -46,13 +46,13 @@ export const lightTheme = {
 export const darkTheme = {
   colors: {
     primary: '#8ACE00',
-    background: '#1a1a1a',
-    card: '#2d2d2d',
-    cardHover: '#333333',
-    text: '#e5e7eb',
-    border: '#fff',
-    hover: '#333333',
-    link: '#FFF'
+    background: '#2a2a2a',
+    card: '#3a3a3a',
+    cardHover: '#404040',
+    text: '#d1d5db',
+    border: '#555555',
+    hover: '#404040',
+    link: '#c5c5c5'
   },
   spacing: {
     xxxs: '4px',
