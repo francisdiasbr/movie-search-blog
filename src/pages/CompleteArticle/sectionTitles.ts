@@ -3,7 +3,7 @@ export const sectionTitles = {
     introduction: '',
     plot_summary: '',
     acting_analysis: '',
-    personal_impressions: 'Minhas impressões',
+    personal_impressions: 'O que eu achei?',
     recommendations: 'Recomendações',
     original_movie_soundtrack: 'Trilha sonora',
     references: 'Referências'

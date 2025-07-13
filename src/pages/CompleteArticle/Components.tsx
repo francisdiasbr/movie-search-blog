@@ -1,10 +1,11 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Card from '../../components/Card';
-import { useAppSelector } from '../../store/hooks';
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { RootState } from '../../store/store';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { fetchCoverImage } from '../../features/blogPost/blogPostImagesSlice';
 import * as S from './styles';
 
 export function Section({ title, content }: { title?: string; content: string }) {
@@ -27,7 +28,7 @@ export function SpotifyEmbed({ url }: { url: string }) {
   }
   const [, type, id] = match;
   return (
-    <div style={{ margin: '20px 0', width: '100%', borderRadius: 12, overflow: 'hidden' }}>
+    <div style={{ margin: '0', width: '100%', borderRadius: 12, overflow: 'hidden' }}>
       <iframe
         src={`https://open.spotify.com/embed/${type}/${id}`}
         width="100%"
@@ -65,6 +66,7 @@ export function ImageGallery({ images, subtitles }: {
 export function RecommendedArticles({ currentMovieId }: { currentMovieId?: string }) {
   const { language } = useLanguage();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   
   const { data } = useAppSelector((state: RootState) => state.blogPostsAndReviews);
   const coverImages = useAppSelector((state: RootState) => state.uploadImages.coverImages);
@@ -86,6 +88,17 @@ export function RecommendedArticles({ currentMovieId }: { currentMovieId?: strin
     // Retornar apenas 3
     return filteredArticles.slice(0, 3);
   }, [data, currentMovieId]);
+
+  // Carregar imagens de capa para os artigos recomendados
+  useEffect(() => {
+    if (recommendedArticles.length > 0) {
+      recommendedArticles.forEach(article => {
+        if (!coverImages[article.tconst]) {
+          dispatch(fetchCoverImage({ tconst: article.tconst }));
+        }
+      });
+    }
+  }, [recommendedArticles, coverImages, dispatch]);
 
   const parseDate = (dateString: string) => {
     if (!dateString) return new Date();

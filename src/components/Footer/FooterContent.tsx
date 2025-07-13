@@ -2,47 +2,59 @@ import styled from 'styled-components';
 
 const FooterContentContainer = styled.div`
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   width: 100%;
-
-  @media (min-width: 768px) {
-    justify-content: space-between;
-  }
-`;
-
-const CopyrightContainer = styled.div`
-  width: 100%;
-  padding: 0 16px;
-  margin: 0 auto;
   text-align: center;
+`;
 
-  @media (min-width: 768px) {
-    width: 33.3333%;
-    text-align: left;
+const FooterText = styled.div`
+  color: #fff;
+  font-size: 14px;
+  font-family: ${({ theme }) => theme.fonts.primary};
+  
+  @media (max-width: 768px) {
+    font-size: 13px;
   }
 `;
 
-const SocialLinksContainer = styled.div`
-  width: 100%;
-  padding: 0 16px;
-  margin: 0 auto;
-
-  @media (min-width: 768px) {
-    width: 66.6667%;
+const FooterLink = styled.a`
+  color: #fff;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  font-family: ${({ theme }) => theme.fonts.primary};
+  font-size: inherit;
+  
+  &:hover {
+    opacity: 0.8;
   }
+`;
+
+const Heart = styled.span`
+  color: #ff6b6b;
+  margin: 0 4px;
 `;
 
 const FooterContent = () => (
   <FooterContentContainer>
-    <CopyrightContainer>
-      <div style={{ color: '#fff' }}>
-        The Movie Search &copy; {new Date().getFullYear()}
-      </div>
-    </CopyrightContainer>
-    <SocialLinksContainer>
-    </SocialLinksContainer>
+    <FooterText>
+      Developed with <Heart>♥</Heart> by{' '}
+      <FooterLink 
+        href="https://www.linkedin.com/in/francisdiasbr/" 
+        target="_blank" 
+        rel="noopener noreferrer"
+      >
+        Francis Dias
+      </FooterLink>
+      {' '} - {' '}
+      <FooterLink 
+        href="https://github.com/francisdiasbr/movie-search-blog" 
+        target="_blank" 
+        rel="noopener noreferrer"
+      >
+        GitHub
+      </FooterLink>
+    </FooterText>
   </FooterContentContainer>
 );
 

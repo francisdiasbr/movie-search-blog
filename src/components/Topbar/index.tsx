@@ -3,19 +3,18 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import { useLanguage } from '../../contexts/LanguageContext';
 import { LanguageToggle } from '../LanguageToggle';
-import { ThemeToggle } from '../ThemeToggle';
 import * as S from './styles';
 
 const translations = {
   pt: {
-    home: 'Home',
+    // home: 'Home',
     reviews: 'Críticas',
     blog: 'Blogroll',
     favorites: 'Vale a Pena Assistir',
     about: 'Sobre'
   },
   en: {
-    home: 'Home',
+    // home: 'Home',
     reviews: 'Reviews',
     blog: 'Blogroll',
     favorites: 'Worth Watching',
@@ -53,12 +52,12 @@ export function Topbar() {
         
         {/* Menu Desktop - apenas visível em telas maiores */}
         <S.DesktopNavContainer>
-          <S.NavItem
+          {/* <S.NavItem
             onClick={() => handleClick('/')}
             isSelected={location.pathname === '/'}
           >
             {t.home}
-          </S.NavItem>
+          </S.NavItem> */}
           <S.NavItem
             onClick={() => handleClick('/reviews')}
             isSelected={location.pathname === '/reviews'}
@@ -77,18 +76,11 @@ export function Topbar() {
           >
             {t.favorites}
           </S.NavItem>
-          <S.NavItem
-            onClick={() => handleClick('/about')}
-            isSelected={location.pathname === '/about'}
-          >
-            {t.about}
-          </S.NavItem>
         </S.DesktopNavContainer>
 
         {/* Controles (sempre visíveis) */}
         <S.ControlsContainer>
           <LanguageToggle />
-          <ThemeToggle />
           
           {/* Hamburger Menu Button - apenas mobile */}
           <S.HamburgerButton onClick={toggleMenu} isOpen={isMenuOpen}>
@@ -101,12 +93,6 @@ export function Topbar() {
 
       {/* Menu Mobile - dropdown */}
       <S.MobileNavContainer isOpen={isMenuOpen}>
-        <S.MobileNavItem
-          onClick={() => handleClick('/')}
-          isSelected={location.pathname === '/'}
-        >
-          {t.home}
-        </S.MobileNavItem>
         <S.MobileNavItem
           onClick={() => handleClick('/reviews')}
           isSelected={location.pathname === '/reviews'}
@@ -124,12 +110,6 @@ export function Topbar() {
           isSelected={location.pathname === '/favorites'}
         >
           {t.favorites}
-        </S.MobileNavItem>
-        <S.MobileNavItem
-          onClick={() => handleClick('/about')}
-          isSelected={location.pathname === '/about'}
-        >
-          {t.about}
         </S.MobileNavItem>
       </S.MobileNavContainer>
     </S.TopbarContainer>

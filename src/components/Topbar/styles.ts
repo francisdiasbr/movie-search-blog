@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const TopbarContainer = styled.div`
-  background-color: ${({ theme }) => theme.colors.background};
+  background-color: white;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
   position: sticky;
@@ -80,29 +80,46 @@ export const NavItem = styled.span<{ isSelected: boolean }>`
   font-family: ${({ theme }) => theme.fonts.primary};
   cursor: pointer;
   font-size: 15px;
-  font-weight: ${({ isSelected }) => (isSelected ? '600' : '500')};
+  font-weight: ${({ isSelected }) => (isSelected ? '500' : '400')};
   position: relative;
-  color: ${({ theme, isSelected }) => 
-    isSelected ? theme.colors.text : theme.colors.textSecondary};
+  color: ${({ theme }) => theme.colors.text};
+  opacity: ${({ isSelected }) => (isSelected ? '1' : '0.7')};
   transition: all 0.2s ease;
   padding: 8px 12px;
   border-radius: 6px;
   white-space: nowrap;
   
-  &:hover {
-    color: ${({ theme }) => theme.colors.text};
-    background-color: ${({ theme }) => theme.colors.cardHover};
-  }
-
+  /* Linha sutil na parte inferior para item selecionado */
   ${({ isSelected, theme }) => 
     isSelected && `
-      background-color: ${theme.colors.cardHover};
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20px;
+        height: 1px;
+        background-color: ${theme.colors.text};
+        opacity: 0.6;
+      }
     `}
+  
+  &:hover {
+    opacity: 1;
+  }
 
   /* Desktop */
   @media (min-width: 768px) {
     font-size: 16px;
     padding: 8px 16px;
+    
+    ${({ isSelected, theme }) => 
+      isSelected && `
+        &::after {
+          width: 24px;
+        }
+      `}
   }
 `;
 
@@ -151,7 +168,7 @@ export const HamburgerButton = styled.button<{ isOpen: boolean }>`
 /* Menu Mobile */
 export const MobileNavContainer = styled.div<{ isOpen: boolean }>`
   display: ${({ isOpen }) => isOpen ? 'block' : 'none'};
-  background-color: ${({ theme }) => theme.colors.background};
+  background-color: white;
   border-top: 1px solid ${({ theme }) => theme.colors.border};
   padding: 16px;
   animation: ${({ isOpen }) => isOpen ? 'slideDown 0.3s ease-in-out' : 'none'};
@@ -177,23 +194,35 @@ export const MobileNavItem = styled.div<{ isSelected: boolean }>`
   font-family: ${({ theme }) => theme.fonts.primary};
   cursor: pointer;
   font-size: 16px;
-  font-weight: ${({ isSelected }) => (isSelected ? '600' : '500')};
-  color: ${({ theme, isSelected }) => 
-    isSelected ? theme.colors.text : theme.colors.textSecondary};
+  font-weight: ${({ isSelected }) => (isSelected ? '500' : '400')};
+  color: ${({ theme }) => theme.colors.text};
+  opacity: ${({ isSelected }) => (isSelected ? '1' : '0.7')};
   padding: 12px 16px;
   border-radius: 8px;
   transition: all 0.2s ease;
   margin-bottom: 4px;
+  position: relative;
   
-  &:hover {
-    color: ${({ theme }) => theme.colors.text};
-    background-color: ${({ theme }) => theme.colors.cardHover};
-  }
-
+  /* Linha sutil na lateral esquerda para item selecionado */
   ${({ isSelected, theme }) => 
     isSelected && `
-      background-color: ${theme.colors.cardHover};
+      &::before {
+        content: '';
+        position: absolute;
+        left: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 2px;
+        height: 16px;
+        background-color: ${theme.colors.text};
+        opacity: 0.6;
+        border-radius: 1px;
+      }
     `}
+  
+  &:hover {
+    opacity: 1;
+  }
 
   &:last-child {
     margin-bottom: 0;

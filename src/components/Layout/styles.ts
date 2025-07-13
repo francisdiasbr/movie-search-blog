@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const LayoutContainer = styled.div`
-  background-color: ${({ theme }) => theme.colors.background};
+  background-color: white;
   color: ${({ theme }) => theme.colors.text};
   display: flex;
   flex-direction: column;
@@ -12,6 +12,9 @@ export const ContentWrapper = styled.div`
   display: flex;
   flex-grow: 1;
   justify-content: center;
+  background-color: ${({ theme }) => 
+    theme.colors.primary === '#ebe7da' ? theme.colors.primary : theme.colors.background
+  };
 `;
 
 export const InnerContainer = styled.div`
@@ -19,6 +22,7 @@ export const InnerContainer = styled.div`
   flex-direction: column;
   padding: 16px;
   width: 85%;
+  background-color: ${({ theme }) => theme.colors.background};
 
   @media (max-width: 1200px) {
     width: 90%;
