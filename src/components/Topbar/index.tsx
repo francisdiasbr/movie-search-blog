@@ -11,14 +11,16 @@ const translations = {
     reviews: 'Críticas',
     blog: 'Blogroll',
     favorites: 'Vale a Pena Assistir',
-    about: 'Sobre'
+    about: 'Sobre',
+    blogPage: 'Blog'
   },
   en: {
     // home: 'Home',
     reviews: 'Reviews',
     blog: 'Blogroll',
     favorites: 'Worth Watching',
-    about: 'About'
+    about: 'About',
+    blogPage: 'Blog'
   }
 };
 
@@ -76,6 +78,12 @@ export function Topbar() {
           >
             {t.favorites}
           </S.NavItem>
+          <S.NavItem
+            onClick={() => handleClick('/blog')}
+            isSelected={location.pathname === '/blog'}
+          >
+            {t.blogPage}
+          </S.NavItem>
         </S.DesktopNavContainer>
 
         {/* Controles (sempre visíveis) */}
@@ -110,6 +118,12 @@ export function Topbar() {
           isSelected={location.pathname === '/favorites'}
         >
           {t.favorites}
+        </S.MobileNavItem>
+        <S.MobileNavItem
+          onClick={() => handleClick('/blog')}
+          isSelected={location.pathname === '/blog'}
+        >
+          {t.blogPage}
         </S.MobileNavItem>
       </S.MobileNavContainer>
     </S.TopbarContainer>

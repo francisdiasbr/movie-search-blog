@@ -6,6 +6,7 @@ import './index.css';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { ThemeProvider } from './contexts/ThemeProvider';
 import { useTheme } from './contexts/useTheme';
+import Blog from './pages/Blog';
 import Blogroll from './pages/Blogroll';
 import CompleteArticle from './pages/CompleteArticle';
 import Favorites from './pages/Favorites';
@@ -28,6 +29,7 @@ function ThemedApp() {
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/blogroll" element={<Blogroll />} />
         <Route path="/favorites" element={<Favorites />} />
+        <Route path="/blog" element={<Blog />} />
       </Routes>
     </StyledThemeProvider>
   );
