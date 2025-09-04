@@ -25,8 +25,8 @@ const Card: React.FC<CardProps> = ({ post, onClick, isFirst }) => {
   return (
     <S.CardContainer
       onClick={() => onClick(post.tconst)}
-      imageUrl={post.imageUrl}
-      isFirst={isFirst}
+      $imageUrl={post.imageUrl}
+      $isFirst={isFirst}
     >
       <S.CardHeader>
         <S.CardTitle>{post.primaryTitle}</S.CardTitle>

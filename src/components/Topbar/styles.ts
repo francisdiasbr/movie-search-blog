@@ -76,22 +76,22 @@ export const DesktopNavContainer = styled.div`
   }
 `;
 
-export const NavItem = styled.span<{ isSelected: boolean }>`
+export const NavItem = styled.span<{ $isSelected: boolean }>`
   font-family: ${({ theme }) => theme.fonts.primary};
   cursor: pointer;
   font-size: 15px;
-  font-weight: ${({ isSelected }) => (isSelected ? '500' : '400')};
+  font-weight: ${({ $isSelected }) => ($isSelected ? '500' : '400')};
   position: relative;
   color: ${({ theme }) => theme.colors.text};
-  opacity: ${({ isSelected }) => (isSelected ? '1' : '0.7')};
+  opacity: ${({ $isSelected }) => ($isSelected ? '1' : '0.7')};
   transition: all 0.2s ease;
   padding: 8px 12px;
   border-radius: 6px;
   white-space: nowrap;
   
   /* Linha sutil na parte inferior para item selecionado */
-  ${({ isSelected, theme }) => 
-    isSelected && `
+  ${({ $isSelected, theme }) => 
+    $isSelected && `
       &::after {
         content: '';
         position: absolute;
@@ -114,8 +114,8 @@ export const NavItem = styled.span<{ isSelected: boolean }>`
     font-size: 16px;
     padding: 8px 16px;
     
-    ${({ isSelected, theme }) => 
-      isSelected && `
+    ${({ $isSelected }) => 
+      $isSelected && `
         &::after {
           width: 24px;
         }
@@ -124,7 +124,7 @@ export const NavItem = styled.span<{ isSelected: boolean }>`
 `;
 
 /* Hamburger Button - Apenas mobile */
-export const HamburgerButton = styled.button<{ isOpen: boolean }>`
+export const HamburgerButton = styled.button<{ $isOpen: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -146,16 +146,16 @@ export const HamburgerButton = styled.button<{ isOpen: boolean }>`
     transform-origin: 1px;
 
     &:first-child {
-      transform: ${({ isOpen }) => isOpen ? 'rotate(45deg)' : 'rotate(0)'};
+      transform: ${({ $isOpen }) => $isOpen ? 'rotate(45deg)' : 'rotate(0)'};
     }
 
     &:nth-child(2) {
-      opacity: ${({ isOpen }) => isOpen ? '0' : '1'};
-      transform: ${({ isOpen }) => isOpen ? 'translateX(20px)' : 'translateX(0)'};
+      opacity: ${({ $isOpen }) => $isOpen ? '0' : '1'};
+      transform: ${({ $isOpen }) => $isOpen ? 'translateX(20px)' : 'translateX(0)'};
     }
 
     &:nth-child(3) {
-      transform: ${({ isOpen }) => isOpen ? 'rotate(-45deg)' : 'rotate(0)'};
+      transform: ${({ $isOpen }) => $isOpen ? 'rotate(-45deg)' : 'rotate(0)'};
     }
   }
 
@@ -166,12 +166,12 @@ export const HamburgerButton = styled.button<{ isOpen: boolean }>`
 `;
 
 /* Menu Mobile */
-export const MobileNavContainer = styled.div<{ isOpen: boolean }>`
-  display: ${({ isOpen }) => isOpen ? 'block' : 'none'};
+export const MobileNavContainer = styled.div<{ $isOpen: boolean }>`
+  display: ${({ $isOpen }) => $isOpen ? 'block' : 'none'};
   background-color: white;
   border-top: 1px solid ${({ theme }) => theme.colors.border};
   padding: 16px;
-  animation: ${({ isOpen }) => isOpen ? 'slideDown 0.3s ease-in-out' : 'none'};
+  animation: ${({ $isOpen }) => $isOpen ? 'slideDown 0.3s ease-in-out' : 'none'};
 
   @keyframes slideDown {
     from {
@@ -190,13 +190,13 @@ export const MobileNavContainer = styled.div<{ isOpen: boolean }>`
   }
 `;
 
-export const MobileNavItem = styled.div<{ isSelected: boolean }>`
+export const MobileNavItem = styled.div<{ $isSelected: boolean }>`
   font-family: ${({ theme }) => theme.fonts.primary};
   cursor: pointer;
   font-size: 16px;
-  font-weight: ${({ isSelected }) => (isSelected ? '500' : '400')};
+  font-weight: ${({ $isSelected }) => ($isSelected ? '500' : '400')};
   color: ${({ theme }) => theme.colors.text};
-  opacity: ${({ isSelected }) => (isSelected ? '1' : '0.7')};
+  opacity: ${({ $isSelected }) => ($isSelected ? '1' : '0.7')};
   padding: 12px 16px;
   border-radius: 8px;
   transition: all 0.2s ease;
@@ -204,8 +204,8 @@ export const MobileNavItem = styled.div<{ isSelected: boolean }>`
   position: relative;
   
   /* Linha sutil na lateral esquerda para item selecionado */
-  ${({ isSelected, theme }) => 
-    isSelected && `
+  ${({ $isSelected, theme }) => 
+    $isSelected && `
       &::before {
         content: '';
         position: absolute;

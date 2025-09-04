@@ -62,25 +62,25 @@ export function Topbar() {
           </S.NavItem> */}
           <S.NavItem
             onClick={() => handleClick('/reviews')}
-            isSelected={location.pathname === '/reviews'}
+            $isSelected={location.pathname === '/reviews'}
           >
             {t.reviews}
           </S.NavItem>
           <S.NavItem
             onClick={() => handleClick('/blogroll')}
-            isSelected={location.pathname === '/blogroll'}
+            $isSelected={location.pathname === '/blogroll'}
           >
             {t.blog}
           </S.NavItem>
           <S.NavItem
             onClick={() => handleClick('/favorites')}
-            isSelected={location.pathname === '/favorites'}
+            $isSelected={location.pathname === '/favorites'}
           >
             {t.favorites}
           </S.NavItem>
           <S.NavItem
             onClick={() => handleClick('/blog')}
-            isSelected={location.pathname === '/blog'}
+            $isSelected={location.pathname === '/blog'}
           >
             {t.blogPage}
           </S.NavItem>
@@ -91,7 +91,7 @@ export function Topbar() {
           <LanguageToggle />
           
           {/* Hamburger Menu Button - apenas mobile */}
-          <S.HamburgerButton onClick={toggleMenu} isOpen={isMenuOpen}>
+          <S.HamburgerButton onClick={toggleMenu} $isOpen={isMenuOpen}>
             <span />
             <span />
             <span />
@@ -100,28 +100,28 @@ export function Topbar() {
       </S.TopbarWrapper>
 
       {/* Menu Mobile - dropdown */}
-      <S.MobileNavContainer isOpen={isMenuOpen}>
+      <S.MobileNavContainer $isOpen={isMenuOpen}>
         <S.MobileNavItem
           onClick={() => handleClick('/reviews')}
-          isSelected={location.pathname === '/reviews'}
+          $isSelected={location.pathname === '/reviews'}
         >
           {t.reviews}
         </S.MobileNavItem>
         <S.MobileNavItem
           onClick={() => handleClick('/blogroll')}
-          isSelected={location.pathname === '/blogroll'}
+          $isSelected={location.pathname === '/blogroll'}
         >
           {t.blog}
         </S.MobileNavItem>
         <S.MobileNavItem
           onClick={() => handleClick('/favorites')}
-          isSelected={location.pathname === '/favorites'}
+          $isSelected={location.pathname === '/favorites'}
         >
           {t.favorites}
         </S.MobileNavItem>
         <S.MobileNavItem
           onClick={() => handleClick('/blog')}
-          isSelected={location.pathname === '/blog'}
+          $isSelected={location.pathname === '/blog'}
         >
           {t.blogPage}
         </S.MobileNavItem>

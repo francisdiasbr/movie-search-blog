@@ -12,10 +12,10 @@ export function LanguageToggle() {
       tabIndex={0}
       title={language === 'pt' ? 'Mudar para inglês' : 'Change to Portuguese'}
     >
-      <S.FlagWrapper isActive={language === 'pt'}>
+      <S.FlagWrapper $isActive={language === 'pt'}>
         🇧🇷
       </S.FlagWrapper>
-      <S.FlagWrapper isActive={language === 'en'}>
+      <S.FlagWrapper $isActive={language === 'en'}>
         🇺🇸
       </S.FlagWrapper>
     </S.Container>

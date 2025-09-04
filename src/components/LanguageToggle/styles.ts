@@ -16,15 +16,15 @@ export const Container = styled.div`
 `;
 
 interface FlagWrapperProps {
-  isActive: boolean;
+  $isActive: boolean;
 }
 
 export const FlagWrapper = styled.div<FlagWrapperProps>`
   font-size: 20px;
   line-height: 1;
   transition: all 0.2s ease-in-out;
-  opacity: ${({ isActive }) => (isActive ? 1 : 0.5)};
-  transform: ${({ isActive }) => (isActive ? 'scale(1.1)' : 'scale(0.9)')};
+  opacity: ${({ $isActive }) => ($isActive ? 1 : 0.5)};
+  transform: ${({ $isActive }) => ($isActive ? 'scale(1.1)' : 'scale(0.9)')};
 
   &:hover {
     opacity: 0.8;
