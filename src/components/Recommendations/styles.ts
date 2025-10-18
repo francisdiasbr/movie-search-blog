@@ -36,41 +36,42 @@ export const Subtitle = styled.p`
 
 export const ScrollContainer = styled.div`
   width: 100%;
-  height: 300px;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: ${({ theme }) => theme.spacing.sm};
+  padding: ${({ theme }) => theme.spacing.md};
+  background: ${({ theme }) => theme.colors.cardBackground};
   
-  /* Custom scrollbar */
+  /* Custom scrollbar - mais visível */
   &::-webkit-scrollbar {
-    height: 8px;
+    height: 12px;
   }
 
   &::-webkit-scrollbar-track {
     background: ${({ theme }) => theme.colors.background};
-    border-radius: 4px;
+    border-radius: 6px;
+    margin: 0 ${({ theme }) => theme.spacing.sm};
   }
 
   &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.border};
-    border-radius: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme }) => theme.colors.textSecondary};
+    background: ${({ theme }) => theme.colors.primary || theme.colors.border};
+    border-radius: 6px;
+    border: 2px solid ${({ theme }) => theme.colors.background};
+    
+    &:hover {
+      background: ${({ theme }) => theme.colors.textSecondary};
+    }
   }
 `;
 
 export const CardsWrapper = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.sm};
-  height: 100%;
 `;
 
 export const MovieCard = styled.div`
   min-width: 180px;
   max-width: 180px;
-  height: 280px;
+  height: 340px;
   border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
@@ -86,17 +87,18 @@ export const MovieCard = styled.div`
   @media (max-width: 768px) {
     min-width: 140px;
     max-width: 140px;
-    height: 240px;
+    height: 280px;
   }
 `;
 
 export const Thumbnail = styled.div<{ $imageUrl?: string }>`
   width: 100%;
-  height: 200px;
+  height: 260px;
   background: ${({ $imageUrl, theme }) =>
     $imageUrl
       ? `url(${$imageUrl}) center/cover no-repeat`
       : theme.colors.border};
+  background-color: ${({ theme }) => theme.colors.background};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -104,7 +106,7 @@ export const Thumbnail = styled.div<{ $imageUrl?: string }>`
   font-size: 0.75rem;
 
   @media (max-width: 768px) {
-    height: 160px;
+    height: 200px;
   }
 `;
 
@@ -162,7 +164,7 @@ export const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 300px;
+  min-height: 300px;
   color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
@@ -170,7 +172,7 @@ export const ErrorContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 300px;
+  min-height: 300px;
   color: ${({ theme }) => theme.colors.error};
   padding: ${({ theme }) => theme.spacing.md};
   text-align: center;

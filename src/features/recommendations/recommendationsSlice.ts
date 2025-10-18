@@ -22,7 +22,13 @@ export const fetchRandomRecommendations = createAsyncThunk(
 const recommendationsSlice = createSlice({
   name: 'recommendations',
   initialState,
-  reducers: {},
+  reducers: {
+    resetRecommendations: (state) => {
+      state.data = [];
+      state.status = 'idle';
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchRandomRecommendations.pending, (state) => {
@@ -31,7 +37,11 @@ const recommendationsSlice = createSlice({
       })
       .addCase(fetchRandomRecommendations.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.data = action.payload.data;
+        // Acumula os dados ao invés de substituir
+        const newMovies = action.payload.data.filter(
+          (movie: any) => !state.data.some((existing: any) => existing.tconst === movie.tconst)
+        );
+        state.data = [...state.data, ...newMovies];
         state.total = action.payload.total;
       })
       .addCase(fetchRandomRecommendations.rejected, (state, action) => {
@@ -40,6 +50,8 @@ const recommendationsSlice = createSlice({
       });
   },
 });
+
+export const { resetRecommendations } = recommendationsSlice.actions;
 
 export default recommendationsSlice.reducer;
 

@@ -25,22 +25,24 @@ const translations = {
 export default function Recommendations() {
   const dispatch = useAppDispatch();
   const { language } = useLanguage();
-  const { data, status, error } = useAppSelector((state) => state.recommendations);
+  const { data, status, error, total } = useAppSelector((state) => state.recommendations);
   
   const t = translations[language];
 
   useEffect(() => {
     if (status === 'idle') {
-      dispatch(fetchRandomRecommendations(8));
+      dispatch(fetchRandomRecommendations(103)); // Busca todos
     }
   }, [dispatch, status]);
 
   const getThumbnailUrl = (movie: any) => {
-    // Usa image_url do banco se disponível, caso contrário tenta construir URL
+    // Usa image_url do banco se disponível
     if (movie.image_url) {
-      return movie.image_url;
+      // Aumenta a resolução da imagem do IMDb substituindo os parâmetros
+      return movie.image_url.replace(/\._V1_.*?\.jpg/, '._V1_UX180_CR0,0,180,267_AL_.jpg');
     }
-    return `https://m.media-amazon.com/images/M/${movie.tconst}_V1_UY209_CR0,0,140,209_.jpg`;
+    // Fallback com resolução maior
+    return `https://m.media-amazon.com/images/M/${movie.tconst}_V1_UX180_CR0,0,180,267_AL_.jpg`;
   };
 
   const handleCardClick = (url: string) => {
