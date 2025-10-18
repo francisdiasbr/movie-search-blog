@@ -55,8 +55,8 @@ function Review() {
               </div>
             )}
           </S.BlogPostTitleContainer>
-          <S.Container hasImages={hasImages}>
-            <S.ContentColumn hasImages={hasImages}>
+          <S.Container $hasImages={hasImages}>
+            <S.ContentColumn $hasImages={hasImages}>
               {data.content[language].text.split('\n').map((paragraph, index) => (
                 <p key={index} style={{ marginBottom: '1rem' }}>{paragraph}</p>
               ))}

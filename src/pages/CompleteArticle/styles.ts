@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
-export const HeroSection = styled.div<{ backgroundImage: string | null }>`
+export const HeroSection = styled.div<{ $backgroundImage: string | null }>`
   position: relative;
   width: 100vw;
   height: 70vh;
   min-height: 500px;
-  background-image: ${({ backgroundImage }) => backgroundImage ? `url(${backgroundImage})` : 'none'};
+  background-image: ${({ $backgroundImage }) => $backgroundImage ? `url(${$backgroundImage})` : 'none'};
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -99,7 +99,7 @@ export const BlogPostTitleContainer = styled.div`
   margin-bottom: 16px;
 `;
 
-export const Container = styled.div<{ hasImages: boolean }>`
+export const Container = styled.div<{ $hasImages: boolean }>`
   max-width: 4xl;
   display: flex;
   flex-direction: row;
@@ -114,8 +114,8 @@ export const Container = styled.div<{ hasImages: boolean }>`
   }
 `;
 
-export const ContentColumn = styled.div<{ hasImages: boolean }>`
-  flex: ${({ hasImages }) => (hasImages ? '2' : '1')};
+export const ContentColumn = styled.div<{ $hasImages: boolean }>`
+  flex: ${({ $hasImages }) => ($hasImages ? '2' : '1')};
   min-width: 0;
 `;
 

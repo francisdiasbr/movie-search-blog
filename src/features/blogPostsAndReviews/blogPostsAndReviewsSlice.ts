@@ -25,11 +25,13 @@ const initialState: CombinedState = {
 };
 
 const formatDateFromISO = (dateString: string) => {
+  if (!dateString) return 'Data não disponível';
+  
   try {
-    return format(parseISO(dateString), 'dd/MM/yyyy', { locale: ptBR });
+    const date = parseISO(dateString);
+    return format(date, 'dd/MM/yyyy', { locale: ptBR });
   } catch (error) {
-    console.error('Error formatting date:', error);
-    return dateString;
+    return 'Data inválida';
   }
 };
 

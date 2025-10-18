@@ -5,7 +5,7 @@ export const BlogPostTitleContainer = styled.div`
   margin-bottom: 16px;
 `;
 
-export const Container = styled.div<{ hasImages: boolean }>`
+export const Container = styled.div<{ $hasImages: boolean }>`
   max-width: 4xl;
   display: flex;
   flex-direction: row;
@@ -16,8 +16,8 @@ export const Container = styled.div<{ hasImages: boolean }>`
   }
 `;
 
-export const ContentColumn = styled.div<{ hasImages: boolean }>`
-  flex: ${({ hasImages }) => (hasImages ? '2' : '1')};
+export const ContentColumn = styled.div<{ $hasImages: boolean }>`
+  flex: ${({ $hasImages }) => ($hasImages ? '2' : '1')};
   min-width: 0;
 `;
 

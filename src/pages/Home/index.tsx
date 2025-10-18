@@ -4,6 +4,7 @@ import Card from '../../components/Card';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
 import { NoPostsMessage } from '../../components/NoPostsMessage';
+import Recommendations from '../../components/Recommendations';
 import { useBlogPosts } from '../../hooks/useBlogPosts';
 import * as S from './styles';
 
@@ -51,6 +52,7 @@ export default function Home() {
 
   return (
     <Layout>
+      <Recommendations />
       {status === 'loading' && (
         <S.LoadingContainer>
           <S.ActivityIndicator>

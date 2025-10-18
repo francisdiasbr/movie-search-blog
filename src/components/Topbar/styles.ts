@@ -48,7 +48,7 @@ export const LogoContainer = styled.div`
     font-size: 24px;
     
     &::after {
-      content: '🍿 Cinema & thoughts';
+      content: '🍿 Movies';
     }
   }
 `;

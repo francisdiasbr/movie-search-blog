@@ -58,7 +58,7 @@ function CompleteArticle() {
 
   return (
     <Layout>
-      <S.HeroSection backgroundImage={heroImage}>
+      <S.HeroSection $backgroundImage={heroImage}>
         <S.HeroOverlay />
         <S.HeroContent>
           <S.HeroTitle>{blogPost.data?.primaryTitle || review.data?.primaryTitle}</S.HeroTitle>
@@ -70,8 +70,8 @@ function CompleteArticle() {
         </S.HeroContent>
       </S.HeroSection>
 
-      <S.Container hasImages={hasImages}>
-        <S.ContentColumn hasImages={hasImages}>
+      <S.Container $hasImages={hasImages}>
+        <S.ContentColumn $hasImages={hasImages}>
           {review.data && (
             <div>
               {review.data.content[language].text.split('\n').map((paragraph, index) => (

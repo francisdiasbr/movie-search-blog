@@ -7,6 +7,7 @@ import blogPostReducer from '../features/blogPost/blogPostSlice';
 import searchBlogPostReducer from '../features/blogPost/searchBlogPostSlice';
 import blogPostsAndReviewsReducer from '../features/blogPostsAndReviews/blogPostsAndReviewsSlice';
 import favoritesReducer from '../features/favorites/favoritesSlice';
+import recommendationsReducer from '../features/recommendations/recommendationsSlice';
 import writeReviewsReducer from '../features/writeReviews/writeReviewsSlice';
 
 export const store = configureStore({
@@ -16,6 +17,7 @@ export const store = configureStore({
     blogPostImages: blogPostImagesReducer,
     blogPostsAndReviews: blogPostsAndReviewsReducer,
     favorites: favoritesReducer,
+    recommendations: recommendationsReducer,
     searchBlogPost: searchBlogPostReducer,
     writeReviews: writeReviewsReducer,
     uploadImages: uploadImagesReducer,
