@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useLanguage } from '../../contexts/LanguageContext';
 import { fetchRandomRecommendations } from '../../features/recommendations/recommendationsSlice';
@@ -24,6 +25,7 @@ const translations = {
 
 export default function Recommendations() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { language } = useLanguage();
   const { data, status, error, total } = useAppSelector((state) => state.recommendations);
   
@@ -45,8 +47,8 @@ export default function Recommendations() {
     return `https://m.media-amazon.com/images/M/${movie.tconst}_V1_UX180_CR0,0,180,267_AL_.jpg`;
   };
 
-  const handleCardClick = (url: string) => {
-    window.open(url, '_blank', 'noopener,noreferrer');
+  const handleCardClick = (movie: any) => {
+    navigate(`/movie/${movie.tconst}`);
   };
 
   if (status === 'loading') {
@@ -98,7 +100,7 @@ export default function Recommendations() {
           {data.map((movie) => (
             <S.MovieCard 
               key={movie.tconst}
-              onClick={() => handleCardClick(movie.url)}
+              onClick={() => handleCardClick(movie)}
             >
               <S.Thumbnail $imageUrl={getThumbnailUrl(movie)}>
                 {!getThumbnailUrl(movie) && t.noImage}
