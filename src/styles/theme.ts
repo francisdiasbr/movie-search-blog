@@ -4,7 +4,7 @@ export const lightTheme = {
     background: '#f4f1e8',
     card: '#ebe7da',
     cardHover: '#ebe7da',
-    text: '#1e293b',
+    text: '#1C1C1E',
     border: '#e0e0e0',
     hover: '#f8f9fa',
     link: '#1e293b'
@@ -39,7 +39,8 @@ export const lightTheme = {
   fonts: {
     primary: "'Roboto', sans-serif",
     secondary: "'Montserrat', sans-serif",
-    tertiary: "'Old Standard TT', serif"
+    tertiary: "'Old Standard TT', serif",
+    neueMontreal: "'NeueMontreal', Arial, sans-serif"
   },
 };
 
@@ -84,7 +85,8 @@ export const darkTheme = {
   fonts: {
     primary: "'Roboto', sans-serif",
     secondary: "'Montserrat', sans-serif",
-    tertiary: "'Old Standard TT', serif"
+    tertiary: "'Old Standard TT', serif",
+    neueMontreal: "'NeueMontreal', Arial, sans-serif"
   },
 };
 

@@ -14,7 +14,7 @@ export const GlobalStyles = createGlobalStyle<{ theme: Theme }>`
   }
 
   body {
-    font-family: ${({ theme }) => theme.fonts.primary};
+    font-family: ${({ theme }) => theme.fonts.neueMontreal};
     background-color: ${({ theme }) => theme.colors.background};
     color: ${({ theme }) => theme.colors.text};
     transition: all 0.2s ease-in-out;
@@ -26,7 +26,7 @@ export const GlobalStyles = createGlobalStyle<{ theme: Theme }>`
   p, a {
     line-height: 1.6;
     font-size: 1.2rem;
-    font-family: ${({ theme }) => theme.fonts.tertiary};
+    font-family: ${({ theme }) => theme.fonts.neueMontreal};
   }
 
   h1, h2, h3 {
@@ -55,5 +55,6 @@ export const GlobalStyles = createGlobalStyle<{ theme: Theme }>`
 
   button {
     font-size: 1rem;
+    font-family: ${({ theme }) => theme.fonts.neueMontreal};
   }
 `;
