@@ -33,9 +33,9 @@ export default function Recommendations() {
 
   useEffect(() => {
     if (status === 'idle') {
-      dispatch(fetchRandomRecommendations(103)); // Busca todos
+      dispatch(fetchRandomRecommendations({ count: 103, language })); // Busca todos
     }
-  }, [dispatch, status]);
+  }, [dispatch, status, language]);
 
   const getThumbnailUrl = (movie: any) => {
     // Usa image_url do banco se disponível

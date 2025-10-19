@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 
 import BaseService from '../../api/service';
+import { Layout } from '../../components/Layout';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { Recommendation } from '../../features/recommendations/types';
 import * as S from './styles';
@@ -11,6 +12,7 @@ const translations = {
     back: 'Voltar',
     imdbButton: 'Ver no IMDb',
     director: 'Diretor',
+    directors: 'Diretores',
     year: 'Ano',
     rating: 'Avaliação',
     runtime: 'Duração',
@@ -21,12 +23,27 @@ const translations = {
     soundtrack: 'Trilha Sonora',
     playPreview: 'Tocar Preview',
     openSpotify: 'Abrir no Spotify',
-    noPreview: 'Preview não disponível'
+    noPreview: 'Preview não disponível',
+    noImage: 'Sem imagem',
+    noPhoto: 'Sem foto',
+    moviePoster: 'Poster do filme',
+    releaseYear: 'Ano de lançamento',
+    imdbRating: 'Avaliação IMDb',
+    duration: 'Duração',
+    movieGenres: 'Gêneros',
+    directorPhoto: 'Foto do diretor',
+    directorBio: 'Biografia do diretor',
+    movieDetails: 'Detalhes do filme',
+    loadingMovieDetails: 'Carregando detalhes do filme',
+    loadingMovieInfo: 'Carregando informações do filme',
+    errorLoadingMovie: 'Erro ao carregar filme',
+    errorLoadingMovieInfo: 'Erro ao carregar informações do filme'
   },
   en: {
     back: 'Back',
     imdbButton: 'View on IMDb',
     director: 'Director',
+    directors: 'Directors',
     year: 'Year',
     rating: 'Rating',
     runtime: 'Runtime',
@@ -37,7 +54,21 @@ const translations = {
     soundtrack: 'Soundtrack',
     playPreview: 'Play Preview',
     openSpotify: 'Open in Spotify',
-    noPreview: 'Preview not available'
+    noPreview: 'Preview not available',
+    noImage: 'No image',
+    noPhoto: 'No photo',
+    moviePoster: 'Movie poster',
+    releaseYear: 'Release year',
+    imdbRating: 'IMDb rating',
+    duration: 'Duration',
+    movieGenres: 'Genres',
+    directorPhoto: 'Director photo',
+    directorBio: 'Director biography',
+    movieDetails: 'Movie details',
+    loadingMovieDetails: 'Loading movie details',
+    loadingMovieInfo: 'Loading movie information',
+    errorLoadingMovie: 'Error loading movie',
+    errorLoadingMovieInfo: 'Error loading movie information'
   }
 };
 
@@ -46,6 +77,7 @@ interface DirectorInfo {
   name: string;
   bio: string;
   photo: string | null;
+  directors?: DirectorInfo[]; // Para múltiplos diretores
 }
 
 interface Track {
@@ -100,11 +132,20 @@ export default function MovieDetail() {
       try {
         setLoading(true);
         setError(null);
+        
+        console.log(`🎬 [FRONTEND] Iniciando busca para filme: ${movieId} (idioma: ${language})`);
+        const totalStart = performance.now();
 
         // Busca informações do filme
+        console.log(`📊 [FRONTEND] Buscando dados do filme...`);
+        const movieStart = performance.now();
         const movieResponse = await BaseService.get<{ data: Recommendation[] }>(
-          `/recommendations/all?search_term=${movieId}&page_size=1`
+          `/recommendations/all?search_term=${movieId}&page_size=1`,
+          {},
+          language
         );
+        const movieTime = performance.now() - movieStart;
+        console.log(`📊 [FRONTEND] Dados do filme: ${movieTime.toFixed(2)}ms`);
 
         if (movieResponse.entries && movieResponse.entries.length > 0) {
           const movieData = movieResponse.entries[0];
@@ -113,29 +154,55 @@ export default function MovieDetail() {
           // Atualiza o título da página
           document.title = `${movieData.title} (${movieData.year}) - Movie Search Blog`;
 
-          // Busca informações do diretor
+          // ✅ OTIMIZAÇÃO: Requisições paralelas para diretor e trilha sonora
+          const promises = [];
+
+          // Busca informações do diretor (se existir)
           if (movieData.director) {
-            try {
-              const directorResponse = await BaseService.get<DirectorInfo>(
-                `/directors/${encodeURIComponent(movieData.director)}?tconst=${movieData.tconst}`
-              );
-              setDirectorInfo(directorResponse);
-            } catch (directorError) {
-              console.warn('Could not fetch director info:', directorError);
-              // Continua sem informações do diretor
-            }
+            promises.push(
+              BaseService.get<DirectorInfo>(
+                `/directors/${encodeURIComponent(movieData.director)}?tconst=${movieData.tconst}`,
+                {},
+                language
+              ).then(response => ({ type: 'director', data: response }))
+              .catch(error => {
+                console.warn('Could not fetch director info:', error);
+                return { type: 'director', data: null };
+              })
+            );
           }
 
           // Busca trilha sonora do filme
-          try {
-            const soundtrackResponse = await BaseService.get<SoundtrackInfo>(
-              `/music/soundtrack?title=${encodeURIComponent(movieData.title)}&year=${movieData.year}&director=${encodeURIComponent(movieData.director || '')}`
-            );
-            setSoundtrackInfo(soundtrackResponse);
-          } catch (soundtrackError) {
-            console.warn('Could not fetch soundtrack info:', soundtrackError);
-            // Continua sem informações da trilha sonora
-          }
+          promises.push(
+            BaseService.get<SoundtrackInfo>(
+              `/music/soundtrack?title=${encodeURIComponent(movieData.title)}&year=${movieData.year}&director=${encodeURIComponent(movieData.director || '')}`,
+              {},
+              language
+            ).then(response => ({ type: 'soundtrack', data: response }))
+            .catch(error => {
+              console.warn('Could not fetch soundtrack info:', error);
+              return { type: 'soundtrack', data: null };
+            })
+          );
+
+          // Executa todas as requisições em paralelo
+          console.log(`🚀 [FRONTEND] Executando ${promises.length} requisições em paralelo...`);
+          const parallelStart = performance.now();
+          const results = await Promise.all(promises);
+          const parallelTime = performance.now() - parallelStart;
+          console.log(`📊 [FRONTEND] Requisições paralelas: ${parallelTime.toFixed(2)}ms`);
+          
+          // Processa os resultados
+          results.forEach(result => {
+            if (result.type === 'director' && result.data) {
+              setDirectorInfo(result.data);
+            } else if (result.type === 'soundtrack' && result.data) {
+              setSoundtrackInfo(result.data);
+            }
+          });
+          
+          const totalTime = performance.now() - totalStart;
+          console.log(`✅ [FRONTEND] Total: ${totalTime.toFixed(2)}ms`);
         } else {
           setError(t.notFound);
         }
@@ -148,7 +215,7 @@ export default function MovieDetail() {
     };
 
     fetchMovieDetails();
-  }, [movieId, t.notFound, t.error]);
+  }, [movieId, language, t.notFound, t.error]);
 
   const getThumbnailUrl = (movie: Recommendation) => {
     if (movie.image_url) {
@@ -166,69 +233,74 @@ export default function MovieDetail() {
 
   if (loading) {
     return (
-      <S.Container role="main" aria-label="Carregando detalhes do filme">
-        <S.LoadingContainer 
-          role="status" 
-          aria-live="polite"
-          aria-label="Carregando informações do filme"
-        >
-          {t.loading}
-        </S.LoadingContainer>
-      </S.Container>
+      <Layout>
+        <S.Container role="main" aria-label={t.loadingMovieDetails}>
+          <S.LoadingContainer 
+            role="status" 
+            aria-live="polite"
+            aria-label={t.loadingMovieInfo}
+          >
+            {t.loading}
+          </S.LoadingContainer>
+        </S.Container>
+      </Layout>
     );
   }
 
   if (error || !movie) {
     return (
-      <S.Container role="main" aria-label="Erro ao carregar filme">
-        <S.ErrorContainer 
-          role="alert" 
-          aria-live="assertive"
-          aria-label="Erro ao carregar informações do filme"
-        >
-          {error || t.notFound}
-        </S.ErrorContainer>
-      </S.Container>
+      <Layout>
+        <S.Container role="main" aria-label={t.errorLoadingMovie}>
+          <S.ErrorContainer 
+            role="alert" 
+            aria-live="assertive"
+            aria-label={t.errorLoadingMovieInfo}
+          >
+            {error || t.notFound}
+          </S.ErrorContainer>
+        </S.Container>
+      </Layout>
     );
   }
 
   return (
-    <S.Container 
-      role="main" 
-      aria-label="Detalhes do filme"
-    >
-      <S.Content>
+    <Layout>
+      <S.Container 
+        role="main" 
+        aria-label={t.movieDetails}
+      >
+        <S.Content>
         <S.MovieSection>
           <S.MoviePoster 
             $imageUrl={getThumbnailUrl(movie)}
             role="img"
-            aria-label={`Poster do filme ${movie.title}`}
+            aria-label={`${t.moviePoster} ${movie.title}`}
           >
-            {!getThumbnailUrl(movie) && 'Sem imagem'}
+            {!getThumbnailUrl(movie) && t.noImage}
           </S.MoviePoster>
           
           <S.MovieInfo>
             <S.MovieTitle id="movie-title">{movie.title}</S.MovieTitle>
             
-            <S.MovieMeta role="list" aria-label="Informações do filme">
+            <S.MovieMeta role="list" aria-label={t.movieDetails}>
               <S.MetaItem role="listitem">
                 <S.MetaLabel>{t.year}</S.MetaLabel>
-                <S.MetaValue aria-label={`Ano de lançamento: ${movie.year}`}>{movie.year}</S.MetaValue>
+                <S.MetaValue aria-label={`${t.releaseYear}: ${movie.year}`}>{movie.year}</S.MetaValue>
               </S.MetaItem>
               
               <S.MetaItem role="listitem">
                 <S.MetaLabel>{t.rating}</S.MetaLabel>
-                <S.MetaValue aria-label={`Avaliação IMDb: ${movie.imdb_rating} de 10`}>{movie.imdb_rating}/10</S.MetaValue>
+                <S.MetaValue aria-label={`${t.imdbRating}: ${movie.imdb_rating} de 10`}>{movie.imdb_rating}/10</S.MetaValue>
               </S.MetaItem>
               
               <S.MetaItem role="listitem">
                 <S.MetaLabel>{t.runtime}</S.MetaLabel>
-                <S.MetaValue aria-label={`Duração: ${movie.runtime} minutos`}>{movie.runtime} min</S.MetaValue>
+                <S.MetaValue aria-label={`${t.duration}: ${movie.runtime} minutos`}>{movie.runtime} min</S.MetaValue>
               </S.MetaItem>
               
               <S.MetaItem role="listitem">
                 <S.MetaLabel>{t.genres}</S.MetaLabel>
-                <S.MetaValue aria-label={`Gêneros: ${movie.genres}`}>{movie.genres}</S.MetaValue>
+                <S.MetaValue aria-label={`${t.movieGenres}: ${movie.genres}`}>{movie.genres}</S.MetaValue>
               </S.MetaItem>
             </S.MovieMeta>
 
@@ -242,27 +314,57 @@ export default function MovieDetail() {
 
         {directorInfo && (
           <S.DirectorSection>
-            <S.DirectorTitle id="director-title">{t.director}</S.DirectorTitle>
+            <S.DirectorTitle id="director-title">
+              {directorInfo.directors && directorInfo.directors.length > 1 ? t.directors : t.director}
+            </S.DirectorTitle>
             
-            <S.DirectorInfo>
-              <S.DirectorPhoto 
-                $imageUrl={directorInfo.photo}
-                role="img"
-                aria-label={directorInfo.photo ? `Foto do diretor ${directorInfo.name}` : `Sem foto do diretor ${directorInfo.name}`}
-              >
-                {!directorInfo.photo && 'Sem foto'}
-              </S.DirectorPhoto>
-              
-              <S.DirectorDetails>
-                <S.DirectorName id="director-name">{directorInfo.name}</S.DirectorName>
-                <S.DirectorBio 
-                  aria-label={`Biografia do diretor ${directorInfo.name}`}
-                  aria-describedby="director-name"
+            {directorInfo.directors && directorInfo.directors.length > 1 ? (
+              // Exibe múltiplos diretores
+              <div>
+                {directorInfo.directors.map((director, index) => (
+                  <S.DirectorInfo key={index} style={{ marginBottom: index < directorInfo.directors!.length - 1 ? '24px' : '0' }}>
+                    <S.DirectorPhoto 
+                      $imageUrl={director.photo}
+                      role="img"
+                      aria-label={director.photo ? `${t.directorPhoto} ${director.name}` : `${t.noPhoto} ${director.name}`}
+                    >
+                      {!director.photo && t.noPhoto}
+                    </S.DirectorPhoto>
+                    
+                    <S.DirectorDetails>
+                      <S.DirectorName id={`director-name-${index}`}>{director.name}</S.DirectorName>
+                      <S.DirectorBio 
+                        aria-label={`${t.directorBio} ${director.name}`}
+                        aria-describedby={`director-name-${index}`}
+                      >
+                        {director.bio}
+                      </S.DirectorBio>
+                    </S.DirectorDetails>
+                  </S.DirectorInfo>
+                ))}
+              </div>
+            ) : (
+              // Exibe um único diretor
+              <S.DirectorInfo>
+                <S.DirectorPhoto 
+                  $imageUrl={directorInfo.photo}
+                  role="img"
+                  aria-label={directorInfo.photo ? `${t.directorPhoto} ${directorInfo.name}` : `${t.noPhoto} ${directorInfo.name}`}
                 >
-                  {directorInfo.bio}
-                </S.DirectorBio>
-              </S.DirectorDetails>
-            </S.DirectorInfo>
+                  {!directorInfo.photo && t.noPhoto}
+                </S.DirectorPhoto>
+                
+                <S.DirectorDetails>
+                  <S.DirectorName id="director-name">{directorInfo.name}</S.DirectorName>
+                  <S.DirectorBio 
+                    aria-label={`${t.directorBio} ${directorInfo.name}`}
+                    aria-describedby="director-name"
+                  >
+                    {directorInfo.bio}
+                  </S.DirectorBio>
+                </S.DirectorDetails>
+              </S.DirectorInfo>
+            )}
           </S.DirectorSection>
         )}
 
@@ -314,7 +416,8 @@ export default function MovieDetail() {
             </S.TracksList>
           </S.SoundtrackSection>
         )}
-      </S.Content>
-    </S.Container>
+        </S.Content>
+      </S.Container>
+    </Layout>
   );
 }

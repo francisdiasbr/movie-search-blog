@@ -26,9 +26,11 @@ class BaseService {
 
   async get<T>(
     endpoint: string,
-    headers: Record<string, string> = {}
+    headers: Record<string, string> = {},
+    language?: string
   ): Promise<T> {
-    return this.request<T>(endpoint, 'GET', null, headers);
+    const url = language ? `${endpoint}${endpoint.includes('?') ? '&' : '?'}language=${language}` : endpoint;
+    return this.request<T>(url, 'GET', null, headers);
   }
 
   async post<T>(

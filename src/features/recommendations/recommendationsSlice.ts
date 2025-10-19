@@ -11,9 +11,11 @@ const initialState: RecommendationsState = {
 
 export const fetchRandomRecommendations = createAsyncThunk(
   'recommendations/fetchRandom',
-  async (count: number = 6) => {
+  async ({ count = 6, language = 'pt' }: { count?: number; language?: string } = {}) => {
     const response = await BaseService.get<{ data: any[]; total: number }>(
-      `/recommendations/random?count=${count}`
+      `/recommendations/random?count=${count}`,
+      {},
+      language
     );
     return response;
   }
