@@ -24,16 +24,14 @@ const initialState: SearchFavoritesState = {
 
 interface SearchParams {
   filters?: unknown;
-  page?: number;
-  page_size?: number;
+  search_term?: string;
 }
 
 interface SearchResponse {
   entries: FavoritesEntry[];
   total_documents: number;
-  total_pages: number;
-  current_page: number;
-  page_size: number;
+  countries: string[];
+  years: number[];
 }
 
 interface GetFavoriteByIdResponse {
@@ -42,38 +40,18 @@ interface GetFavoriteByIdResponse {
 
 export const searchFavorites = createAsyncThunk<SearchResponse, SearchParams>(
   'favorites/search',
-  async (params = { filters: {}, page: 1, page_size: 10 }) => {
+  async (params = { filters: {}, search_term: "" }) => {
     try {
-      const firstResponse = await BaseService.post('/favorites/search', {
-        ...params,
-        page: 1,
-        page_size: 10
+      const response = await BaseService.post('/favorites/search', {
+        filters: params.filters || {},
+        search_term: params.search_term || ""
       }) as SearchResponse;
 
-      const totalPages = firstResponse.total_pages;
-      let allEntries = [...firstResponse.entries];
-
-      const remainingPages = Array.from({ length: totalPages - 1 }, (_, i) => i + 2);
-      const remainingRequests = remainingPages.map(page =>
-        BaseService.post('/favorites/search', {
-          ...params,
-          page,
-          page_size: 10
-        })
-      );
-
-      const remainingResponses = await Promise.all(remainingRequests);
-      
-      remainingResponses.forEach(response => {
-        allEntries = [...allEntries, ...(response as SearchResponse).entries];
-      });
-
       return {
-        entries: allEntries,
-        total_documents: firstResponse.total_documents,
-        total_pages: totalPages,
-        current_page: 1,
-        page_size: allEntries.length
+        entries: response.entries,
+        total_documents: response.total_documents,
+        countries: response.countries,
+        years: response.years
       };
     } catch (error) {
       console.error('Error searching favorites:', error);
@@ -92,8 +70,7 @@ export const getFavoriteById = createAsyncThunk<GetFavoriteByIdResponse, string>
             $eq: tconst
           }
         },
-        page: 1,
-        page_size: 1
+        search_term: ""
       }) as SearchResponse;
 
       return {

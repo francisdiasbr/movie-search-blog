@@ -33,7 +33,7 @@ export default function Recommendations() {
 
   useEffect(() => {
     if (status === 'idle') {
-      dispatch(fetchRandomRecommendations({ count: 103, language })); // Busca todos
+      dispatch(fetchRandomRecommendations({ language })); // Busca todos
     }
   }, [dispatch, status, language]);
 
