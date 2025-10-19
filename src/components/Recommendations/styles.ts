@@ -91,19 +91,10 @@ export const MovieCard = styled.div`
   }
 `;
 
-export const Thumbnail = styled.div<{ $imageUrl?: string }>`
+export const Thumbnail = styled.div`
   width: 100%;
   height: 260px;
-  background: ${({ $imageUrl, theme }) =>
-    $imageUrl
-      ? `url(${$imageUrl}) center/cover no-repeat`
-      : theme.colors.border};
-  background-color: ${({ theme }) => theme.colors.background};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  font-size: 0.75rem;
+  overflow: hidden;
 
   @media (max-width: 768px) {
     height: 200px;

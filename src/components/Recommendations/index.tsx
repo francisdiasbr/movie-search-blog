@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { fetchRandomRecommendations } from '../../features/recommendations/recommendationsSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import Image from '../Image';
 import * as S from './styles';
 
 const translations = {
@@ -41,10 +42,11 @@ export default function Recommendations() {
     // Usa image_url do banco se disponível
     if (movie.image_url) {
       // Aumenta a resolução da imagem do IMDb substituindo os parâmetros
-      return movie.image_url.replace(/\._V1_.*?\.jpg/, '._V1_UX180_CR0,0,180,267_AL_.jpg');
+      // Usa resolução maior para melhor qualidade
+      return movie.image_url.replace(/\._V1_.*?\.jpg/, '._V1_UX400_CR0,0,400,600_AL_.jpg');
     }
-    // Fallback com resolução maior
-    return `https://m.media-amazon.com/images/M/${movie.tconst}_V1_UX180_CR0,0,180,267_AL_.jpg`;
+    // Fallback com resolução maior para melhor qualidade
+    return `https://m.media-amazon.com/images/M/${movie.tconst}_V1_UX400_CR0,0,400,600_AL_.jpg`;
   };
 
   const handleCardClick = (movie: any) => {
@@ -102,8 +104,12 @@ export default function Recommendations() {
               key={movie.tconst}
               onClick={() => handleCardClick(movie)}
             >
-              <S.Thumbnail $imageUrl={getThumbnailUrl(movie)}>
-                {!getThumbnailUrl(movie) && t.noImage}
+              <S.Thumbnail>
+                <Image 
+                  src={getThumbnailUrl(movie)} 
+                  alt={movie.title}
+                  fallbackText={t.noImage}
+                />
               </S.Thumbnail>
               <S.Info>
                 <S.MovieTitle title={movie.title}>

@@ -133,19 +133,40 @@ export default function MovieDetail() {
         setLoading(true);
         setError(null);
         
-        console.log(`🎬 [FRONTEND] Iniciando busca para filme: ${movieId} (idioma: ${language})`);
         const totalStart = performance.now();
 
-        // Busca informações do filme
-        console.log(`📊 [FRONTEND] Buscando dados do filme...`);
-        const movieStart = performance.now();
+        // ✅ NOVA OTIMIZAÇÃO: Tenta buscar cache completo primeiro
+        const cacheStart = performance.now();
+        
+        try {
+          const cacheResponse = await BaseService.get<any>(
+            `/movie-detail/${movieId}?language=${language}`,
+            {},
+            language
+          );
+          
+          if (cacheResponse && cacheResponse.movie) {
+            // Cache encontrado! Usa os dados do cache
+            setMovie(cacheResponse.movie);
+            setDirectorInfo(cacheResponse.director || null);
+            setSoundtrackInfo(cacheResponse.soundtrack || null);
+            
+            // Atualiza o título da página
+            document.title = `${cacheResponse.movie.title} (${cacheResponse.movie.year}) - Movie Search Blog`;
+            
+            setLoading(false);
+            return;
+          }
+        } catch (cacheError) {
+          // Cache não disponível, continua com busca normal
+        }
+
+        // Se não tem cache, busca dados normalmente
         const movieResponse = await BaseService.get<{ data: Recommendation[] }>(
           `/recommendations/all?search_term=${movieId}&page_size=1`,
           {},
           language
         );
-        const movieTime = performance.now() - movieStart;
-        console.log(`📊 [FRONTEND] Dados do filme: ${movieTime.toFixed(2)}ms`);
 
         if (movieResponse.entries && movieResponse.entries.length > 0) {
           const movieData = movieResponse.entries[0];
@@ -166,7 +187,6 @@ export default function MovieDetail() {
                 language
               ).then(response => ({ type: 'director', data: response }))
               .catch(error => {
-                console.warn('Could not fetch director info:', error);
                 return { type: 'director', data: null };
               })
             );
@@ -180,17 +200,12 @@ export default function MovieDetail() {
               language
             ).then(response => ({ type: 'soundtrack', data: response }))
             .catch(error => {
-              console.warn('Could not fetch soundtrack info:', error);
               return { type: 'soundtrack', data: null };
             })
           );
 
           // Executa todas as requisições em paralelo
-          console.log(`🚀 [FRONTEND] Executando ${promises.length} requisições em paralelo...`);
-          const parallelStart = performance.now();
           const results = await Promise.all(promises);
-          const parallelTime = performance.now() - parallelStart;
-          console.log(`📊 [FRONTEND] Requisições paralelas: ${parallelTime.toFixed(2)}ms`);
           
           // Processa os resultados
           results.forEach(result => {
@@ -200,14 +215,10 @@ export default function MovieDetail() {
               setSoundtrackInfo(result.data);
             }
           });
-          
-          const totalTime = performance.now() - totalStart;
-          console.log(`✅ [FRONTEND] Total: ${totalTime.toFixed(2)}ms`);
         } else {
           setError(t.notFound);
         }
       } catch (err) {
-        console.error('Error fetching movie details:', err);
         setError(t.error);
       } finally {
         setLoading(false);
