@@ -3,7 +3,6 @@ import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 import BaseService from '../../api/service';
-import { searchBlogPosts } from '../blogPost/searchBlogPostSlice';
 import { fetchAllAuthoralReviews } from '../writeReviews/writeReviewsSlice';
 import { CombinedResponse, SearchParams, BlogPostCard, BlogPostCardsResponse } from './types';
 
@@ -62,8 +61,13 @@ export const fetchBlogPostCards = createAsyncThunk<BlogPostCardsResponse, Search
 export const fetchBlogPostsAndReviews = createAsyncThunk<CombinedResponse, SearchParams>(
   'blogPosts/fetchBlogPostsAndReviews',
   async (params, { dispatch }) => {
+    // Usa o mesmo endpoint otimizado /home/cards para garantir imageUrl do S3
     const [blogPostsResponse, reviewsResponse] = await Promise.all([
-      dispatch(searchBlogPosts(params)).unwrap(),
+      dispatch(fetchBlogPostCards({
+        filters: params.filters || {},
+        page: params.page || 1,
+        pageSize: params.pageSize || 10,
+      })).unwrap(),
       dispatch(fetchAllAuthoralReviews({
         filters: params.filters || {},
         page: 1,
@@ -73,14 +77,7 @@ export const fetchBlogPostsAndReviews = createAsyncThunk<CombinedResponse, Searc
 
     return {
       blogPosts: {
-        entries: blogPostsResponse.entries.map(post => ({
-          ...post,
-          imageUrl: post.poster_url || post.images?.find(img => 
-            img.startsWith('http') && 
-            !img.includes('encrypted-tbn') && 
-            !img.includes('googlelogo')
-          ) || undefined
-        })) || []
+        entries: blogPostsResponse.entries || []
       },
       reviews: {
         entries: (reviewsResponse as any)?.entries || []
@@ -124,10 +121,8 @@ const blogPostsAndReviewsSlice = createSlice({
         state.status = 'succeeded';
         state.data = {
           blogPosts: {
-            entries: action.payload.blogPosts.entries.map(post => ({
-              ...post,
-              created_at: formatDateFromISO(post.created_at),
-            })),
+            // blogPosts já vêm formatados com imageUrl do S3 do fetchBlogPostCards
+            entries: action.payload.blogPosts.entries
           },
           reviews: {
             entries: action.payload.reviews.entries.map(review => ({

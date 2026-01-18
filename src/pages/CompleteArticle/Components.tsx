@@ -23,7 +23,6 @@ export function SpotifyEmbed({ url }: { url: string }) {
   if (!url) return null;
   const match = url.match(/spotify\.com\/(album|artist|playlist|episode|show|track)\/([^/?]+)/);
   if (!match) {
-    console.warn('URL do Spotify inválida:', url);
     return null;
   }
   const [, type, id] = match;
@@ -89,11 +88,13 @@ export function RecommendedArticles({ currentMovieId }: { currentMovieId?: strin
     return filteredArticles.slice(0, 3);
   }, [data, currentMovieId]);
 
-  // Carregar imagens de capa para os artigos recomendados
+  // Não precisa mais buscar imagens - elas já vêm do /home/cards (mesma lógica da Home)
+  // Mantido apenas para reviews que não têm imageUrl do S3
   useEffect(() => {
     if (recommendedArticles.length > 0) {
       recommendedArticles.forEach(article => {
-        if (!coverImages[article.tconst]) {
+        // Só busca para reviews que não têm imageUrl (blog posts já vêm com imageUrl do S3)
+        if (!article.imageUrl && !coverImages[article.tconst]) {
           dispatch(fetchCoverImage({ tconst: article.tconst }));
         }
       });
@@ -122,20 +123,29 @@ export function RecommendedArticles({ currentMovieId }: { currentMovieId?: strin
         {language === 'pt' ? 'Você também poderá gostar de:' : 'You might also like:'}
       </S.RecommendedTitle>
       <S.RecommendedGrid>
-        {recommendedArticles.map((article) => (
-          <Card
-            key={article.tconst}
-            post={{
-              ...article,
-              title: article.primaryTitle,
-              created_at: formatDate(parseDate(article.created_at)),
-              imageUrl: coverImages[article.tconst]
-                ? encodeURI(coverImages[article.tconst])
-                : (article.imageUrl ? encodeURI(article.imageUrl) : undefined)
-            }}
-            onClick={() => handleCardClick(article)}
-          />
-        ))}
+        {recommendedArticles.map((article) => {
+          // Prioridade: 1) imageUrl dos dados, 2) coverImages do Redux, 3) undefined
+          const imageUrl = article.imageUrl 
+            ? encodeURI(article.imageUrl)
+            : (coverImages[article.tconst] 
+              ? encodeURI(coverImages[article.tconst]) 
+              : undefined);
+          
+          return (
+            <Card
+              key={article.tconst}
+              post={{
+                ...article,
+                title: article.primaryTitle,
+                primaryTitle: article.primaryTitle,
+                created_at: formatDate(parseDate(article.created_at)),
+                imageUrl,
+                content: { pt: {}, en: {} },
+              }}
+              onClick={() => handleCardClick(article)}
+            />
+          );
+        })}
       </S.RecommendedGrid>
     </S.RecommendedSection>
   );
