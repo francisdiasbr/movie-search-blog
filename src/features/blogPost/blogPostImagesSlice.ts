@@ -10,8 +10,6 @@ interface UploadImageState {
   coverImages: Record<string, string>;
 }
 
-const CACHE_KEY = 'coverImagesCache';
-
 const CACHE_NAME = 'movie-images-cache';
 
 const loadFromCache = async (tconst: string): Promise<string | null> => {
@@ -32,8 +30,8 @@ const saveToCache = async (tconst: string, response: Response) => {
   try {
     const cache = await caches.open(CACHE_NAME);
     await cache.put(`/images/${tconst}`, response.clone());
-  } catch (error) {
-    console.warn('Erro ao salvar no cache:', error);
+  } catch {
+    // Cache API não disponível ou erro ao salvar - continua sem cache
   }
 };
 
@@ -68,7 +66,6 @@ export const fetchAllImageUrls = createAsyncThunk(
         })),
       };
     } catch (error) {
-      console.error('Error in fetchAllImageUrls:', error);
       return rejectWithValue('Error fetching images');
     }
   }
@@ -80,11 +77,13 @@ export const fetchCoverImage = createAsyncThunk(
     try {
       // Tenta carregar do cache primeiro
       const cachedUrl = await loadFromCache(tconst);
+      
       if (cachedUrl) {
         return { tconst, coverUrl: cachedUrl };
       }
 
       const response = await baseService.get(`/images/${tconst}`) as ImageResponse;
+      
       await saveToCache(tconst, new Response(JSON.stringify(response)));
       
       return {
@@ -126,15 +125,6 @@ const uploadImagesSlice = createSlice({
       .addCase(fetchCoverImage.fulfilled, (state, action) => {
         if (action.payload.coverUrl) {
           state.coverImages[action.payload.tconst] = action.payload.coverUrl;
-          // Atualiza o cache
-          try {
-            localStorage.setItem(CACHE_KEY, JSON.stringify({
-              timestamp: Date.now(),
-              data: state.coverImages
-            }));
-          } catch (error) {
-            console.warn('Erro ao salvar cache:', error);
-          }
         }
       });
   },

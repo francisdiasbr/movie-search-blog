@@ -71,13 +71,6 @@ class BaseService {
     try {
       const response = await fetch(url, options);
 
-      // console.log('API Response:', {
-      //   status: response.status,
-      //   url,
-      //   method,
-      //   response,
-      // });
-
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
         const error = new Error(
@@ -94,15 +87,10 @@ class BaseService {
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.includes('application/json')) {
         const data = await response.json();
-        // console.log('Response data:', data);
         return data;
       }
       return response.statusText as T;
-    } catch (error) {
-      console.error(
-        `API call error with ${method} request from url ${url}:`,
-        error
-      );
+    } catch (error: any) {
       throw error;
     }
   }

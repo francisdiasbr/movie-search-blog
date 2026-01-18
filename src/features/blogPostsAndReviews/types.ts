@@ -22,4 +22,18 @@ export interface SearchParams {
   };
   page: number;
   pageSize: number;
+}
+
+// Interface para cards otimizados
+export interface BlogPostCard {
+  tconst: string;
+  primaryTitle: string;
+  created_at: string;
+  imageUrl?: string;
+  _id?: string; // Opcional para compatibilidade
+}
+
+export interface BlogPostCardsResponse {
+  entries: BlogPostCard[];
+  total_documents: number;
 } 

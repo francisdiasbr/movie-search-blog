@@ -2,16 +2,16 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
-import { RootState } from '../../store/types';
+import BaseService from '../../api/service';
 import { searchBlogPosts } from '../blogPost/searchBlogPostSlice';
 import { fetchAllAuthoralReviews } from '../writeReviews/writeReviewsSlice';
-import { CombinedResponse, SearchParams } from './types';
+import { CombinedResponse, SearchParams, BlogPostCard, BlogPostCardsResponse } from './types';
 
 interface CombinedState {
   data: CombinedResponse | null;
+  cardsData: BlogPostCardsResponse | null; // Dados otimizados para cards
   error: string | null;
   status: 'failed' | 'idle' | 'loading' | 'succeeded';
-  lastFetched: number | null;
 }
 
 const initialState: CombinedState = {
@@ -19,9 +19,9 @@ const initialState: CombinedState = {
     blogPosts: { entries: [] },
     reviews: { entries: [] }
   },
+  cardsData: null,
   error: null,
   status: 'idle',
-  lastFetched: null,
 };
 
 const formatDateFromISO = (dateString: string) => {
@@ -35,18 +35,33 @@ const formatDateFromISO = (dateString: string) => {
   }
 };
 
+// Action otimizada para buscar apenas dados dos cards
+export const fetchBlogPostCards = createAsyncThunk<BlogPostCardsResponse, SearchParams>(
+  'blogPosts/fetchBlogPostCards',
+  async (params = { filters: {}, page: 1, page_size: 10 }) => {
+    const response = await BaseService.post<BlogPostCardsResponse>(
+      '/home/cards',
+      {
+        filters: params.filters || {},
+        page: params.page || 1,
+        page_size: params.pageSize || 10,
+      }
+    );
+    
+    // Formata data ISO para formato brasileiro
+    return {
+      ...response,
+      entries: response.entries.map(card => ({
+        ...card,
+        created_at: formatDateFromISO(card.created_at),
+      })),
+    };
+  }
+);
+
 export const fetchBlogPostsAndReviews = createAsyncThunk<CombinedResponse, SearchParams>(
   'blogPosts/fetchBlogPostsAndReviews',
-  async (params, { dispatch, getState }) => {
-    const state = getState() as RootState;
-    const lastFetched = state.blogPostsAndReviews.lastFetched;
-    const cacheTimeout = 50 * 60 * 1000; // 5 minutos
-
-    // Verifica se os dados em cache ainda são válidos
-    if (lastFetched && Date.now() - lastFetched < cacheTimeout) {
-      return state.blogPostsAndReviews.data as CombinedResponse;
-    }
-
+  async (params, { dispatch }) => {
     const [blogPostsResponse, reviewsResponse] = await Promise.all([
       dispatch(searchBlogPosts(params)).unwrap(),
       dispatch(fetchAllAuthoralReviews({
@@ -80,12 +95,27 @@ const blogPostsAndReviewsSlice = createSlice({
   reducers: {
     clearState: (state) => {
       state.data = null;
+      state.cardsData = null;
       state.status = 'idle';
       state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
+      // Reducers para fetchBlogPostCards (endpoint otimizado)
+      .addCase(fetchBlogPostCards.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(fetchBlogPostCards.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.cardsData = action.payload;
+      })
+      .addCase(fetchBlogPostCards.rejected, (state) => {
+        state.status = 'failed';
+        state.error = 'Falha ao carregar cards. Por favor, tente novamente mais tarde.';
+      })
+      // Reducers para fetchBlogPostsAndReviews (endpoint completo - mantido para compatibilidade)
       .addCase(fetchBlogPostsAndReviews.pending, (state) => {
         state.status = 'loading';
         state.error = null;
@@ -106,7 +136,6 @@ const blogPostsAndReviewsSlice = createSlice({
             })),
           },
         };
-        state.lastFetched = Date.now();
       })
       .addCase(fetchBlogPostsAndReviews.rejected, (state) => {
         state.status = 'failed';

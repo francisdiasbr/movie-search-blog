@@ -20,13 +20,16 @@ export const fetchBlogPost = createAsyncThunk<BlogPostEntry, string>(
   'blogPost/fetchById',
   async movieId => {
     try {
-      const response = await BaseService.get<BlogPostEntry>(
+      const response = await BaseService.get<{ data: BlogPostEntry }>(
         `/generate-blogpost/${movieId}`
       );
-      // console.log('API Response:', response);
-      return response;
-    } catch (error) {
-      console.error('Error fetching blog post:', error);
+      // O backend retorna { data: blog_post }, então extraímos o campo data
+      return response.data;
+    } catch (error: any) {
+      // Se for 404, retornamos null em vez de lançar erro
+      if (error.response?.status === 404) {
+        return null as any;
+      }
       throw error;
     }
   }
@@ -56,8 +59,9 @@ const blogPostSlice = createSlice({
             created_at: formatDate(action.payload.created_at),
           };
         } else {
-          console.error('Payload is undefined');
+          state.data = null;
         }
+        state.error = null;
       })
       .addCase(fetchBlogPost.rejected, state => {
         state.status = 'failed';

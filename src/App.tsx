@@ -2,7 +2,6 @@ import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 
-import './index.css';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { ThemeProvider } from './contexts/ThemeProvider';
 import { useTheme } from './contexts/useTheme';

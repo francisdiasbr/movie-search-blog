@@ -1,13 +1,10 @@
-import { useMemo } from 'react';
-
-import Card from '../../components/Card';
 import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { NoPostsMessage } from '../../components/NoPostsMessage';
-import Recommendations from '../../components/Recommendations';
 import { useBlogPosts } from '../../hooks/useBlogPosts';
+import { PostCardList } from './components/PostCardList';
 import * as S from './styles';
-
 export default function Home() {
   const {
     error,
@@ -15,55 +12,26 @@ export default function Home() {
     entries,
     hasEntries,
     handleCardClick,
-    parseDate,
-    formatDate,
-    coverImages
   } = useBlogPosts();
-  
-  const memoizedCards = useMemo(() => {
-    if (!hasEntries || status !== 'succeeded') return null;
 
-    const cards = entries.map((post, index) => {
-      return (
-        <Card
-          key={post.tconst}
-          post={{
-            ...post,
-            title: post.primaryTitle,
-            created_at: formatDate(parseDate(post.created_at)),
-            imageUrl: coverImages[post.tconst]
-              ? encodeURI(coverImages[post.tconst])
-              : (post.imageUrl ? encodeURI(post.imageUrl) : undefined)
-          }}
-          onClick={() => handleCardClick(post)}
-          isFirst={index === 0}
-        />
-      );
-    });
+  if (error) {
+    return <ErrorMessage message={error} />;
+  }
 
-    if (cards.length > 1) {
-      cards.splice(1, 0, <div key="break" className="card-break" />);
-    }
-
-    return cards;
-  }, [entries, status, coverImages]);
-
-  if (error) return <ErrorMessage message={error} />;
+  const isLoading = status === 'loading';
+  const showNoPosts = status === 'succeeded' && !hasEntries;
+  const showGrid = status === 'succeeded' && hasEntries;
 
   return (
     <Layout>
-      <Recommendations />
-      {status === 'loading' && (
-        <S.LoadingContainer>
-          <S.ActivityIndicator>
-            <span />
-          </S.ActivityIndicator>
-        </S.LoadingContainer>
-      )}
-      {status === 'succeeded' && !hasEntries && <NoPostsMessage />}
-      {status === 'succeeded' && hasEntries && (
+      {isLoading && <LoadingSpinner />}
+      {showNoPosts && <NoPostsMessage />}
+      {showGrid && (
         <S.GridContainer>
-          {memoizedCards}
+          <PostCardList
+            posts={entries}
+            onCardClick={handleCardClick}
+          />
         </S.GridContainer>
       )}
     </Layout>

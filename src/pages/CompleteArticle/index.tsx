@@ -45,13 +45,19 @@ function CompleteArticle() {
     };
   }, [dispatch, movieId]);
 
-  if ((blogPost.error && !blogPost.data) || (review.error && !review.data)) {
-    return <ErrorMessage message={blogPost.error || review.error || 'Erro desconhecido'} />;
-  }
   if (blogPost.status === 'loading' || review.status === 'loading' || favoritesLoading) {
     return <Layout><SkeletonBlogPost /></Layout>;
   }
-  if (!blogPost.data && !review.data) return null;
+  
+  // Só mostra erro se ambos falharem e nenhum tiver dados
+  const hasError = (blogPost.error && !blogPost.data) && (review.error && !review.data);
+  const hasData = blogPost.data || review.data;
+  
+  if (hasError && !hasData) {
+    return <ErrorMessage message={blogPost.error || review.error || 'Erro desconhecido'} />;
+  }
+  
+  if (!hasData) return null;
 
   const hasImages = imageUrls && imageUrls.length > 0;
   const heroImage = hasImages ? imageUrls[0] : null;
