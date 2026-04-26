@@ -9,7 +9,6 @@ import * as S from './styles';
 
 const translations = {
   pt: {
-    back: 'Voltar',
     imdbButton: 'Ver no IMDb',
     director: 'Diretor',
     directors: 'Diretores',
@@ -40,7 +39,6 @@ const translations = {
     errorLoadingMovieInfo: 'Erro ao carregar informações do filme'
   },
   en: {
-    back: 'Back',
     imdbButton: 'View on IMDb',
     director: 'Director',
     directors: 'Directors',
@@ -181,9 +179,7 @@ export default function MovieDetail() {
                 {},
                 language
               ).then(response => ({ type: 'director', data: response }))
-              .catch(error => {
-                return { type: 'director', data: null };
-              })
+              .catch(() => ({ type: 'director', data: null }))
             );
           }
 
@@ -194,9 +190,7 @@ export default function MovieDetail() {
               {},
               language
             ).then(response => ({ type: 'soundtrack', data: response }))
-            .catch(error => {
-              return { type: 'soundtrack', data: null };
-            })
+            .catch(() => ({ type: 'soundtrack', data: null }))
           );
 
           // Executa todas as requisições em paralelo

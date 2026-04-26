@@ -53,11 +53,7 @@ export const fetchAllAuthoralReviews = createAsyncThunk(
 const allAuthoralReviewsSlice = createSlice({
   initialState,
   name: 'reviews',
-  reducers: {
-    clearAuthoralReviewStatus(state) {
-      state.status = 'idle';
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllAuthoralReviews.pending, (state) => {
@@ -74,7 +70,5 @@ const allAuthoralReviewsSlice = createSlice({
       });
   },
 });
-
-export const { clearAuthoralReviewStatus } = allAuthoralReviewsSlice.actions;
 
 export default allAuthoralReviewsSlice.reducer;

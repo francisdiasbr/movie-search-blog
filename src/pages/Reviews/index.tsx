@@ -35,13 +35,10 @@ export default function Reviews() {
       <Card
         key={post.tconst}
         post={{
-          _id: post._id,
           tconst: post.tconst,
-          title: post.primaryTitle,
           primaryTitle: post.primaryTitle,
           created_at: post.created_at,
           imageUrl: post.imageUrl ? encodeURI(post.imageUrl) : undefined,
-          content: { pt: {}, en: {} },
         }}
         onClick={() => navigate(`/article/${post.tconst}`)}
         isFirst={index === 0}

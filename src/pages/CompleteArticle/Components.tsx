@@ -135,12 +135,10 @@ export function RecommendedArticles({ currentMovieId }: { currentMovieId?: strin
             <Card
               key={article.tconst}
               post={{
-                ...article,
-                title: article.primaryTitle,
+                tconst: article.tconst,
                 primaryTitle: article.primaryTitle,
                 created_at: formatDate(parseDate(article.created_at)),
                 imageUrl,
-                content: { pt: {}, en: {} },
               }}
               onClick={() => handleCardClick(article)}
             />

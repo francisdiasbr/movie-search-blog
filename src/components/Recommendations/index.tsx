@@ -28,7 +28,7 @@ export default function Recommendations() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { language } = useLanguage();
-  const { data, status, error, total } = useAppSelector((state) => state.recommendations);
+  const { data, status, error } = useAppSelector((state) => state.recommendations);
   
   const t = translations[language];
 

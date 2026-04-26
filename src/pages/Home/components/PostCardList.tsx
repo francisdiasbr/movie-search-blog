@@ -14,13 +14,10 @@ export const PostCardList = ({ posts, onCardClick }: PostCardListProps) => {
       <Card
         key={post.tconst}
         post={{
-          _id: post._id || post.tconst,
           tconst: post.tconst,
-          title: post.primaryTitle,
           primaryTitle: post.primaryTitle,
           created_at: post.created_at,
           imageUrl: post.imageUrl ? encodeURI(post.imageUrl) : undefined,
-          content: { pt: {}, en: {} },
         }}
         onClick={() => onCardClick(post)}
         isFirst={index === 0}
