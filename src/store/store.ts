@@ -2,9 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import authoralReviewReducer from '../features/authoralReview/authoralReviewSlice';
 import blogPostImagesReducer from '../features/blogPost/blogPostImagesSlice';
-import uploadImagesReducer from '../features/blogPost/blogPostImagesSlice';
 import blogPostReducer from '../features/blogPost/blogPostSlice';
-import searchBlogPostReducer from '../features/blogPost/searchBlogPostSlice';
 import blogPostsAndReviewsReducer from '../features/blogPostsAndReviews/blogPostsAndReviewsSlice';
 import favoritesReducer from '../features/favorites/favoritesSlice';
 import recommendationsReducer from '../features/recommendations/recommendationsSlice';
@@ -18,9 +16,7 @@ export const store = configureStore({
     blogPostsAndReviews: blogPostsAndReviewsReducer,
     favorites: favoritesReducer,
     recommendations: recommendationsReducer,
-    searchBlogPost: searchBlogPostReducer,
     writeReviews: writeReviewsReducer,
-    uploadImages: uploadImagesReducer,
   },
 });
 

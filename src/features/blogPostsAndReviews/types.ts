@@ -1,8 +1,6 @@
 import { BlogPostEntry } from '../blogPost/types';
 import { MovieReviewResponse } from '../writeReviews/types';
 
-export type CombinedEntry = BlogPostEntry | MovieReviewResponse;
-
 export interface CombinedResponse {
   blogPosts: {
     entries: BlogPostEntry[];

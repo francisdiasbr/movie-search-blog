@@ -68,7 +68,7 @@ export function RecommendedArticles({ currentMovieId }: { currentMovieId?: strin
   const dispatch = useAppDispatch();
   
   const { data } = useAppSelector((state: RootState) => state.blogPostsAndReviews);
-  const coverImages = useAppSelector((state: RootState) => state.uploadImages.coverImages);
+  const coverImages = useAppSelector((state: RootState) => state.blogPostImages.coverImages);
 
   const recommendedArticles = useMemo(() => {
     if (!data) return [];
