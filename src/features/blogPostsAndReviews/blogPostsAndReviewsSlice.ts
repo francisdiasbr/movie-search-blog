@@ -89,14 +89,7 @@ export const fetchBlogPostsAndReviews = createAsyncThunk<CombinedResponse, Searc
 const blogPostsAndReviewsSlice = createSlice({
   name: 'blogPostsAndReviews',
   initialState,
-  reducers: {
-    clearState: (state) => {
-      state.data = null;
-      state.cardsData = null;
-      state.status = 'idle';
-      state.error = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       // Reducers para fetchBlogPostCards (endpoint otimizado)
@@ -139,5 +132,4 @@ const blogPostsAndReviewsSlice = createSlice({
   },
 });
 
-export const { clearState } = blogPostsAndReviewsSlice.actions;
 export default blogPostsAndReviewsSlice.reducer; 

@@ -133,11 +133,6 @@ export default function MovieDetail() {
         setLoading(true);
         setError(null);
         
-        const totalStart = performance.now();
-
-        // ✅ NOVA OTIMIZAÇÃO: Tenta buscar cache completo primeiro
-        const cacheStart = performance.now();
-        
         try {
           const cacheResponse = await BaseService.get<any>(
             `/movie-detail/${movieId}?language=${language}`,

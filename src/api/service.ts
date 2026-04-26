@@ -68,31 +68,27 @@ class BaseService {
       options.body = JSON.stringify(body);
     }
 
-    try {
-      const response = await fetch(url, options);
+    const response = await fetch(url, options);
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        const error = new Error(
-          `HTTP error! status: ${response.status}`
-        ) as Error & {
-          response: Response;
-          data?: unknown;
-        };
-        error.response = response;
-        error.data = errorData;
-        throw error;
-      }
-
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        const data = await response.json();
-        return data;
-      }
-      return response.statusText as T;
-    } catch (error: any) {
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      const error = new Error(
+        `HTTP error! status: ${response.status}`
+      ) as Error & {
+        response: Response;
+        data?: unknown;
+      };
+      error.response = response;
+      error.data = errorData;
       throw error;
     }
+
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      const data = await response.json();
+      return data;
+    }
+    return response.statusText as T;
   }
 }
 
