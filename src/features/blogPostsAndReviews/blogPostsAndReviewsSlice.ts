@@ -4,7 +4,7 @@ import { ptBR } from 'date-fns/locale';
 
 import BaseService from '../../api/service';
 import { fetchAllAuthoralReviews } from '../writeReviews/writeReviewsSlice';
-import { CombinedResponse, SearchParams, BlogPostCard, BlogPostCardsResponse } from './types';
+import { CombinedResponse, SearchParams, BlogPostCardsResponse } from './types';
 
 interface CombinedState {
   data: CombinedResponse | null;
@@ -37,7 +37,7 @@ const formatDateFromISO = (dateString: string) => {
 // Action otimizada para buscar apenas dados dos cards
 export const fetchBlogPostCards = createAsyncThunk<BlogPostCardsResponse, SearchParams>(
   'blogPosts/fetchBlogPostCards',
-  async (params = { filters: {}, page: 1, page_size: 10 }) => {
+  async (params = { filters: {}, page: 1, pageSize: 10 }) => {
     const response = await BaseService.post<BlogPostCardsResponse>(
       '/home/cards',
       {
