@@ -40,46 +40,36 @@ interface GetFavoriteByIdResponse {
 
 export const searchFavorites = createAsyncThunk<SearchResponse, SearchParams>(
   'favorites/search',
-  async (params = { filters: {}, search_term: "" }) => {
-    try {
-      const response = await BaseService.post('/favorites/search', {
-        filters: params.filters || {},
-        search_term: params.search_term || ""
-      }) as SearchResponse;
+  async (params = { filters: {}, search_term: '' }) => {
+    const response = await BaseService.post('/favorites/search', {
+      filters: params.filters || {},
+      search_term: params.search_term || '',
+    }) as SearchResponse;
 
-      return {
-        entries: response.entries,
-        total_documents: response.total_documents,
-        countries: response.countries,
-        years: response.years
-      };
-    } catch (error) {
-      console.error('Error searching favorites:', error);
-      throw error;
-    }
+    return {
+      entries: response.entries,
+      total_documents: response.total_documents,
+      countries: response.countries,
+      years: response.years,
+    };
   }
 );
 
 export const getFavoriteById = createAsyncThunk<GetFavoriteByIdResponse, string>(
   'favorites/getById',
   async (tconst) => {
-    try {
-      const response = await BaseService.post('/favorites/search', {
-        filters: {
-          tconst: {
-            $eq: tconst
-          }
-        },
-        search_term: ""
-      }) as SearchResponse;
+    const response = await BaseService.post('/favorites/search', {
+      filters: {
+        tconst: {
+          $eq: tconst
+        }
+      },
+      search_term: '',
+    }) as SearchResponse;
 
-      return {
-        entry: response.entries.length > 0 ? response.entries[0] : null
-      };
-    } catch (error) {
-      console.error('Error fetching favorite:', error);
-      throw error;
-    }
+    return {
+      entry: response.entries.length > 0 ? response.entries[0] : null
+    };
   }
 );
 

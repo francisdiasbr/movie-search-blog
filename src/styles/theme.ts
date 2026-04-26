@@ -40,7 +40,7 @@ export const lightTheme = {
     primary: "'Roboto', sans-serif",
     secondary: "'Montserrat', sans-serif",
     tertiary: "'Old Standard TT', serif",
-    neueMontreal: "Arial, sans-serif"
+    neueMontreal: 'Arial, sans-serif'
   },
 };
 
@@ -86,7 +86,7 @@ export const darkTheme = {
     primary: "'Roboto', sans-serif",
     secondary: "'Montserrat', sans-serif",
     tertiary: "'Old Standard TT', serif",
-    neueMontreal: "Arial, sans-serif"
+    neueMontreal: 'Arial, sans-serif'
   },
 };
 

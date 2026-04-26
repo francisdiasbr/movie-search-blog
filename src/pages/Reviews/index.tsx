@@ -22,9 +22,7 @@ export default function Reviews() {
     }
   }, [status, dispatch]);
 
-  const entries: MovieReviewResponse[] = useMemo(() => {
-    return (data as any)?.entries ?? [];
-  }, [data]);
+  const entries: MovieReviewResponse[] = useMemo(() => data?.entries ?? [], [data]);
 
   const hasEntries = entries.length > 0;
 

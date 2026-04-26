@@ -5,7 +5,7 @@ import { MovieReviewResponse } from './types';
 
 
 interface MovieReviewState {
-  data: MovieReviewResponse | null;
+  data: { entries: MovieReviewResponse[]; total_documents: number } | null;
   error: unknown;
   status: 'failed' | 'idle' | 'loading' | 'succeeded';
 }
@@ -33,19 +33,16 @@ export const fetchAllAuthoralReviews = createAsyncThunk(
         page_size: params.pageSize,
       };
       const response = await BaseService.post(url, fetchBody);
-      // console.log('response fetchAllAuthoralReviews', response);
       if (response) {
         return response;
       } else {
         throw new Error('Invalid response format');
       }
     } catch (error) {
-      console.error('Error fetching all Authoral reviews:', error);
       if (error instanceof Error) {
         return rejectWithValue(error.message);
-      } else {
-        return rejectWithValue('An unexpected error occurred');
       }
+      return rejectWithValue('An unexpected error occurred');
     }
   }
 );
@@ -60,9 +57,8 @@ const allAuthoralReviewsSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(fetchAllAuthoralReviews.fulfilled, (state, action) => {
-        const payload = action.payload as MovieReviewResponse;
         state.status = 'succeeded';
-        state.data = payload;
+        state.data = action.payload as { entries: MovieReviewResponse[]; total_documents: number };
       })
       .addCase(fetchAllAuthoralReviews.rejected, (state, action) => {
         state.status = 'failed';

@@ -10,9 +10,9 @@ import prettier from 'eslint-plugin-prettier';
 import parser from '@typescript-eslint/parser';
 
 export default [
+  { ignores: ['dist'] },
   js.configs.recommended,
   {
-    ignores: ['dist'],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,

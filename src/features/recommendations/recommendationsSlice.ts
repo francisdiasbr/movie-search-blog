@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
 import BaseService from '../../api/service';
 import { RecommendationsState } from './types';
 
@@ -13,7 +14,7 @@ export const fetchRandomRecommendations = createAsyncThunk(
   'recommendations/fetchRandom',
   async ({ language = 'pt' }: { language?: string } = {}) => {
     const response = await BaseService.get<{ data: any[]; total: number }>(
-      `/recommendations/random`,
+      '/recommendations/random',
       {},
       language
     );

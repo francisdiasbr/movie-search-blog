@@ -2,10 +2,10 @@ import { useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Card from '../../components/Card';
-import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import { RootState } from '../../store/store';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { fetchCoverImage } from '../../features/blogPost/blogPostImagesSlice';
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
+import { RootState } from '../../store/store';
 import * as S from './styles';
 
 export function Section({ title, content }: { title?: string; content: string }) {

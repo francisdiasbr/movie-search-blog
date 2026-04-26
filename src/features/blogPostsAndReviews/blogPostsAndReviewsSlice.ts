@@ -3,6 +3,7 @@ import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 import BaseService from '../../api/service';
+import { MovieReviewResponse } from '../writeReviews/types';
 import { fetchAllAuthoralReviews } from '../writeReviews/writeReviewsSlice';
 import { CombinedResponse, SearchParams, BlogPostCardsResponse } from './types';
 
@@ -80,7 +81,7 @@ export const fetchBlogPostsAndReviews = createAsyncThunk<CombinedResponse, Searc
         entries: blogPostsResponse.entries || []
       },
       reviews: {
-        entries: (reviewsResponse as any)?.entries || []
+        entries: (reviewsResponse as { entries: MovieReviewResponse[] })?.entries || []
       }
     };
   }
@@ -114,7 +115,6 @@ const blogPostsAndReviewsSlice = createSlice({
         state.status = 'succeeded';
         state.data = {
           blogPosts: {
-            // blogPosts já vêm formatados com imageUrl do S3 do fetchBlogPostCards
             entries: action.payload.blogPosts.entries
           },
           reviews: {
@@ -132,4 +132,4 @@ const blogPostsAndReviewsSlice = createSlice({
   },
 });
 
-export default blogPostsAndReviewsSlice.reducer; 
+export default blogPostsAndReviewsSlice.reducer;
