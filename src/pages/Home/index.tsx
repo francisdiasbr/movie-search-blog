@@ -5,6 +5,7 @@ import { NoPostsMessage } from '../../components/NoPostsMessage';
 import { useBlogPosts } from '../../hooks/useBlogPosts';
 import { PostCardList } from './components/PostCardList';
 import * as S from './styles';
+
 export default function Home() {
   const {
     error,
@@ -14,19 +15,13 @@ export default function Home() {
     handleCardClick,
   } = useBlogPosts();
 
-  if (error) {
-    return <ErrorMessage message={error} />;
-  }
-
-  const isLoading = status === 'loading';
-  const showNoPosts = status === 'succeeded' && !hasEntries;
-  const showGrid = status === 'succeeded' && hasEntries;
+  if (error) return <ErrorMessage message={error} />;
 
   return (
     <Layout>
-      {isLoading && <LoadingSpinner />}
-      {showNoPosts && <NoPostsMessage />}
-      {showGrid && (
+      {status === 'loading' && <LoadingSpinner />}
+      {status === 'succeeded' && !hasEntries && <NoPostsMessage />}
+      {status === 'succeeded' && hasEntries && (
         <S.GridContainer>
           <PostCardList
             posts={entries}
