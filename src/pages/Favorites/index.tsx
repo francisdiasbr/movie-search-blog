@@ -11,6 +11,10 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/types';
 import * as S from './styles';
 
+// A API pagina com 10 por padrão e não tem um modo "todos"; a lista de A a Z
+// precisa da coleção inteira, então pede uma página maior que ela.
+const ALL_FAVORITES_PAGE_SIZE = 1000;
+
 const translations = {
   pt: {
     title: 'Filmes de A a Z',
@@ -34,7 +38,7 @@ export default function Favorites() {
 
   useEffect(() => {
     if (!initialFetchDone) {
-      dispatch(searchFavorites({}));
+      dispatch(searchFavorites({ page: 1, pageSize: ALL_FAVORITES_PAGE_SIZE }));
       dispatch(fetchBlogPostsAndReviews({ page: 1, pageSize: 100 }));
     }
   }, [dispatch, initialFetchDone]);

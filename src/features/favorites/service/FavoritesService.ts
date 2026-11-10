@@ -13,6 +13,8 @@ class FavoritesService extends BaseService {
   search(params: FavoritesSearchParams = {}): Promise<FavoritesSearchResponse> {
     const body = {
       filters: params.filters ?? {},
+      page: params.page,
+      page_size: params.pageSize,
       search_term: params.searchTerm ?? '',
     };
     return this.post(body, this.path('search'));

@@ -19,6 +19,8 @@ export interface FavoritesEntry {
 }
 export interface FavoritesSearchParams {
   filters?: unknown;
+  page?: number;
+  pageSize?: number;
   searchTerm?: string;
 }
 
