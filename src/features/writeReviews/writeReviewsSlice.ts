@@ -1,13 +1,14 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-import BaseService from '../../api/service';
-import { MovieReviewResponse } from './types';
-
+import { addStatusCases, createApiThunk } from '../../lib/api/thunk';
+import type { AsyncStatus } from '../../lib/api/types';
+import WriteReviewsService from './service/WriteReviewsService';
+import { ReviewsSearchParams, ReviewsSearchResponse } from './types';
 
 interface MovieReviewState {
-  data: { entries: MovieReviewResponse[]; total_documents: number } | null;
-  error: unknown;
-  status: 'failed' | 'idle' | 'loading' | 'succeeded';
+  data: ReviewsSearchResponse | null;
+  error: string | null;
+  status: AsyncStatus;
 }
 
 const initialState: MovieReviewState = {
@@ -16,54 +17,20 @@ const initialState: MovieReviewState = {
   status: 'idle',
 };
 
-interface FetchAllAuthoralReviewsParams {
-  filters?: any;
-  page: number;
-  pageSize?: number;
-}
-
-export const fetchAllAuthoralReviews = createAsyncThunk(
+export const fetchAllAuthoralReviews = createApiThunk(
   'review/fetchAllAuthoral',
-  async (params: FetchAllAuthoralReviewsParams, { rejectWithValue }) => {
-    const url = '/write-review/search';
-    try {
-      const fetchBody = {
-        filters: params.filters || {},
-        page: params.page,
-        page_size: params.pageSize,
-      };
-      const response = await BaseService.post(url, fetchBody);
-      if (response) {
-        return response;
-      } else {
-        throw new Error('Invalid response format');
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        return rejectWithValue(error.message);
-      }
-      return rejectWithValue('An unexpected error occurred');
-    }
-  }
+  (params: ReviewsSearchParams) => WriteReviewsService.search(params),
+  'Falha ao carregar as reviews. Por favor, tente novamente mais tarde.'
 );
 
 const allAuthoralReviewsSlice = createSlice({
   initialState,
   name: 'reviews',
   reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchAllAuthoralReviews.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchAllAuthoralReviews.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.data = action.payload as { entries: MovieReviewResponse[]; total_documents: number };
-      })
-      .addCase(fetchAllAuthoralReviews.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload;
-      });
+  extraReducers: builder => {
+    addStatusCases(builder, fetchAllAuthoralReviews, 'status', (state, action) => {
+      state.data = action.payload;
+    });
   },
 });
 

@@ -17,3 +17,14 @@ export interface FavoritesEntry {
   rating: number;
   director: string;
 }
+export interface FavoritesSearchParams {
+  filters?: unknown;
+  searchTerm?: string;
+}
+
+export interface FavoritesSearchResponse {
+  countries: string[];
+  entries: FavoritesEntry[];
+  total_documents: number;
+  years: number[];
+}

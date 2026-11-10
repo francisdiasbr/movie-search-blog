@@ -36,3 +36,14 @@ export interface BlogPostEntry {
   type?: 'blogpost' | 'review';
   soundtrack?: string;
 }
+
+export interface ImageItem {
+  filename: string;
+  subtitle_en?: string;
+  subtitle_pt?: string;
+  url: string;
+}
+
+export interface ImagesListResponse {
+  images: ImageItem[];
+}

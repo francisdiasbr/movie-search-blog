@@ -1,3 +1,5 @@
+import type { AsyncStatus } from '../../lib/api/types';
+
 export interface Recommendation {
   _id: string;
   position: number;
@@ -17,7 +19,11 @@ export interface Recommendation {
 export interface RecommendationsState {
   data: Recommendation[];
   total: number;
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: AsyncStatus;
   error: string | null;
 }
 
+export interface RandomRecommendationsResponse {
+  data: Recommendation[];
+  total: number;
+}

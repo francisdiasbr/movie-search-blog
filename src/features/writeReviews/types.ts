@@ -18,3 +18,14 @@ export interface MovieReviewResponse {
   images?: string[];
   imageUrl?: string;
 }
+
+export interface ReviewsSearchParams {
+  filters?: unknown;
+  page: number;
+  pageSize?: number;
+}
+
+export interface ReviewsSearchResponse {
+  entries: MovieReviewResponse[];
+  total_documents: number;
+}

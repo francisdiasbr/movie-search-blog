@@ -1,9 +1,8 @@
-import { BlogPostEntry } from '../blogPost/types';
 import { MovieReviewResponse } from '../writeReviews/types';
 
 export interface CombinedResponse {
   blogPosts: {
-    entries: BlogPostEntry[];
+    entries: BlogPostCard[];
   };
   reviews: {
     entries: MovieReviewResponse[];

@@ -1,9 +1,11 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 
-import BaseService from '../../api/service';
 import { Layout } from '../../components/Layout';
 import { useLanguage } from '../../contexts/LanguageContext';
+import MovieDetailService from '../../features/movieDetail/service/MovieDetailService';
+import { DirectorInfo, SoundtrackInfo } from '../../features/movieDetail/types';
+import RecommendationsService from '../../features/recommendations/service/RecommendationsService';
 import { Recommendation } from '../../features/recommendations/types';
 import * as S from './styles';
 
@@ -70,44 +72,6 @@ const translations = {
   }
 };
 
-interface DirectorInfo {
-  _id?: string;
-  name: string;
-  bio: string;
-  photo: string | null;
-  directors?: DirectorInfo[]; // Para múltiplos diretores
-}
-
-interface Track {
-  title: string;
-  artist: string;
-  spotify_id: string | null;
-  preview_url: string | null;
-  external_urls: {
-    spotify?: string;
-  };
-  album: {
-    name: string;
-    images: Array<{
-      url: string;
-      height: number;
-      width: number;
-    }>;
-  } | null;
-  duration_ms: number | null;
-  description: string;
-}
-
-interface SoundtrackInfo {
-  _id?: string;
-  movie_title: string;
-  movie_year: number | null;
-  movie_director: string | null;
-  tracks: Track[];
-  description: string;
-  source: string;
-}
-
 export default function MovieDetail() {
   const { movieId } = useParams<{ movieId: string }>();
   const { language } = useLanguage();
@@ -132,34 +96,26 @@ export default function MovieDetail() {
         setError(null);
         
         try {
-          const cacheResponse = await BaseService.get<any>(
-            `/movie-detail/${movieId}?language=${language}`,
-            {},
-            language
-          );
-          
+          const cacheResponse = await MovieDetailService.getCached(movieId, language);
+
           if (cacheResponse && cacheResponse.movie) {
             // Cache encontrado! Usa os dados do cache
             setMovie(cacheResponse.movie);
             setDirectorInfo(cacheResponse.director || null);
             setSoundtrackInfo(cacheResponse.soundtrack || null);
-            
+
             // Atualiza o título da página
             document.title = `${cacheResponse.movie.title} (${cacheResponse.movie.year}) - Movie Search Blog`;
-            
+
             setLoading(false);
             return;
           }
-        } catch (cacheError) {
+        } catch {
           // Cache não disponível, continua com busca normal
         }
 
         // Se não tem cache, busca dados normalmente
-        const movieResponse = await BaseService.get<{ data: Recommendation[] }>(
-          `/recommendations/all?search_term=${movieId}&page_size=1`,
-          {},
-          language
-        );
+        const movieResponse = await RecommendationsService.findByTconst(movieId, language);
 
         if (movieResponse.entries && movieResponse.entries.length > 0) {
           const movieData = movieResponse.entries[0];
@@ -168,42 +124,20 @@ export default function MovieDetail() {
           // Atualiza o título da página
           document.title = `${movieData.title} (${movieData.year}) - Movie Search Blog`;
 
-          // ✅ OTIMIZAÇÃO: Requisições paralelas para diretor e trilha sonora
-          const promises = [];
-
-          // Busca informações do diretor (se existir)
-          if (movieData.director) {
-            promises.push(
-              BaseService.get<DirectorInfo>(
-                `/directors/${encodeURIComponent(movieData.director)}?tconst=${movieData.tconst}`,
-                {},
-                language
-              ).then(response => ({ type: 'director', data: response }))
-              .catch(() => ({ type: 'director', data: null }))
-            );
-          }
-
-          // Busca trilha sonora do filme
-          promises.push(
-            BaseService.get<SoundtrackInfo>(
-              `/music/soundtrack?title=${encodeURIComponent(movieData.title)}&year=${movieData.year}&director=${encodeURIComponent(movieData.director || '')}`,
-              {},
+          // Requisições paralelas para diretor e trilha sonora; a falha de uma
+          // não impede a outra
+          const [director, soundtrack] = await Promise.all([
+            movieData.director
+              ? MovieDetailService.getDirector(movieData.director, movieData.tconst, language).catch(() => null)
+              : null,
+            MovieDetailService.getSoundtrack(
+              { director: movieData.director, title: movieData.title, year: movieData.year },
               language
-            ).then(response => ({ type: 'soundtrack', data: response }))
-            .catch(() => ({ type: 'soundtrack', data: null }))
-          );
+            ).catch(() => null),
+          ]);
 
-          // Executa todas as requisições em paralelo
-          const results = await Promise.all(promises);
-          
-          // Processa os resultados
-          results.forEach(result => {
-            if (result.type === 'director' && result.data) {
-              setDirectorInfo(result.data);
-            } else if (result.type === 'soundtrack' && result.data) {
-              setSoundtrackInfo(result.data);
-            }
-          });
+          if (director) setDirectorInfo(director);
+          if (soundtrack) setSoundtrackInfo(soundtrack);
         } else {
           setError(t.notFound);
         }

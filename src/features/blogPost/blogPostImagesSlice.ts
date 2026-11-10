@@ -1,9 +1,11 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-import baseService from '../../api/service';
+import { addStatusCases, createApiThunk } from '../../lib/api/thunk';
+import type { AsyncStatus } from '../../lib/api/types';
+import ImagesService from './service/ImagesService';
 
 interface UploadImageState {
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: AsyncStatus;
   error: string | null;
   imageUrls: string[];
   subtitles: { en: string; pt: string; }[];
@@ -43,57 +45,35 @@ const initialState: UploadImageState = {
   subtitles: [],
 };
 
-interface ImageResponse {
-  images: { 
-    url: string; 
-    filename: string;
-    subtitle_en?: string;
-    subtitle_pt?: string;
-  }[];
-}
-
-export const fetchAllImageUrls = createAsyncThunk(
+export const fetchAllImageUrls = createApiThunk(
   '/uploadImages/fetchAllImageUrls',
-  async ({ tconst }: { tconst: string }, { rejectWithValue }) => {
-    try {
-      const response = (await baseService.get(`/images/${tconst}`)) as ImageResponse;
-
-      return {
-        urls: response.images.map(image => image.url),
-        subtitles: response.images.map(image => ({
-          en: image.subtitle_en || 'Movie scene',
-          pt: image.subtitle_pt || 'Cena do filme'
-        })),
-      };
-    } catch (error) {
-      return rejectWithValue('Error fetching images');
-    }
-  }
+  async ({ tconst }: { tconst: string }) => {
+    const { images } = await ImagesService.list(tconst);
+    return {
+      urls: images.map(image => image.url),
+      subtitles: images.map(image => ({
+        en: image.subtitle_en || 'Movie scene',
+        pt: image.subtitle_pt || 'Cena do filme'
+      })),
+    };
+  },
+  'Error fetching images'
 );
 
-export const fetchCoverImage = createAsyncThunk(
+export const fetchCoverImage = createApiThunk(
   'uploadImages/fetchCoverImage',
-  async ({ tconst }: { tconst: string }, { rejectWithValue }) => {
-    try {
-      // Tenta carregar do cache primeiro
-      const cachedUrl = await loadFromCache(tconst);
-      
-      if (cachedUrl) {
-        return { tconst, coverUrl: cachedUrl };
-      }
-
-      const response = await baseService.get(`/images/${tconst}`) as ImageResponse;
-      
-      await saveToCache(tconst, new Response(JSON.stringify(response)));
-      
-      return {
-        tconst,
-        coverUrl: response.images[0]?.url
-      };
-    } catch (error) {
-      return rejectWithValue('Error fetching cover image');
+  async ({ tconst }: { tconst: string }) => {
+    // Tenta carregar do cache primeiro
+    const cachedUrl = await loadFromCache(tconst);
+    if (cachedUrl) {
+      return { tconst, coverUrl: cachedUrl };
     }
-  }
+
+    const response = await ImagesService.list(tconst);
+    await saveToCache(tconst, new Response(JSON.stringify(response)));
+    return { tconst, coverUrl: response.images[0]?.url };
+  },
+  'Error fetching cover image'
 );
 
 const uploadImagesSlice = createSlice({
@@ -108,25 +88,14 @@ const uploadImagesSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder
-      .addCase(fetchAllImageUrls.pending, state => {
-        state.status = 'loading';
-        state.error = null;
-      })
-      .addCase(fetchAllImageUrls.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.imageUrls = action.payload.urls;
-        state.subtitles = action.payload.subtitles;
-      })
-      .addCase(fetchAllImageUrls.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload as string;
-      })
-      .addCase(fetchCoverImage.fulfilled, (state, action) => {
-        if (action.payload.coverUrl) {
-          state.coverImages[action.payload.tconst] = action.payload.coverUrl;
-        }
-      });
+    addStatusCases(builder, fetchAllImageUrls, 'status', (state, action) => {
+      state.imageUrls = action.payload.urls;
+      state.subtitles = action.payload.subtitles;
+    }).addCase(fetchCoverImage.fulfilled, (state, action) => {
+      if (action.payload.coverUrl) {
+        state.coverImages[action.payload.tconst] = action.payload.coverUrl;
+      }
+    });
   },
 });
 

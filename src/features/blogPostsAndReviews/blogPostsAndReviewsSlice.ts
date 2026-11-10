@@ -1,134 +1,95 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
-import BaseService from '../../api/service';
-import { MovieReviewResponse } from '../writeReviews/types';
-import { fetchAllAuthoralReviews } from '../writeReviews/writeReviewsSlice';
+import { addStatusCases, createApiThunk } from '../../lib/api/thunk';
+import type { AsyncStatus } from '../../lib/api/types';
+import WriteReviewsService from '../writeReviews/service/WriteReviewsService';
+import HomeService from './service/HomeService';
 import { CombinedResponse, SearchParams, BlogPostCardsResponse } from './types';
 
 interface CombinedState {
-  data: CombinedResponse | null;
   cardsData: BlogPostCardsResponse | null; // Dados otimizados para cards
+  data: CombinedResponse | null;
   error: string | null;
-  status: 'failed' | 'idle' | 'loading' | 'succeeded';
+  postsAndReviewsStatus: AsyncStatus;
+  status: AsyncStatus;
 }
 
 const initialState: CombinedState = {
+  cardsData: null,
   data: {
     blogPosts: { entries: [] },
     reviews: { entries: [] }
   },
-  cardsData: null,
   error: null,
+  postsAndReviewsStatus: 'idle',
   status: 'idle',
 };
 
 const formatDateFromISO = (dateString: string) => {
   if (!dateString) return 'Data não disponível';
-  
+
   try {
     const date = parseISO(dateString);
     return format(date, 'dd/MM/yyyy', { locale: ptBR });
-  } catch (error) {
+  } catch {
     return 'Data inválida';
   }
 };
 
+const fetchCards = async (params: SearchParams): Promise<BlogPostCardsResponse> => {
+  const response = await HomeService.cards(params);
+  // Formata data ISO para formato brasileiro
+  return {
+    ...response,
+    entries: response.entries.map(card => ({
+      ...card,
+      created_at: formatDateFromISO(card.created_at),
+    })),
+  };
+};
+
 // Action otimizada para buscar apenas dados dos cards
-export const fetchBlogPostCards = createAsyncThunk<BlogPostCardsResponse, SearchParams>(
+export const fetchBlogPostCards = createApiThunk(
   'blogPosts/fetchBlogPostCards',
-  async (params = { filters: {}, page: 1, pageSize: 10 }) => {
-    const response = await BaseService.post<BlogPostCardsResponse>(
-      '/home/cards',
-      {
-        filters: params.filters || {},
-        page: params.page || 1,
-        page_size: params.pageSize || 10,
-      }
-    );
-    
-    // Formata data ISO para formato brasileiro
-    return {
-      ...response,
-      entries: response.entries.map(card => ({
-        ...card,
-        created_at: formatDateFromISO(card.created_at),
-      })),
-    };
-  }
+  fetchCards,
+  'Falha ao carregar cards. Por favor, tente novamente mais tarde.'
 );
 
-export const fetchBlogPostsAndReviews = createAsyncThunk<CombinedResponse, SearchParams>(
+// Chama os services direto (e não os outros thunks) para não sobrescrever
+// os cards da home nem a lista de reviews com outro page size.
+export const fetchBlogPostsAndReviews = createApiThunk(
   'blogPosts/fetchBlogPostsAndReviews',
-  async (params, { dispatch }) => {
-    // Usa o mesmo endpoint otimizado /home/cards para garantir imageUrl do S3
-    const [blogPostsResponse, reviewsResponse] = await Promise.all([
-      dispatch(fetchBlogPostCards({
-        filters: params.filters || {},
-        page: params.page || 1,
-        pageSize: params.pageSize || 10,
-      })).unwrap(),
-      dispatch(fetchAllAuthoralReviews({
-        filters: params.filters || {},
-        page: 1,
-        pageSize: 10,
-      })).unwrap()
+  async (params: SearchParams): Promise<CombinedResponse> => {
+    const [blogPosts, reviews] = await Promise.all([
+      fetchCards(params),
+      WriteReviewsService.search({ filters: params.filters, page: 1, pageSize: 10 }),
     ]);
-
     return {
-      blogPosts: {
-        entries: blogPostsResponse.entries || []
-      },
+      blogPosts: { entries: blogPosts.entries ?? [] },
       reviews: {
-        entries: (reviewsResponse as { entries: MovieReviewResponse[] })?.entries || []
-      }
+        entries: (reviews.entries ?? []).map(review => ({
+          ...review,
+          created_at: formatDateFromISO(review.created_at),
+        })),
+      },
     };
-  }
+  },
+  'Falha ao carregar posts e reviews. Por favor, tente novamente mais tarde.'
 );
 
 const blogPostsAndReviewsSlice = createSlice({
   name: 'blogPostsAndReviews',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
-    builder
-      // Reducers para fetchBlogPostCards (endpoint otimizado)
-      .addCase(fetchBlogPostCards.pending, (state) => {
-        state.status = 'loading';
-        state.error = null;
-      })
-      .addCase(fetchBlogPostCards.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.cardsData = action.payload;
-      })
-      .addCase(fetchBlogPostCards.rejected, (state) => {
-        state.status = 'failed';
-        state.error = 'Falha ao carregar cards. Por favor, tente novamente mais tarde.';
-      })
-      // Reducers para fetchBlogPostsAndReviews (endpoint completo - mantido para compatibilidade)
-      .addCase(fetchBlogPostsAndReviews.pending, (state) => {
-        state.status = 'loading';
-        state.error = null;
-      })
-      .addCase(fetchBlogPostsAndReviews.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.data = {
-          blogPosts: {
-            entries: action.payload.blogPosts.entries
-          },
-          reviews: {
-            entries: action.payload.reviews.entries.map(review => ({
-              ...review,
-              created_at: formatDateFromISO(review.created_at),
-            })),
-          },
-        };
-      })
-      .addCase(fetchBlogPostsAndReviews.rejected, (state) => {
-        state.status = 'failed';
-        state.error = 'Falha ao carregar posts e reviews. Por favor, tente novamente mais tarde.';
-      });
+  extraReducers: builder => {
+    addStatusCases(builder, fetchBlogPostCards, 'status', (state, action) => {
+      state.cardsData = action.payload;
+    });
+    addStatusCases(builder, fetchBlogPostsAndReviews, 'postsAndReviewsStatus', (state, action) => {
+      state.data = action.payload;
+    });
   },
 });
 

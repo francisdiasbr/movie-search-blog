@@ -27,7 +27,7 @@ export default function Favorites() {
   const { language } = useLanguage();
   const dispatch = useAppDispatch();
   
-  const { data, error, loading, initialFetchDone } = useAppSelector(
+  const { data, error, initialFetchDone, status } = useAppSelector(
     (state: RootState) => state.favorites
   );
   const { data: postsAndReviews } = useAppSelector((state: RootState) => state.blogPostsAndReviews);
@@ -81,7 +81,7 @@ export default function Favorites() {
       >
         <h1>{content.title}</h1>
         <p>{content.description}</p>
-        {loading ? (
+        {status === 'loading' ? (
           <S.LoadingContainer>
             <S.ActivityIndicator>
               <span />

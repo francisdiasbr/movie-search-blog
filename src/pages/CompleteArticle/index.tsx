@@ -25,7 +25,7 @@ function CompleteArticle() {
   const blogPost = useAppSelector((state: RootState) => state.blogPost);
   const review = useAppSelector(state => state.authoralReview);
   const { imageUrls, subtitles } = useAppSelector((state: RootState) => state.blogPostImages);
-  const { currentFavorite, loading: favoritesLoading } = useAppSelector((state: RootState) => state.favorites);
+  const { currentFavorite, status: favoritesStatus } = useAppSelector((state: RootState) => state.favorites);
 
   useEffect(() => {
     if (movieId) {
@@ -45,7 +45,7 @@ function CompleteArticle() {
     };
   }, [dispatch, movieId]);
 
-  if (blogPost.status === 'loading' || review.status === 'loading' || favoritesLoading) {
+  if (blogPost.status === 'loading' || review.status === 'loading' || favoritesStatus === 'loading') {
     return <Layout><SkeletonBlogPost /></Layout>;
   }
   

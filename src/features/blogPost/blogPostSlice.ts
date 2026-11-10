@@ -1,13 +1,16 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-import BaseService from '../../api/service';
+import { nullIfNotFound } from '../../lib/api/errors';
+import { addStatusCases, createApiThunk } from '../../lib/api/thunk';
+import type { AsyncStatus } from '../../lib/api/types';
 import { formatDate } from '../../utils/dateUtils';
+import BlogPostService from './service/BlogPostService';
 import { BlogPostEntry } from './types';
 
 interface BlogPostState {
   data: BlogPostEntry | null;
   error: string | null;
-  status: 'failed' | 'idle' | 'loading' | 'succeeded';
+  status: AsyncStatus;
 }
 
 const initialState: BlogPostState = {
@@ -16,23 +19,10 @@ const initialState: BlogPostState = {
   status: 'idle',
 };
 
-export const fetchBlogPost = createAsyncThunk<BlogPostEntry, string>(
+export const fetchBlogPost = createApiThunk(
   'blogPost/fetchById',
-  async movieId => {
-    try {
-      const response = await BaseService.get<{ data: BlogPostEntry }>(
-        `/generate-blogpost/${movieId}`
-      );
-      // O backend retorna { data: blog_post }, então extraímos o campo data
-      return response.data;
-    } catch (error: any) {
-      // Se for 404, retornamos null em vez de lançar erro
-      if (error.response?.status === 404) {
-        return null as any;
-      }
-      throw error;
-    }
-  }
+  async (tconst: string) => (await nullIfNotFound(BlogPostService.getByTconst(tconst)))?.data ?? null,
+  'Falha ao carregar o post do blog. Por favor, tente novamente mais tarde.'
 );
 
 const blogPostSlice = createSlice({
@@ -46,28 +36,11 @@ const blogPostSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder
-      .addCase(fetchBlogPost.pending, state => {
-        state.status = 'loading';
-        state.error = null;
-      })
-      .addCase(fetchBlogPost.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        if (action.payload) {
-          state.data = {
-            ...action.payload,
-            created_at: formatDate(action.payload.created_at),
-          };
-        } else {
-          state.data = null;
-        }
-        state.error = null;
-      })
-      .addCase(fetchBlogPost.rejected, state => {
-        state.status = 'failed';
-        state.error =
-          'Falha ao carregar o post do blog. Por favor, tente novamente mais tarde.';
-      });
+    addStatusCases(builder, fetchBlogPost, 'status', (state, action) => {
+      state.data = action.payload
+        ? { ...action.payload, created_at: formatDate(action.payload.created_at) }
+        : null;
+    });
   },
 });
 

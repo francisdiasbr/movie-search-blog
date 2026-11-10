@@ -2,6 +2,7 @@ import { ErrorMessage } from '../../components/ErrorMessage';
 import { Layout } from '../../components/Layout';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { NoPostsMessage } from '../../components/NoPostsMessage';
+import Recommendations from '../../components/Recommendations';
 import { useBlogPosts } from '../../hooks/useBlogPosts';
 import { PostCardList } from './components/PostCardList';
 import * as S from './styles';
@@ -19,6 +20,7 @@ export default function Home() {
 
   return (
     <Layout>
+      <Recommendations />
       {status === 'loading' && <LoadingSpinner />}
       {status === 'succeeded' && !hasEntries && <NoPostsMessage />}
       {status === 'succeeded' && hasEntries && (

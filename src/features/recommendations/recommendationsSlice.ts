@@ -1,6 +1,8 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-import BaseService from '../../api/service';
+import { Language } from '../../contexts/LanguageContext';
+import { addStatusCases, createApiThunk } from '../../lib/api/thunk';
+import RecommendationsService from './service/RecommendationsService';
 import { RecommendationsState } from './types';
 
 const initialState: RecommendationsState = {
@@ -10,43 +12,26 @@ const initialState: RecommendationsState = {
   error: null,
 };
 
-export const fetchRandomRecommendations = createAsyncThunk(
+export const fetchRandomRecommendations = createApiThunk(
   'recommendations/fetchRandom',
-  async ({ language = 'pt' }: { language?: string } = {}) => {
-    const response = await BaseService.get<{ data: any[]; total: number }>(
-      '/recommendations/random',
-      {},
-      language
-    );
-    return response;
-  }
+  ({ language = 'pt' }: { language?: Language } = {}) => RecommendationsService.random(language),
+  'Falha ao carregar recomendações.'
 );
 
 const recommendationsSlice = createSlice({
   name: 'recommendations',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchRandomRecommendations.pending, (state) => {
-        state.status = 'loading';
-        state.error = null;
-      })
-      .addCase(fetchRandomRecommendations.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        // Acumula os dados ao invés de substituir
-        const newMovies = action.payload.data.filter(
-          (movie: any) => !state.data.some((existing: any) => existing.tconst === movie.tconst)
-        );
-        state.data = [...state.data, ...newMovies];
-        state.total = action.payload.total;
-      })
-      .addCase(fetchRandomRecommendations.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message || 'Failed to fetch recommendations';
-      });
+  extraReducers: builder => {
+    addStatusCases(builder, fetchRandomRecommendations, 'status', (state, action) => {
+      // Acumula os dados ao invés de substituir
+      const newMovies = action.payload.data.filter(
+        movie => !state.data.some(existing => existing.tconst === movie.tconst)
+      );
+      state.data = [...state.data, ...newMovies];
+      state.total = action.payload.total;
+    });
   },
 });
 
 export default recommendationsSlice.reducer;
-
