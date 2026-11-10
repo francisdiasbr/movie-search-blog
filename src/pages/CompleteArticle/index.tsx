@@ -12,6 +12,7 @@ import { fetchBlogPostsAndReviews } from '../../features/blogPostsAndReviews/blo
 import { clearFavoriteState, getFavoriteById } from '../../features/favorites/favoritesSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/store';
+import NotFound from '../NotFound';
 import { Section, SpotifyEmbed, ImageGallery, RecommendedArticles } from './Components';
 import { sectionTitles } from './sectionTitles';
 import * as S from './styles';
@@ -57,7 +58,7 @@ function CompleteArticle() {
     return <ErrorMessage message={blogPost.error || review.error || 'Erro desconhecido'} />;
   }
   
-  if (!hasData) return null;
+  if (!hasData) return <NotFound />;
 
   const hasImages = imageUrls && imageUrls.length > 0;
   const heroImage = hasImages ? imageUrls[0] : null;

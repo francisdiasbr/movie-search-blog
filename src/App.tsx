@@ -11,6 +11,7 @@ import CompleteArticle from './pages/CompleteArticle';
 import Favorites from './pages/Favorites';
 import Home from './pages/Home';
 import MovieDetail from './pages/MovieDetail';
+import NotFound from './pages/NotFound';
 import Reviews from './pages/Reviews';
 import { store } from './store/store';
 import { GlobalStyles } from './styles/GlobalStyles';
@@ -31,6 +32,7 @@ function ThemedApp() {
         <Route path="/blogroll" element={<Blogroll />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </StyledThemeProvider>
   );
