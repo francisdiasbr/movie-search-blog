@@ -22,9 +22,7 @@ const translations = {
     error: 'Erro ao carregar filme',
     notFound: 'Filme não encontrado',
     soundtrack: 'Trilha Sonora',
-    playPreview: 'Tocar Preview',
     openSpotify: 'Abrir no Spotify',
-    noPreview: 'Preview não disponível',
     noImage: 'Sem imagem',
     noPhoto: 'Sem foto',
     moviePoster: 'Poster do filme',
@@ -52,9 +50,7 @@ const translations = {
     error: 'Error loading movie',
     notFound: 'Movie not found',
     soundtrack: 'Soundtrack',
-    playPreview: 'Play Preview',
     openSpotify: 'Open in Spotify',
-    noPreview: 'Preview not available',
     noImage: 'No image',
     noPhoto: 'No photo',
     moviePoster: 'Movie poster',
@@ -330,11 +326,6 @@ export default function MovieDetail() {
                   </S.TrackInfo>
                   
                   <S.TrackActions>
-                    {track.preview_url && (
-                      <S.TrackButton $variant="primary" title={t.playPreview}>
-                        ▶️ {t.playPreview}
-                      </S.TrackButton>
-                    )}
                     {track.external_urls?.spotify && (
                       <S.TrackButton 
                         $variant="secondary" 
