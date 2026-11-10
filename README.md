@@ -77,3 +77,12 @@ src/
 - Interface responsiva
 
 
+## Documentação
+
+A documentação técnica detalhada fica na pasta [`docs/`](docs/README.md):
+
+- [Arquitetura](docs/arquitetura.md): pastas, rotas, store Redux, acesso à API, idioma e estilos.
+- [Telas](docs/telas.md): o que cada página mostra, o estado que usa e as chamadas que dispara.
+- [Componentes](docs/componentes.md): componentes compartilhados e suas props.
+- [API consumida](docs/api-consumida.md): rotas do backend usadas pelo frontend.
+- [Desenvolvimento](docs/desenvolvimento.md): instalação, scripts, variáveis de ambiente e configuração do Netlify.
