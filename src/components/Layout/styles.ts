@@ -12,9 +12,7 @@ export const ContentWrapper = styled.div`
   display: flex;
   flex-grow: 1;
   justify-content: center;
-  background-color: ${({ theme }) => 
-    theme.colors.primary === '#ebe7da' ? theme.colors.primary : theme.colors.background
-  };
+  background-color: ${({ theme }) => theme.colors.primary};
 `;
 
 export const InnerContainer = styled.div`

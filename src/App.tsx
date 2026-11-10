@@ -3,8 +3,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 
 import { LanguageProvider } from './contexts/LanguageContext';
-import { ThemeProvider } from './contexts/ThemeProvider';
-import { useTheme } from './contexts/useTheme';
 import Blog from './pages/Blog';
 import Blogroll from './pages/Blogroll';
 import CompleteArticle from './pages/CompleteArticle';
@@ -15,15 +13,12 @@ import NotFound from './pages/NotFound';
 import Reviews from './pages/Reviews';
 import { store } from './store/store';
 import { GlobalStyles } from './styles/GlobalStyles';
-import { lightTheme, darkTheme } from './styles/theme';
+import { lightTheme } from './styles/theme';
 
 function ThemedApp() {
-  const { theme } = useTheme();
-  const currentTheme = theme === 'light' ? lightTheme : darkTheme;
-
   return (
-    <StyledThemeProvider theme={currentTheme}>
-      <GlobalStyles theme={currentTheme} />
+    <StyledThemeProvider theme={lightTheme}>
+      <GlobalStyles theme={lightTheme} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/article/:movieId" element={<CompleteArticle />} />
@@ -40,15 +35,13 @@ function ThemedApp() {
 
 function App() {
   return (
-    <ThemeProvider>
-      <LanguageProvider>
-        <Provider store={store}>
-          <BrowserRouter>
-            <ThemedApp />
-          </BrowserRouter>
-        </Provider>
-      </LanguageProvider>
-    </ThemeProvider>
+    <LanguageProvider>
+      <Provider store={store}>
+        <BrowserRouter>
+          <ThemedApp />
+        </BrowserRouter>
+      </Provider>
+    </LanguageProvider>
   );
 }
 
